@@ -1,0 +1,1925 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A Guilda · Codex de Conquistas & Journal (Wurm Online)</title>
+  
+  <!-- Fonts do ecossistema A Guilda -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ═══════════════════════════════════════════════════════════════
+       DESIGN SYSTEM: A GUILDA (Wurm Mining Tool & Ecosystem)
+       Palette: #050505 (bg), #0a0a0a (panel), #262626 (border),
+                #d4b483 (guild gold accent), #8a7453 (accent dim),
+                #e5e5e5 (text), #737373 (muted), #3e6b46 (success)
+       ═══════════════════════════════════════════════════════════════ */
+    :root {
+      --wurm-bg: #050505;
+      --wurm-panel: #0a0a0a;
+      --wurm-panel-hover: #121212;
+      --wurm-border: #262626;
+      --wurm-border-light: #333333;
+      --wurm-accent: #d4b483;         /* Guild Gold */
+      --wurm-accent-dim: #8a7453;     /* Muted Gold */
+      --wurm-accent-bg: rgba(212, 180, 131, 0.08);
+      --wurm-text: #e5e5e5;
+      --wurm-muted: #737373;
+      --wurm-dim: #404040;
+      --wurm-success: #3e6b46;       /* Desaturated Guild Green */
+      --wurm-success-bg: rgba(62, 107, 70, 0.15);
+      --wurm-warning: #b45309;
+      --wurm-silver: #a4b0be;
+      --wurm-diamond: #7dd3fc;
+      
+      --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+      --font-serif: 'Playfair Display', Georgia, serif;
+      
+      --header-height: 56px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    ::selection {
+      background-color: var(--wurm-accent);
+      color: #000;
+    }
+
+    /* Custom Guild Scrollbar */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: var(--wurm-panel); }
+    ::-webkit-scrollbar-thumb { background: var(--wurm-border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--wurm-accent-dim); }
+
+    body {
+      background-color: var(--wurm-bg);
+      color: var(--wurm-text);
+      font-family: var(--font-sans);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ═══════════════════════════════════════════════════════════════
+       CANONICAL TOPBAR (A Guilda Ecosystem Header)
+       ═══════════════════════════════════════════════════════════════ */
+    .guild-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      width: 100%;
+      height: var(--header-height);
+      background: rgba(5, 5, 5, 0.95);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--wurm-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+    }
+
+    .guild-brand-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .ecosystem-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--wurm-muted);
+      cursor: pointer;
+      padding: 6px 8px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .ecosystem-btn:hover, .ecosystem-btn.active {
+      color: var(--wurm-accent);
+      background: rgba(255, 255, 255, 0.05);
+      border-color: var(--wurm-border);
+    }
+
+    .brand-divider {
+      width: 1px;
+      height: 18px;
+      background-color: var(--wurm-border);
+    }
+
+    .guild-brand-title {
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--wurm-text);
+      letter-spacing: 0.01em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .guild-brand-title span {
+      color: var(--wurm-accent);
+      font-style: italic;
+    }
+
+    .guild-header-center {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .eco-nav-link {
+      padding: 4px 10px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--wurm-muted);
+      border-radius: 4px;
+      transition: all 0.2s;
+      font-family: var(--font-sans);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .eco-nav-link:hover {
+      color: var(--wurm-text);
+      background-color: rgba(255, 255, 255, 0.04);
+    }
+    .eco-nav-link.current {
+      color: var(--wurm-accent);
+      background: var(--wurm-accent-bg);
+      border: 1px solid rgba(212, 180, 131, 0.25);
+    }
+
+    .guild-header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .kofi-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      background-color: #fcbf47 !important;
+      color: #323842 !important;
+      font-weight: 700;
+      border-radius: 4px;
+      font-size: 10px;
+      text-transform: uppercase;
+      font-family: var(--font-mono);
+      transition: all 0.2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+    .kofi-btn:hover {
+      background-color: #f7b22a !important;
+      color: #000 !important;
+      transform: scale(1.02);
+    }
+
+    /* Live Player status tag */
+    .player-sync-tag {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 10px;
+      background: var(--wurm-panel);
+      border: 1px solid var(--wurm-border);
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+    }
+    .sync-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--wurm-success);
+      box-shadow: 0 0 6px var(--wurm-success);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
+
+    /* Ecosystem Dropdown Menu */
+    .ecosystem-menu {
+      position: absolute;
+      top: calc(var(--header-height) + 6px);
+      left: 1.5rem;
+      background: var(--wurm-panel);
+      border: 1px solid var(--wurm-border);
+      border-radius: 6px;
+      width: 250px;
+      padding: 6px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75);
+      display: none;
+      z-index: 100;
+    }
+    .ecosystem-menu.open { display: block; }
+    .eco-menu-header {
+      padding: 6px 10px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--wurm-accent-dim);
+      border-bottom: 1px solid var(--wurm-border);
+      margin-bottom: 4px;
+      font-family: var(--font-mono);
+    }
+    .eco-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 10px;
+      font-size: 0.82rem;
+      color: var(--wurm-text);
+      border-radius: 4px;
+      transition: all 0.15s;
+      font-family: var(--font-mono);
+    }
+    .eco-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--wurm-accent);
+    }
+    .eco-item.active-eco {
+      background: var(--wurm-accent-bg);
+      color: var(--wurm-accent);
+      border-left: 2px solid var(--wurm-accent);
+      font-weight: 600;
+    }
+    .eco-tag {
+      margin-left: auto;
+      font-size: 0.65rem;
+      color: var(--wurm-muted);
+      border: 1px solid var(--wurm-border);
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       MAIN LAYOUT CONTAINER
+       ═══════════════════════════════════════════════════════════════ */
+    .container {
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px 20px 48px;
+      flex-grow: 1;
+    }
+
+    /* Sub-header Hero Banner (Guild Aesthetic) */
+    .hero-banner {
+      background: var(--wurm-panel);
+      border: 1px solid var(--wurm-border);
+      border-radius: 6px;
+      padding: 24px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-banner::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: linear-gradient(180deg, var(--wurm-accent), transparent);
+    }
+    .hero-title h1 {
+      font-family: var(--font-serif);
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.01em;
+    }
+    .hero-title h1 span {
+      color: var(--wurm-accent);
+      font-style: italic;
+    }
+    .hero-title p {
+      color: var(--wurm-muted);
+      font-size: 0.88rem;
+      margin-top: 4px;
+      font-family: var(--font-sans);
+    }
+    .hero-stats-inline {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .hero-stat-badge {
+      background: #050505;
+      border: 1px solid var(--wurm-border);
+      border-radius: 4px;
+      padding: 8px 16px;
+      text-align: right;
+    }
+    .hero-stat-badge .num {
+      font-family: var(--font-serif);
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--wurm-accent);
+      line-height: 1.1;
+    }
+    .hero-stat-badge .label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--wurm-muted);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       STATS SUMMARY CARDS
+       ═══════════════════════════════════════════════════════════════ */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: var(--wurm-panel);
+      border: 1px solid var(--wurm-border);
+      border-radius: 6px;
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: all 0.2s;
+    }
+    .stat-card:hover {
+      border-color: var(--wurm-border-light);
+      transform: translateY(-1px);
+    }
+    .stat-icon {
+      font-size: 1.6rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--wurm-border);
+    }
+    .stat-val {
+      font-family: var(--font-serif);
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1;
+    }
+    .stat-lbl {
+      color: var(--wurm-muted);
+      font-size: 0.76rem;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 4px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       TOP 5 PODIUM
+       ═══════════════════════════════════════════════════════════════ */
+    .top-rankings {
+      background: var(--wurm-panel);
+      border: 1px solid var(--wurm-border);
+      border-radius: 6px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--wurm-border);
+      padding-bottom: 12px;
+    }
+    .section-header h2 {
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--wurm-text);
+    }
+    .section-header h2 span {
+      color: var(--wurm-accent);
+    }
+    .section-header .subtext {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--wurm-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .podium-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .podium-card {
+      background: #050505;
+      border: 1px solid var(--wurm-border);
+      border-radius: 4px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.2s;
+    }
+    .podium-card:hover {
+      border-color: var(--wurm-border-light);
+    }
+    .podium-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--wurm-border);
+    }
+    .podium-card.rank-1::before { background: var(--wurm-accent); }
+    .podium-card.rank-2::before { background: var(--wurm-silver); }
+    .podium-card.rank-3::before { background: #cd7f32; }
+
+    .podium-rank {
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--wurm-muted);
+      min-width: 28px;
+    }
+    .rank-1 .podium-rank { color: var(--wurm-accent); }
+    .rank-2 .podium-rank { color: var(--wurm-silver); }
+    .rank-3 .podium-rank { color: #cd7f32; }
+
+    .podium-data h4 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #fff;
+    }
+    .podium-data p {
+      font-size: 0.76rem;
+      color: var(--wurm-accent-dim);
+    }
+    .podium-count {
+      margin-left: auto;
+      font-family: var(--font-mono);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--wurm-accent);
+      text-align: right;
+    }
+    .podium-count span {
+      display: block;
+      font-size: 0.6rem;
+      color: var(--wurm-muted);
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       TAB NAVIGATION
+       ═══════════════════════════════════════════════════════════════ */
+    .tab-nav {
+      display: flex;
+      gap: 0;
+      margin-bottom: 20px;
+      background: var(--wurm-panel);
+      border: 1px solid var(--wurm-border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 12px 18px;
+      background: transparent;
+      border: none;
+      color: var(--wurm-muted);
+      font-family: var(--font-sans);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border-right: 1px solid var(--wurm-border);
+    }
+    .tab-btn:last-child { border-right: none; }
+    .tab-btn:hover {
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--wurm-text);
+    }
+    .tab-btn.active {
+      background: var(--wurm-accent-bg);
+      color: var(--wurm-accent);
+      border-bottom: 2px solid var(--wurm-accent);
+    }
+    .tab-badge {
+      background: #050505;
+      border: 1px solid var(--wurm-border);
+      padding: 2px 7px;
+      border-radius: 12px;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--wurm-muted);
+    }
+    .tab-btn.active .tab-badge {
+      color: var(--wurm-accent);
+      border-color: rgba(212, 180, 131, 0.4);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       CONTROLS BAR (Filters, Search, View toggles)
+       ═══════════════════════════════════════════════════════════════ */
+    .controls-bar {
+      background: var(--wurm-panel);
+      border: 1px solid var(--wurm-border);
+      border-radius: 6px;
+      padding: 14px 18px;
+      margin-bottom: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .search-box {
+      flex: 1;
+      min-width: 240px;
+      position: relative;
+    }
+    .search-box input {
+      width: 100%;
+      background: #050505;
+      border: 1px solid var(--wurm-border);
+      border-radius: 4px;
+      padding: 8px 14px 8px 36px;
+      color: #fff;
+      font-family: var(--font-sans);
+      font-size: 0.88rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-box input:focus {
+      border-color: var(--wurm-accent);
+    }
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--wurm-muted);
+      font-size: 0.85rem;
+    }
+    .filter-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    select, .action-btn {
+      background: #050505;
+      border: 1px solid var(--wurm-border);
+      color: var(--wurm-text);
+      padding: 7px 12px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.2s;
+    }
+    select:hover, .action-btn:hover {
+      border-color: var(--wurm-border-light);
+      color: #fff;
+    }
+    select:focus { border-color: var(--wurm-accent); }
+
+    /* VIEW MODE BUTTONS - Guild Pill Style */
+    .view-mode-group {
+      display: flex;
+      gap: 0;
+      border: 1px solid var(--wurm-border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .view-mode-btn {
+      background: #050505;
+      border: none;
+      border-right: 1px solid var(--wurm-border);
+      color: var(--wurm-muted);
+      padding: 7px 12px;
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .view-mode-btn:last-child { border-right: none; }
+    .view-mode-btn:hover {
+      background: #111;
+      color: var(--wurm-text);
+    }
+    .view-mode-btn.active {
+      background: var(--wurm-accent);
+      color: #000;
+      font-weight: 700;
+    }
+
+    /* CATEGORY PILLS (Same as Mining Tool: rounded-full pills) */
+    .category-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .pill-btn {
+      background: transparent;
+      border: 1px solid var(--wurm-border);
+      color: var(--wurm-muted);
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .pill-btn:hover {
+      border-color: var(--wurm-text);
+      color: var(--wurm-text);
+    }
+    .pill-btn.active {
+      background: var(--wurm-accent);
+      border-color: var(--wurm-accent);
+      color: #000;
+      font-weight: 700;
+    }
+    .pill-badge {
+      font-size: 0.7rem;
+      opacity: 0.75;
+    }
+    .pill-btn.active .pill-badge {
+      opacity: 1;
+      color: #000;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       CARDS VIEW
+       ═══════════════════════════════════════════════════════════════ */
+    .achievements-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 14px;
+    }
+    .ach-card {
+      background: var(--wurm-panel);
+      border: 1px solid var(--wurm-border);
+      border-radius: 6px;
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+      transition: all 0.2s;
+      position: relative;
+    }
+    .ach-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--wurm-border-light);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .ach-card.gold-tier {
+      border-color: rgba(212, 180, 131, 0.35);
+      background: linear-gradient(180deg, rgba(212, 180, 131, 0.03) 0%, var(--wurm-panel) 100%);
+    }
+    .ach-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .ach-title-area h3 {
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .ach-pt-name {
+      color: var(--wurm-accent);
+      font-size: 0.8rem;
+      font-family: var(--font-mono);
+      margin-top: 1px;
+    }
+    .ach-counter-badge {
+      background: #050505;
+      border: 1px solid var(--wurm-border);
+      border-radius: 4px;
+      padding: 4px 10px;
+      text-align: center;
+      min-width: 58px;
+    }
+    .ach-counter-badge .num {
+      font-family: var(--font-mono);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1;
+    }
+    .ach-card.gold-tier .ach-counter-badge .num {
+      color: var(--wurm-accent);
+    }
+    .ach-counter-badge .lbl {
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      text-transform: uppercase;
+      color: var(--wurm-muted);
+      margin-top: 2px;
+    }
+    .ach-desc-box {
+      background: #050505;
+      border: 1px solid var(--wurm-border);
+      border-radius: 4px;
+      padding: 9px 12px;
+      font-size: 0.82rem;
+      color: #bbb;
+      font-style: italic;
+      line-height: 1.4;
+    }
+    .ach-details {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 0.8rem;
+    }
+    .detail-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .detail-label {
+      color: var(--wurm-muted);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      min-width: 80px;
+      margin-top: 1px;
+    }
+    .detail-val {
+      color: var(--wurm-text);
+      flex: 1;
+    }
+    .trivia-box {
+      background: rgba(212, 180, 131, 0.04);
+      border-left: 2px solid var(--wurm-accent);
+      padding: 6px 10px;
+      border-radius: 0 4px 4px 0;
+      font-size: 0.78rem;
+      color: #e5d8c3;
+      font-family: var(--font-sans);
+    }
+    .ach-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 10px;
+      border-top: 1px solid var(--wurm-border);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--wurm-muted);
+    }
+
+    /* Badges & Tags */
+    .badge-tag {
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .tag-gold {
+      background: var(--wurm-accent-bg);
+      color: var(--wurm-accent);
+      border: 1px solid rgba(212, 180, 131, 0.4);
+    }
+    .tag-normal, .tag-silver {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--wurm-silver);
+      border: 1px solid var(--wurm-border);
+    }
+    .tag-diamond {
+      background: rgba(125, 211, 252, 0.1);
+      color: var(--wurm-diamond);
+      border: 1px solid rgba(125, 211, 252, 0.3);
+    }
+    .tag-iron {
+      background: rgba(255, 255, 255, 0.02);
+      color: #888;
+      border: 1px solid #333;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       COMPACT ROW VIEW
+       ═══════════════════════════════════════════════════════════════ */
+    .compact-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .compact-row {
+      background: var(--wurm-panel);
+      border: 1px solid var(--wurm-border);
+      border-radius: 4px;
+      padding: 9px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.15s;
+    }
+    .compact-row:hover {
+      background: var(--wurm-panel-hover);
+      border-color: var(--wurm-border-light);
+    }
+    .compact-row.gold-row {
+      border-left: 3px solid var(--wurm-accent);
+    }
+    .compact-rank {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--wurm-muted);
+      min-width: 28px;
+    }
+    .compact-icon {
+      font-size: 1.1rem;
+      min-width: 22px;
+      text-align: center;
+    }
+    .compact-names {
+      flex: 1;
+      min-width: 0;
+    }
+    .compact-en {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .compact-pt {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: var(--wurm-accent);
+    }
+    .compact-counter {
+      background: #050505;
+      border: 1px solid var(--wurm-border);
+      border-radius: 3px;
+      padding: 2px 8px;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #fff;
+      min-width: 48px;
+      text-align: center;
+    }
+    .compact-row.gold-row .compact-counter {
+      color: var(--wurm-accent);
+    }
+    .compact-date {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--wurm-muted);
+      min-width: 125px;
+      text-align: right;
+    }
+    .compact-rarity {
+      min-width: 55px;
+      text-align: right;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       TABLE VIEW
+       ═══════════════════════════════════════════════════════════════ */
+    .table-container {
+      background: var(--wurm-panel);
+      border: 1px solid var(--wurm-border);
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    th, td {
+      padding: 11px 16px;
+      border-bottom: 1px solid var(--wurm-border);
+      font-size: 0.85rem;
+    }
+    th {
+      background: #050505;
+      color: var(--wurm-muted);
+      font-family: var(--font-mono);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+    }
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       JOURNAL 2.0 TAB
+       ═══════════════════════════════════════════════════════════════ */
+    .journal-container { display: none; }
+    
+    .journal-progress-bar-wrap {
+      background: var(--wurm-panel);
+      border: 1px solid var(--wurm-border);
+      border-radius: 6px;
+      padding: 18px 22px;
+      margin-bottom: 18px;
+    }
+    .journal-progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .journal-progress-header h3 {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #fff;
+    }
+    .journal-progress-pct {
+      font-family: var(--font-mono);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--wurm-accent);
+    }
+    .progress-bar-bg {
+      background: #050505;
+      border: 1px solid var(--wurm-border);
+      border-radius: 4px;
+      height: 8px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--wurm-accent-dim), var(--wurm-accent));
+      transition: width 0.5s ease;
+    }
+    .journal-stats-row {
+      display: flex;
+      gap: 24px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+    .journal-stat {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--wurm-muted);
+    }
+    .journal-stat strong {
+      color: #fff;
+    }
+
+    .journal-filter-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      background: var(--wurm-panel);
+      border: 1px solid var(--wurm-border);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+    }
+    .journal-filter-bar label {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--wurm-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .journal-filter-bar input {
+      flex: 1;
+      background: #050505;
+      border: 1px solid var(--wurm-border);
+      border-radius: 4px;
+      padding: 7px 12px;
+      color: #fff;
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      outline: none;
+    }
+    .journal-filter-bar input:focus {
+      border-color: var(--wurm-accent);
+    }
+
+    .journal-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .journal-row {
+      background: var(--wurm-panel);
+      border: 1px solid var(--wurm-border);
+      border-radius: 4px;
+      padding: 11px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: all 0.15s;
+    }
+    .journal-row:hover {
+      background: var(--wurm-panel-hover);
+    }
+    .journal-row.unlocked {
+      border-left: 3px solid var(--wurm-success);
+    }
+    .journal-row.locked {
+      border-left: 3px solid var(--wurm-border);
+      opacity: 0.85;
+    }
+    .journal-status {
+      font-size: 1rem;
+      min-width: 24px;
+      text-align: center;
+    }
+    .journal-name {
+      flex: 1;
+      min-width: 0;
+    }
+    .journal-name .j-en {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #fff;
+    }
+    .journal-name .j-desc {
+      font-size: 0.76rem;
+      color: var(--wurm-muted);
+      margin-top: 1px;
+      font-style: italic;
+    }
+    .journal-how {
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
+      color: var(--wurm-accent);
+      max-width: 320px;
+    }
+    .journal-rarity {
+      min-width: 65px;
+      text-align: right;
+    }
+    .journal-counter-badge {
+      background: var(--wurm-success-bg);
+      border: 1px solid rgba(62, 107, 70, 0.4);
+      border-radius: 3px;
+      padding: 2px 8px;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #7ee787;
+    }
+
+    .section-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 18px 0 10px;
+    }
+    .section-divider h4 {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--wurm-accent-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+    }
+    .section-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--wurm-border);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 48px;
+      color: var(--wurm-muted);
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       FOOTER (Guild Credits)
+       ═══════════════════════════════════════════════════════════════ */
+    footer {
+      border-top: 1px solid var(--wurm-border);
+      padding: 24px 20px;
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--wurm-muted);
+      background: var(--wurm-panel);
+      margin-top: auto;
+    }
+    footer span {
+      color: var(--wurm-accent);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .guild-header { padding: 0 1rem; }
+      .guild-header-center { display: none; }
+      .hero-banner { flex-direction: column; align-items: flex-start; }
+      .hero-stats-inline { width: 100%; justify-content: space-between; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       TOPBAR: A GUILDA ECOSYSTEM
+       ═══════════════════════════════════════════════════════════════ -->
+  <header class="guild-header">
+    <div class="guild-brand-area">
+      <!-- Ecosystem dropdown trigger -->
+      <button class="ecosystem-btn" id="ecoDropdownBtn" title="Ecossistema A Guilda">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="9" y="9" width="6" height="6" rx="1"></rect>
+          <path d="m21 12-6-6M3 12l6 6M12 3v6M12 15v6"></path>
+        </svg>
+      </button>
+
+      <div class="brand-divider"></div>
+
+      <a href="https://wurm-aguild-site.pages.dev" target="_blank" class="guild-brand-title">
+        A Guilda <span>Codex</span>
+      </a>
+    </div>
+
+    <!-- Center Navigation across tools -->
+    <nav class="guild-header-center">
+      <a href="https://wurm-aguild-site.pages.dev" target="_blank" class="eco-nav-link">Portal</a>
+      <a href="https://wurm-mining-tool.pages.dev" target="_blank" class="eco-nav-link">Mineração</a>
+      <a href="https://wurm-recipe-tool.pages.dev" target="_blank" class="eco-nav-link">Receitas</a>
+      <a href="#" class="eco-nav-link current">Achievements</a>
+      <a href="https://wurm-analytics-journal.pages.dev" target="_blank" class="eco-nav-link">Analytics</a>
+    </nav>
+
+    <!-- Right Area: Support + Player Live Tag -->
+    <div class="guild-header-right">
+      <a href="https://ko-fi.com/aguildanode" target="_blank" rel="noopener noreferrer" class="kofi-btn">
+        ☕ <span>Support Us</span>
+      </a>
+      <div class="player-sync-tag">
+        <span class="sync-dot"></span>
+        <span id="playerName" style="color:#fff; font-weight:700;">jotasiete</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ECOSYSTEM DROPDOWN MENU -->
+  <div class="ecosystem-menu" id="ecoMenu">
+    <div class="eco-menu-header">Ecossistema · A Guilda</div>
+    <a href="https://wurm-aguild-site.pages.dev" target="_blank" class="eco-item">
+      <span>🏛️</span> Portal Geral
+    </a>
+    <a href="https://wurm-mining-tool.pages.dev" target="_blank" class="eco-item">
+      <span>⛏️</span> Mineração Optimizer
+    </a>
+    <a href="https://wurm-recipe-tool.pages.dev" target="_blank" class="eco-item">
+      <span>📖</span> Livro de Receitas
+    </a>
+    <a href="https://wurm-liturgy.pages.dev" target="_blank" class="eco-item">
+      <span>📜</span> Liturgy & Deuses
+    </a>
+    <a href="https://wurm-carpentry-tool.pages.dev" target="_blank" class="eco-item">
+      <span>🔨</span> Carpintaria
+    </a>
+    <a href="https://wurm-auction-helper.pages.dev" target="_blank" class="eco-item">
+      <span>⚖️</span> Leilões
+    </a>
+    <a href="https://wurm-aguilda-badges.pages.dev" target="_blank" class="eco-item">
+      <span>🛡️</span> Guilda Badges
+    </a>
+    <div class="eco-item active-eco">
+      <span>🏆</span> Codex & Journal <span class="eco-tag">aqui</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       MAIN CONTENT CONTAINER
+       ═══════════════════════════════════════════════════════════════ -->
+  <div class="container">
+
+    <!-- HERO BANNER -->
+    <div class="hero-banner">
+      <div class="hero-title">
+        <h1>Wurm Online <span>Achievements Codex</span></h1>
+        <p>Extrator em Tempo Real · Significados Ocultos · Journal 2.0 de Metas · Rankings</p>
+      </div>
+      <div class="hero-stats-inline">
+        <div class="hero-stat-badge">
+          <div class="num" id="statTotalHero">32</div>
+          <div class="label">Desbloqueadas</div>
+        </div>
+        <div class="hero-stat-badge">
+          <div class="num" id="statTopHero">275</div>
+          <div class="label">Maior Recorde</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATS CARDS -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon" style="color: var(--wurm-accent);">🏆</div>
+        <div>
+          <div class="stat-val" id="statTotal">32</div>
+          <div class="stat-lbl">Conquistas Desbloqueadas</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="color: var(--wurm-accent);">⭐</div>
+        <div>
+          <div class="stat-val" id="statGold">1</div>
+          <div class="stat-lbl">Raridade Ouro (Gold)</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="color: #a78bfa;">🔥</div>
+        <div>
+          <div class="stat-val" id="statTopCount">275</div>
+          <div class="stat-lbl">Maior Recorde (Nomad)</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="color: var(--wurm-success);">⛵</div>
+        <div>
+          <div class="stat-val" id="statNaval">450+</div>
+          <div class="stat-lbl">Viagens Náuticas Feitas</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PODIUM TOP 5 -->
+    <div class="top-rankings">
+      <div class="section-header">
+        <h2>👑 Recordes Pessoais <span>(Top 5 Rankings)</span></h2>
+        <span class="subtext" id="syncStatus">Sincronizado e Ativo</span>
+      </div>
+      <div class="podium-grid" id="podiumGrid"><!-- JS --></div>
+    </div>
+
+    <!-- TAB NAVIGATION -->
+    <div class="tab-nav">
+      <button class="tab-btn active" id="tabMyAch" onclick="switchTab('achievements')">
+        🏅 Minhas Conquistas
+        <span class="tab-badge" id="tabMyCount">32</span>
+      </button>
+      <button class="tab-btn" id="tabJournal" onclick="switchTab('journal')">
+        📖 Journal 2.0 — Mapa de Metas
+        <span class="tab-badge" id="tabJournalCount">? restantes</span>
+      </button>
+      <button class="tab-btn" id="tabInstall" onclick="switchTab('install')">
+        📥 Como Conectar seu Personagem
+        <span class="tab-badge" style="color:var(--wurm-accent); border-color:rgba(212,180,131,0.4);">Auto-Setup</span>
+      </button>
+    </div>
+
+    <!-- ====== TAB 1: MINHAS CONQUISTAS ====== -->
+    <div id="achievementsTab">
+
+      <!-- CONTROLS BAR -->
+      <div class="controls-bar">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput" placeholder="Buscar conquista, tradução, significado, barco ou arma...">
+        </div>
+        <div class="filter-actions">
+          <select id="sortSelect">
+            <option value="counter_desc">Ranking: Maior Contador</option>
+            <option value="date_desc">Mais Recentes Primeiro</option>
+            <option value="name_asc">Nome (A-Z)</option>
+            <option value="rarity_desc">Maior Raridade</option>
+          </select>
+          <div class="view-mode-group">
+            <button class="view-mode-btn active" id="modeCards" onclick="setViewMode('cards')">Cards</button>
+            <button class="view-mode-btn" id="modeCompact" onclick="setViewMode('compact')">Compacto</button>
+            <button class="view-mode-btn" id="modeTable" onclick="setViewMode('table')">Tabela</button>
+          </div>
+          <button class="action-btn" id="reloadBtn" title="Recarregar dados do arquivo">🔄 Atualizar</button>
+        </div>
+      </div>
+
+      <!-- CATEGORY PILLS (Same style as Mining Tool) -->
+      <div class="category-pills" id="categoryPills">
+        <button class="pill-btn active" data-cat="all">Todas <span class="pill-badge" id="pillAllCount">32</span></button>
+        <button class="pill-btn" data-cat="sailing">⛵ Náutica <span class="pill-badge" id="pillSailingCount">0</span></button>
+        <button class="pill-btn" data-cat="combat">⚔️ Combate <span class="pill-badge" id="pillCombatCount">0</span></button>
+        <button class="pill-btn" data-cat="exploration">🧭 Exploração <span class="pill-badge" id="pillExplorationCount">0</span></button>
+        <button class="pill-btn" data-cat="mounts">🐴 Montarias <span class="pill-badge" id="pillMountsCount">0</span></button>
+        <button class="pill-btn" data-cat="epic">⚡ Épico <span class="pill-badge" id="pillEpicCount">0</span></button>
+        <button class="pill-btn" data-cat="work">📦 Trabalho <span class="pill-badge" id="pillWorkCount">0</span></button>
+        <button class="pill-btn" data-cat="survival">💀 Sobrevivência <span class="pill-badge" id="pillSurvivalCount">0</span></button>
+      </div>
+
+      <!-- 1. CARDS VIEW -->
+      <div class="achievements-grid" id="achievementsGrid"></div>
+
+      <!-- 2. COMPACT ROW VIEW -->
+      <div class="compact-list" id="compactList" style="display:none;"></div>
+
+      <!-- 3. TABLE VIEW -->
+      <div class="table-container" id="tableContainer" style="display:none;">
+        <table>
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Nome Original</th>
+              <th>Tradução PT</th>
+              <th>Categoria</th>
+              <th>Contador</th>
+              <th>Data</th>
+              <th>Raridade</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- ====== TAB 2: JOURNAL 2.0 ====== -->
+    <div class="journal-container" id="journalTab">
+
+      <!-- PROGRESS BAR -->
+      <div class="journal-progress-bar-wrap">
+        <div class="journal-progress-header">
+          <h3>Progresso Geral no Wurm Online</h3>
+          <div class="journal-progress-pct" id="journalPct">—</div>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="journalProgressFill" style="width:0%"></div>
+        </div>
+        <div class="journal-stats-row">
+          <div class="journal-stat">✅ Desbloqueadas: <strong id="journalUnlockedCount">0</strong></div>
+          <div class="journal-stat">🔒 Restantes: <strong id="journalLockedCount">0</strong></div>
+          <div class="journal-stat">📋 Catálogo Total: <strong id="journalTotalCount">0</strong></div>
+        </div>
+      </div>
+
+      <!-- JOURNAL FILTER -->
+      <div class="journal-filter-bar">
+        <span>🔍</span>
+        <input type="text" id="journalSearch" placeholder="Buscar conquista, método de obtenção...">
+        <label>Status:</label>
+        <select id="journalFilter">
+          <option value="all">Todas</option>
+          <option value="locked">🔒 Não Desbloqueadas</option>
+          <option value="unlocked">✅ Já Feitas</option>
+        </select>
+        <label>Raridade:</label>
+        <select id="journalRarityFilter">
+          <option value="all">Todas as Raridades</option>
+          <option value="Silver">Prata (Silver)</option>
+          <option value="Gold">Ouro (Gold)</option>
+          <option value="Diamond">Diamante (Diamond)</option>
+          <option value="Iron">Ferro (Iron)</option>
+        </select>
+      </div>
+
+      <!-- JOURNAL LIST -->
+      <div class="journal-grid" id="journalGrid"></div>
+
+    </div>
+
+    <!-- ====== TAB 3: COMO CONECTAR (SETUP & TRANSPARÊNCIA) ====== -->
+    <div id="installTab" style="display:none;">
+
+      <!-- Top Action Download Banner -->
+      <div style="background: var(--wurm-panel); border: 1px solid rgba(212,180,131,0.4); border-radius: 6px; padding: 24px 28px; margin-bottom: 24px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px; background: linear-gradient(180deg, rgba(212,180,131,0.06) 0%, var(--wurm-panel) 100%);">
+        <div>
+          <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: #fff; margin-bottom: 4px;">
+            Pacote Oficial: <span>Wurm Online Guild Tracker</span>
+          </h2>
+          <p style="color: var(--wurm-muted); font-size: 0.88rem;">
+            Extrator leve, 100% seguro, sem necessidade de instalar o Java ou procurar pastas manualmente.
+          </p>
+        </div>
+        <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+          <a href="Wurm-Guilda-Tracker.zip" download class="pill-btn active" style="padding: 10px 22px; font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; gap: 8px;">
+            📥 Baixar Extrator da Guilda (ZIP · ~750 KB)
+          </a>
+          <a href="https://github.com/Jotasiete7/wurm-aguild-Achievements" target="_blank" class="pill-btn" style="padding: 10px 16px; font-size: 0.8rem;">
+            💻 Ver Código no GitHub
+          </a>
+        </div>
+      </div>
+
+      <!-- 3-Step Setup Cards Grid -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-bottom: 28px;">
+        
+        <div style="background: var(--wurm-panel); border: 1px solid var(--wurm-border); border-radius: 6px; padding: 20px; position: relative;">
+          <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--wurm-accent); font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em;">
+            Passo 01
+          </div>
+          <h3 style="font-family: var(--font-serif); font-size: 1.2rem; color: #fff; margin-bottom: 8px;">
+            Baixar & Extrair
+          </h3>
+          <p style="color: var(--wurm-muted); font-size: 0.84rem; line-height: 1.5;">
+            Clique no botão acima para baixar o <code style="color:var(--wurm-accent); font-family:var(--font-mono);">Wurm-Guilda-Tracker.zip</code> e extraia os dois arquivos em qualquer pasta do seu computador (como Downloads ou Área de Trabalho).
+          </p>
+        </div>
+
+        <div style="background: var(--wurm-panel); border: 1px solid var(--wurm-border); border-radius: 6px; padding: 20px; position: relative;">
+          <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--wurm-accent); font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em;">
+            Passo 02 · Automático
+          </div>
+          <h3 style="font-family: var(--font-serif); font-size: 1.2rem; color: #fff; margin-bottom: 8px;">
+            Executar o Instalador
+          </h3>
+          <p style="color: var(--wurm-muted); font-size: 0.84rem; line-height: 1.5;">
+            Dê dois cliques em <strong style="color:#fff;">Instalar-Guilda-Tracker.bat</strong>. Ele busca sozinho sua instalação do Wurm na Steam (C:, D:, E: etc.) e cria um atalho na sua Área de Trabalho chamado <strong style="color:var(--wurm-accent);">"Wurm Online (Guilda Tracker)"</strong>.
+          </p>
+        </div>
+
+        <div style="background: var(--wurm-panel); border: 1px solid var(--wurm-border); border-radius: 6px; padding: 20px; position: relative;">
+          <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--wurm-accent); font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em;">
+            Passo 03
+          </div>
+          <h3 style="font-family: var(--font-serif); font-size: 1.2rem; color: #fff; margin-bottom: 8px;">
+            Jogar & Comparar
+          </h3>
+          <p style="color: var(--wurm-muted); font-size: 0.84rem; line-height: 1.5;">
+            Abra o jogo através do novo atalho. Quando você abrir sua janela de Achievements no jogo, o tracker captura a lista e atualiza o seu perfil no Codex automaticamente!
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Transparency & Security Section -->
+      <div style="background: var(--wurm-panel); border: 1px solid var(--wurm-border); border-radius: 6px; padding: 24px; margin-bottom: 24px;">
+        <div class="section-header" style="margin-bottom: 18px;">
+          <h2>🛡️ Transparência & Segurança: <span>O que cada arquivo faz?</span></h2>
+          <span class="subtext">Código 100% auditável e open source</span>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          
+          <div style="background: #050505; border: 1px solid var(--wurm-border); border-radius: 4px; padding: 14px 18px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <strong style="color:var(--wurm-accent); font-family:var(--font-mono); font-size:0.88rem;">📦 wurm_achievements.jar (800 KB)</strong>
+              <span class="badge-tag tag-gold">Agente Premain</span>
+            </div>
+            <p style="color: var(--wurm-muted); font-size: 0.82rem; line-height: 1.5;">
+              Utiliza a API oficial de instrumentação do próprio Java da Oracle (<code style="font-family:var(--font-mono);">javaagent</code>). Ele atua como um ouvinte passivo: quando os pacotes da lista de conquistas chegam do servidor oficial e são desenhados na janela de interface, ele apenas anota o nome, contador e data em um arquivo de texto local (<code style="font-family:var(--font-mono);">.json</code>). <strong style="color:#fff;">Não altera mecânicas do jogo, não dá vantagens (não é bot nem hack), não toca em senhas nem lê outros arquivos do computador.</strong>
+            </p>
+          </div>
+
+          <div style="background: #050505; border: 1px solid var(--wurm-border); border-radius: 4px; padding: 14px 18px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <strong style="color:var(--wurm-accent); font-family:var(--font-mono); font-size:0.88rem;">⚙️ Instalar-Guilda-Tracker.bat (Script de Configuração)</strong>
+              <span class="badge-tag tag-silver">Script Batch</span>
+            </div>
+            <p style="color: var(--wurm-muted); font-size: 0.82rem; line-height: 1.5;">
+              Script transparente em lote do Windows. Ele apenas consulta o Registro do Windows e as pastas de biblioteca da Steam para encontrar o caminho onde o Wurm está instalado, copia o arquivo JAR para lá e gera um atalho na Área de Trabalho com o parâmetro de inicialização seguro. Pode ser aberto e inspecionado no Bloco de Notas por qualquer jogador.
+            </p>
+          </div>
+
+          <div style="background: #050505; border: 1px solid var(--wurm-border); border-radius: 4px; padding: 14px 18px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <strong style="color:var(--wurm-accent); font-family:var(--font-mono); font-size:0.88rem;">☕ Preciso instalar o Java no meu PC?</strong>
+              <span class="badge-tag tag-diamond">Já Incluso</span>
+            </div>
+            <p style="color: var(--wurm-muted); font-size: 0.82rem; line-height: 1.5;">
+              <strong style="color:#fff;">Não!</strong> O próprio Wurm Online (tanto na Steam quanto no cliente oficial) já vem com o Java 21 oficial da desenvolvedora embutido na pasta do jogo (<code style="font-family:var(--font-mono);">runtime\bin\java.exe</code>). O atalho gerado utiliza diretamente o mesmo Java que o próprio jogo já usa.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- GUILD FOOTER -->
+  <footer>
+    <p>
+      Ecossistema <span>A Guilda</span> · Desenvolvido para a comunidade de Wurm Online · Integração Local & Servidor
+    </p>
+  </footer>
+
+  <!-- DATA & SCRIPTS -->
+  <script src="achievements_db.js"></script>
+  <script>
+    // ─── STATE ───────────────────────────────────────────────
+    let currentData = [];
+    let currentCategory = 'all';
+    let currentSort = 'counter_desc';
+    let currentViewMode = 'cards';
+    let currentTab = 'achievements';
+
+    // ─── DROPDOWN TOGGLE ─────────────────────────────────────
+    const ecoBtn = document.getElementById('ecoDropdownBtn');
+    const ecoMenu = document.getElementById('ecoMenu');
+    ecoBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      ecoMenu.classList.toggle('open');
+      ecoBtn.classList.toggle('active');
+    });
+    document.addEventListener('click', (e) => {
+      if (!ecoMenu.contains(e.target) && e.target !== ecoBtn) {
+        ecoMenu.classList.remove('open');
+        ecoBtn.classList.remove('active');
+      }
+    });
+
+    // ─── FALLBACK DATA ────────────────────────────────────────
+    const fallbackData = [
+      {"name":"Nomad","description":"You love visiting different places and discovering deeds across the lands.","rarity":"Gold","counter":275,"date":"28/08/2026 22:34"},
+      {"name":"Epic Helper","description":"You contributed significantly to divine epic scenarios on Valrei/Epic.","rarity":"Normal","counter":199,"date":"14/08/2026 17:46"},
+      {"name":"Knarr Sailor","description":"Look, it floats! Commanded a Knarr on the waters.","rarity":"Normal","counter":185,"date":"14/06/2026 16:08"},
+      {"name":"Corbita Sailor","description":"Look, it floats! Commanded a Corbita merchant ship.","rarity":"Normal","counter":157,"date":"29/11/2025 09:38"},
+      {"name":"Ouch That Hurt","description":"You suffered severe falling or impact damage.","rarity":"Normal","counter":88,"date":"24/05/2026 11:13"},
+      {"name":"Hauler","description":"Transported heavy loads and dragged carts across the territory.","rarity":"Normal","counter":71,"date":"30/01/2026 21:24"},
+      {"name":"Caravel Sailor","description":"Look, it floats! Commanded a majestic Caravel ship.","rarity":"Normal","counter":47,"date":"17/10/2025 17:44"},
+      {"name":"Rowboat Sailor","description":"Look, it floats! Rowed a rowboat across the waters.","rarity":"Normal","counter":33,"date":"09/03/2026 09:49"},
+      {"name":"Just Killed A Man","description":"Defeated an opponent player in combat. Mama, just killed a man...","rarity":"Normal","counter":24,"date":"18/01/2026 19:10"},
+      {"name":"Be Gentle Please","description":"You won a sparring session with a fellow adventurer.","rarity":"Normal","counter":24,"date":"18/01/2026 19:10"},
+      {"name":"Axe Kill","description":"Slain an enemy using an axe.","rarity":"Normal","counter":23,"date":"26/07/2025 20:00"},
+      {"name":"Cog Sailor","description":"Look, it floats! Commanded a sturdy Cog vessel.","rarity":"Normal","counter":19,"date":"21/05/2026 20:16"},
+      {"name":"Moved A Mountain","description":"Dragged a cart over 250+ tiles.","rarity":"Normal","counter":14,"date":"19/05/2025 17:14"},
+      {"name":"Epic Finalizer","description":"Delivered the crucial final step to accomplish an Epic mission.","rarity":"Normal","counter":12,"date":"09/11/2025 20:46"},
+      {"name":"Sailboat Sailor","description":"Look, it floats! Commanded a small sailboat.","rarity":"Normal","counter":9,"date":"02/02/2025 23:43"},
+      {"name":"The Lucky One","description":"Survived a deadly encounter by the skin of your teeth.","rarity":"Normal","counter":3,"date":"20/09/2025 23:07"},
+      {"name":"Brother In Spars","description":"Sparred repeatedly with companions.","rarity":"Normal","counter":2,"date":"26/07/2025 19:58"},
+      {"name":"Maul Kill","description":"Crushed an enemy using a heavy maul hammer.","rarity":"Normal","counter":1,"date":"18/01/2026 19:10"},
+      {"name":"Headsman","description":"Executed an opponent with a critical blow.","rarity":"Normal","counter":1,"date":"26/07/2025 19:58"},
+      {"name":"Finish Him!","description":"Delivered the final coup de grâce in mortal combat.","rarity":"Normal","counter":1,"date":"03/04/2026 13:50"},
+      {"name":"Chief Mate","description":"Yarr Matey! Embarked ships as captain many times.","rarity":"Normal","counter":1,"date":"02/02/2025 23:43"},
+      {"name":"Cap'n","description":"Aye aye, Cap'n! Commanded all the major ship types.","rarity":"Normal","counter":1,"date":"16/10/2025 21:41"},
+      {"name":"Wanderer","description":"Walked long journeys across the wild lands.","rarity":"Normal","counter":1,"date":"31/10/2024 18:24"},
+      {"name":"Tradesman","description":"Successfully traded goods through the trade interface.","rarity":"Normal","counter":1,"date":"25/03/2025 14:06"},
+      {"name":"Wet Feet","description":"Waded into the water and learned how to swim.","rarity":"Normal","counter":1,"date":"17/11/2024 16:50"},
+      {"name":"Dead End","description":"Died while operating a vehicle/cart.","rarity":"Normal","counter":1,"date":"05/12/2024 20:29"},
+      {"name":"Trucker","description":"Drove a large cart or wagon across the realm.","rarity":"Normal","counter":1,"date":"17/11/2024 23:01"},
+      {"name":"Joyrider","description":"Enjoyed riding a fast steed or cart.","rarity":"Normal","counter":1,"date":"25/07/2025 19:31"},
+      {"name":"Rider Of The Apocalypse","description":"Rode upon a fiery Hell Horse.","rarity":"Normal","counter":1,"date":"24/12/2024 10:57"},
+      {"name":"Sore Bottom","description":"Rode long hours continuously upon mount back.","rarity":"Normal","counter":1,"date":"30/11/2024 16:57"},
+      {"name":"Out At Sea","description":"Sailed far away from the coastline into the vast ocean deeps.","rarity":"Normal","counter":1,"date":"28/11/2024 17:57"},
+      {"name":"Went Up A Hill","description":"Climbed high upon the peaks and steep mountain ridges.","rarity":"Normal","counter":1,"date":"21/12/2024 19:37"}
+    ];
+
+    // ─── LOAD DATA ────────────────────────────────────────────
+    async function loadAchievements() {
+      try {
+        const res = await fetch('achievements_latest.json?t=' + Date.now());
+        if (res.ok) {
+          const json = await res.json();
+          if (json.achievements && json.achievements.length > 0) {
+            currentData = json.achievements;
+            if (json.player) document.getElementById('playerName').textContent = json.player;
+            if (json.last_updated) document.getElementById('syncStatus').textContent = 'Sync: ' + json.last_updated;
+          } else { currentData = fallbackData; }
+        } else { currentData = fallbackData; }
+      } catch { currentData = fallbackData; }
+      enrichAndRender();
+    }
+
+    function enrichAndRender() {
+      updateStats();
+      renderPodium();
+      renderItems();
+      renderJournal();
+    }
+
+    // ─── TABS ─────────────────────────────────────────────────
+    function switchTab(tab) {
+      currentTab = tab;
+      document.getElementById('achievementsTab').style.display = tab === 'achievements' ? 'block' : 'none';
+      document.getElementById('journalTab').style.display = tab === 'journal' ? 'block' : 'none';
+      document.getElementById('installTab').style.display = tab === 'install' ? 'block' : 'none';
+      
+      document.getElementById('tabMyAch').classList.toggle('active', tab === 'achievements');
+      document.getElementById('tabJournal').classList.toggle('active', tab === 'journal');
+      document.getElementById('tabInstall').classList.toggle('active', tab === 'install');
+    }
+
+    // ─── VIEW MODES ───────────────────────────────────────────
+    function setViewMode(mode) {
+      currentViewMode = mode;
+      ['cards','compact','table'].forEach(m => {
+        const btn = document.getElementById('mode' + m.charAt(0).toUpperCase() + m.slice(1));
+        if (btn) btn.classList.toggle('active', m === mode);
+      });
+      document.getElementById('achievementsGrid').style.display = mode === 'cards' ? 'grid' : 'none';
+      document.getElementById('compactList').style.display = mode === 'compact' ? 'flex' : 'none';
+      document.getElementById('tableContainer').style.display = mode === 'table' ? 'block' : 'none';
+    }
+
+    // ─── STATS ────────────────────────────────────────────────
+    function updateStats() {
+      const counts = { all: currentData.length, sailing: 0, combat: 0, exploration: 0, mounts: 0, epic: 0, work: 0, survival: 0 };
+      let navalTrips = 0, goldCount = 0, maxCount = 0;
+      currentData.forEach(item => {
+        const meta = (typeof WURM_ACHIEVEMENTS_DB !== 'undefined' && WURM_ACHIEVEMENTS_DB[item.name]) || {};
+        const cat = meta.category || 'exploration';
+        if (counts[cat] !== undefined) counts[cat]++;
+        if (item.rarity === 'Gold' || meta.rarity === 'Gold') goldCount++;
+        if (item.counter > maxCount) { maxCount = item.counter; }
+        if (cat === 'sailing') navalTrips += item.counter;
+      });
+      document.getElementById('statTotal').textContent = currentData.length;
+      document.getElementById('statTotalHero').textContent = currentData.length;
+      document.getElementById('statGold').textContent = goldCount;
+      document.getElementById('statTopCount').textContent = maxCount;
+      document.getElementById('statTopHero').textContent = maxCount;
+      document.getElementById('statNaval').textContent = navalTrips;
+      document.getElementById('tabMyCount').textContent = currentData.length;
+      document.getElementById('pillAllCount').textContent = counts.all;
+      document.getElementById('pillSailingCount').textContent = counts.sailing;
+      document.getElementById('pillCombatCount').textContent = counts.combat;
+      document.getElementById('pillExplorationCount').textContent = counts.exploration;
+      document.getElementById('pillMountsCount').textContent = counts.mounts;
+      document.getElementById('pillEpicCount').textContent = counts.epic;
+      document.getElementById('pillWorkCount').textContent = counts.work;
+      document.getElementById('pillSurvivalCount').textContent = counts.survival;
+    }
+
+    // ─── PODIUM ───────────────────────────────────────────────
+    function renderPodium() {
+      const sorted = [...currentData].sort((a,b) => b.counter - a.counter).slice(0, 5);
+      document.getElementById('podiumGrid').innerHTML = sorted.map((item, idx) => {
+        const meta = (typeof WURM_ACHIEVEMENTS_DB !== 'undefined' && WURM_ACHIEVEMENTS_DB[item.name]) || {};
+        const rankClass = idx === 0 ? 'rank-1' : idx === 1 ? 'rank-2' : idx === 2 ? 'rank-3' : '';
+        const icon = meta.categoryIcon || '🏆';
+        return `<div class="podium-card ${rankClass}">
+          <div class="podium-rank">#${idx+1}</div>
+          <div class="podium-data">
+            <h4>${icon} ${item.name}</h4>
+            <p>${meta.ptName || 'Conquista'}</p>
+          </div>
+          <div class="podium-count">${item.counter}<span>vezes</span></div>
+        </div>`;
+      }).join('');
+    }
+
+    // ─── FILTER + SORT ────────────────────────────────────────
+    function filterAndSortData() {
+      const query = document.getElementById('searchInput').value.toLowerCase().trim();
+      let filtered = currentData.filter(item => {
+        const meta = (typeof WURM_ACHIEVEMENTS_DB !== 'undefined' && WURM_ACHIEVEMENTS_DB[item.name]) || {};
+        const cat = meta.category || 'exploration';
+        if (currentCategory !== 'all' && cat !== currentCategory) return false;
+        if (query) {
+          const s = [item.name, meta.ptName||'', item.description||'', meta.meaning||'', meta.trivia||''].join(' ').toLowerCase();
+          if (!s.includes(query)) return false;
+        }
+        return true;
+      });
+      filtered.sort((a, b) => {
+        if (currentSort === 'counter_desc') return b.counter - a.counter;
+        if (currentSort === 'name_asc') return a.name.localeCompare(b.name);
+        if (currentSort === 'rarity_desc') {
+          const r = x => x.rarity === 'Gold' ? 3 : x.rarity === 'Silver' ? 2 : 1;
+          return r(b) - r(a);
+        }
+        return b.counter - a.counter;
+      });
+      return filtered;
+    }
+
+    // ─── RENDER ITEMS ─────────────────────────────────────────
+    function renderItems() {
+      const items = filterAndSortData();
+      const grid = document.getElementById('achievementsGrid');
+      const compact = document.getElementById('compactList');
+      const tableBody = document.getElementById('tableBody');
+
+      if (items.length === 0) {
+        grid.innerHTML = `<div class="empty-state">Nenhuma conquista encontrada com esse filtro.</div>`;
+        compact.innerHTML = `<div class="empty-state">Nenhuma conquista encontrada com esse filtro.</div>`;
+        tableBody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:24px;" class="empty-state">Nenhuma conquista encontrada.</td></tr>`;
+        return;
+      }
+
+      // CARDS
+      grid.innerHTML = items.map((item, idx) => {
+        const meta = (typeof WURM_ACHIEVEMENTS_DB !== 'undefined' && WURM_ACHIEVEMENTS_DB[item.name]) || {};
+        const isGold = item.rarity === 'Gold' || meta.rarity === 'Gold';
+        const icon = meta.categoryIcon || '🎯';
+        return `<div class="ach-card ${isGold?'gold-tier':''}">
+          <div class="ach-top">
+            <div class="ach-title-area">
+              <h3>${icon} ${item.name}</h3>
+              <div class="ach-pt-name">${meta.ptName || 'Conquista'}</div>
+            </div>
+            <div class="ach-counter-badge">
+              <div class="num">${item.counter}</div>
+              <div class="lbl">Vezes</div>
+            </div>
+          </div>
+          <div class="ach-desc-box">"${item.description || meta.meaning || ''}"</div>
+          <div class="ach-details">
+            <div class="detail-item"><span class="detail-label">Significado:</span><span class="detail-val">${meta.meaning || 'Ação registrada pelo servidor.'}</span></div>
+            <div class="detail-item"><span class="detail-label">Como obter:</span><span class="detail-val">${meta.unlock || 'Realizar a ação no jogo.'}</span></div>
+            ${meta.trivia ? `<div class="trivia-box">💡 <strong>Referência:</strong> ${meta.trivia}</div>` : ''}
+          </div>
+          <div class="ach-footer">
+            <span>📅 ${item.date || 'Desconhecida'}</span>
+            <span class="badge-tag ${isGold?'tag-gold':'tag-normal'}">${isGold?'Ouro':'Normal'}</span>
+          </div>
+        </div>`;
+      }).join('');
+
+      // COMPACT
+      compact.innerHTML = items.map((item, idx) => {
+        const meta = (typeof WURM_ACHIEVEMENTS_DB !== 'undefined' && WURM_ACHIEVEMENTS_DB[item.name]) || {};
+        const isGold = item.rarity === 'Gold' || meta.rarity === 'Gold';
+        const icon = meta.categoryIcon || '🎯';
+        return `<div class="compact-row ${isGold?'gold-row':''}">
+          <span class="compact-rank">#${idx+1}</span>
+          <span class="compact-icon">${icon}</span>
+          <div class="compact-names">
+            <div class="compact-en">${item.name}</div>
+            <div class="compact-pt">${meta.ptName || ''}</div>
+          </div>
+          <span class="compact-counter">${item.counter}×</span>
+          <span class="compact-date">${item.date || '—'}</span>
+          <span class="compact-rarity"><span class="badge-tag ${isGold?'tag-gold':'tag-normal'}">${isGold?'Ouro':'N'}</span></span>
+        </div>`;
+      }).join('');
+
+      // TABLE
+      tableBody.innerHTML = items.map((item, idx) => {
+        const meta = (typeof WURM_ACHIEVEMENTS_DB !== 'undefined' && WURM_ACHIEVEMENTS_DB[item.name]) || {};
+        const isGold = item.rarity === 'Gold' || meta.rarity === 'Gold';
+        return `<tr>
+          <td style="font-family:var(--font-mono);font-weight:700;">#${idx+1}</td>
+          <td><strong style="color:#fff;">${item.name}</strong></td>
+          <td style="color:var(--wurm-accent);">${meta.ptName || '—'}</td>
+          <td>${meta.categoryIcon||''} ${meta.categoryLabel||'Geral'}</td>
+          <td><strong style="color:${isGold?'var(--wurm-accent)':'#fff'};font-family:var(--font-mono);">${item.counter}</strong></td>
+          <td style="font-family:var(--font-mono);font-size:0.75rem;color:var(--wurm-muted);">${item.date || '—'}</td>
+          <td><span class="badge-tag ${isGold?'tag-gold':'tag-normal'}">${isGold?'Ouro':'Normal'}</span></td>
+        </tr>`;
+      }).join('');
+    }
+
+    // ─── JOURNAL 2.0 ─────────────────────────────────────────
+    function renderJournal() {
+      if (typeof WIKI_ACHIEVEMENTS === 'undefined') return;
+
+      const unlockedNames = new Set(currentData.map(d => d.name.toLowerCase().trim()));
+      const filterMode = document.getElementById('journalFilter').value;
+      const rarityFilter = document.getElementById('journalRarityFilter').value;
+      const query = (document.getElementById('journalSearch').value || '').toLowerCase().trim();
+
+      const all = WIKI_ACHIEVEMENTS.map(wa => ({
+        ...wa,
+        unlocked: unlockedNames.has(wa.name.toLowerCase().trim()),
+        playerData: currentData.find(d => d.name.toLowerCase().trim() === wa.name.toLowerCase().trim())
+      }));
+
+      const unlockedCount = all.filter(x => x.unlocked).length;
+      const pct = all.length > 0 ? Math.round((unlockedCount / all.length) * 100) : 0;
+
+      document.getElementById('journalUnlockedCount').textContent = unlockedCount;
+      document.getElementById('journalLockedCount').textContent = all.length - unlockedCount;
+      document.getElementById('journalTotalCount').textContent = all.length;
+      document.getElementById('journalPct').textContent = pct + '%';
+      document.getElementById('journalProgressFill').style.width = pct + '%';
+      document.getElementById('tabJournalCount').textContent = (all.length - unlockedCount) + ' restantes';
+
+      let filtered = all.filter(wa => {
+        if (filterMode === 'locked' && wa.unlocked) return false;
+        if (filterMode === 'unlocked' && !wa.unlocked) return false;
+        if (rarityFilter !== 'all' && wa.rarity !== rarityFilter) return false;
+        if (query) {
+          const s = [wa.name, wa.description||'', wa.howTo||''].join(' ').toLowerCase();
+          if (!s.includes(query)) return false;
+        }
+        return true;
+      });
+
+      filtered.sort((a,b) => {
+        if (a.unlocked !== b.unlocked) return a.unlocked ? 1 : -1;
+        return a.name.localeCompare(b.name);
+      });
+
+      if (filtered.length === 0) {
+        document.getElementById('journalGrid').innerHTML = `<div class="empty-state">Nenhuma conquista encontrada com esses filtros.</div>`;
+        return;
+      }
+
+      const locked = filtered.filter(x => !x.unlocked);
+      const unlocked = filtered.filter(x => x.unlocked);
+
+      let html = '';
+
+      if (locked.length > 0 && filterMode !== 'unlocked') {
+        html += `<div class="section-divider"><h4>🔒 Metas Para Conquistar (${locked.length})</h4></div>`;
+        html += locked.map(wa => {
+          const rarityTag = wa.rarity === 'Gold' ? 'tag-gold' : wa.rarity === 'Diamond' ? 'tag-diamond' : wa.rarity === 'Iron' ? 'tag-iron' : 'tag-silver';
+          return `<div class="journal-row locked">
+            <span class="journal-status">🔒</span>
+            <div class="journal-name">
+              <div class="j-en">${wa.name}</div>
+              <div class="j-desc">${wa.description || ''}</div>
+            </div>
+            <div class="journal-how">${wa.howTo || '—'}</div>
+            <div class="journal-rarity"><span class="badge-tag ${rarityTag}">${wa.rarity}</span></div>
+          </div>`;
+        }).join('');
+      }
+
+      if (unlocked.length > 0 && filterMode !== 'locked') {
+        html += `<div class="section-divider"><h4>✅ Já Desbloqueadas (${unlocked.length})</h4></div>`;
+        html += unlocked.map(wa => {
+          const pd = wa.playerData;
+          const rarityTag = wa.rarity === 'Gold' ? 'tag-gold' : wa.rarity === 'Diamond' ? 'tag-diamond' : wa.rarity === 'Iron' ? 'tag-iron' : 'tag-silver';
+          return `<div class="journal-row unlocked">
+            <span class="journal-status">✅</span>
+            <div class="journal-name">
+              <div class="j-en">${wa.name}</div>
+              <div class="j-desc">${wa.description || ''}</div>
+            </div>
+            <div class="journal-how">${wa.howTo || '—'}</div>
+            ${pd ? `<span class="journal-counter-badge">${pd.counter}×</span>` : ''}
+            <div class="journal-rarity"><span class="badge-tag ${rarityTag}">${wa.rarity}</span></div>
+          </div>`;
+        }).join('');
+      }
+
+      document.getElementById('journalGrid').innerHTML = html;
+    }
+
+    // ─── EVENT LISTENERS ──────────────────────────────────────
+    document.getElementById('searchInput').addEventListener('input', renderItems);
+    document.getElementById('sortSelect').addEventListener('change', e => { currentSort = e.target.value; renderItems(); });
+    document.getElementById('reloadBtn').addEventListener('click', loadAchievements);
+    document.getElementById('journalSearch').addEventListener('input', renderJournal);
+    document.getElementById('journalFilter').addEventListener('change', renderJournal);
+    document.getElementById('journalRarityFilter').addEventListener('change', renderJournal);
+
+    document.querySelectorAll('.pill-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentCategory = btn.dataset.cat;
+        renderItems();
+      });
+    });
+
+    // ─── INITIAL LOAD + LIVE REFRESH ──────────────────────────
+    setInterval(loadAchievements, 5000);
+    loadAchievements();
+  </script>
+</body>
+</html>

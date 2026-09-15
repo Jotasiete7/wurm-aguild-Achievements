@@ -1,0 +1,263 @@
+﻿{
+  "player": "jotasiete",
+  "last_updated": "2026-09-15 19:20:00",
+  "total": 32,
+  "achievements": [
+    {
+      "name": "Nomad",
+      "description": "You love visiting different places and discovering deeds across the lands.",
+      "rarity_id": 4,
+      "rarity": "Gold",
+      "counter": 275,
+      "date": "28/08/2026 22:34"
+    },
+    {
+      "name": "Epic Helper",
+      "description": "You contributed significantly to divine epic scenarios on Valrei/Epic.",
+      "rarity_id": 2,
+      "rarity": "Normal",
+      "counter": 199,
+      "date": "14/08/2026 17:46"
+    },
+    {
+      "name": "Knarr Sailor",
+      "description": "Look, it floats! Commanded a Knarr on the waters.",
+      "rarity_id": 2,
+      "rarity": "Normal",
+      "counter": 185,
+      "date": "14/06/2026 16:08"
+    },
+    {
+      "name": "Corbita Sailor",
+      "description": "Look, it floats! Commanded a Corbita merchant ship.",
+      "rarity_id": 2,
+      "rarity": "Normal",
+      "counter": 157,
+      "date": "29/11/2025 09:38"
+    },
+    {
+      "name": "Ouch That Hurt",
+      "description": "You suffered severe falling or impact damage from climbing cliffs or slopes.",
+      "rarity_id": 2,
+      "rarity": "Normal",
+      "counter": 88,
+      "date": "24/05/2026 11:13"
+    },
+    {
+      "name": "Hauler",
+      "description": "Transported heavy loads and dragged carts across the territory.",
+      "rarity_id": 2,
+      "rarity": "Normal",
+      "counter": 71,
+      "date": "30/01/2026 21:24"
+    },
+    {
+      "name": "Caravel Sailor",
+      "description": "Look, it floats! Commanded a majestic Caravel ship.",
+      "rarity_id": 2,
+      "rarity": "Normal",
+      "counter": 47,
+      "date": "17/10/2025 17:44"
+    },
+    {
+      "name": "Rowboat Sailor",
+      "description": "Look, it floats! Rowed a rowboat across the waters.",
+      "rarity_id": 2,
+      "rarity": "Normal",
+      "counter": 33,
+      "date": "09/03/2026 09:49"
+    },
+    {
+      "name": "Just Killed A Man",
+      "description": "Defeated an opponent player in combat. Mama, just killed a man...",
+      "rarity_id": 2,
+      "rarity": "Normal",
+      "counter": 24,
+      "date": "18/01/2026 19:10"
+    },
+    {
+      "name": "Be Gentle Please",
+      "description": "You won a sparring session with a fellow adventurer.",
+      "rarity_id": 2,
+      "rarity": "Normal",
+      "counter": 24,
+      "date": "18/01/2026 19:10"
+    },
+    {
+      "name": "Axe Kill",
+      "description": "Slain an enemy using an axe.",
+      "rarity_id": 2,
+      "rarity": "Normal",
+      "counter": 23,
+      "date": "26/07/2025 20:00"
+    },
+    {
+      "name": "Cog Sailor",
+      "description": "Look, it floats! Commanded a sturdy Cog vessel.",
+      "rarity_id": 2,
+      "rarity": "Normal",
+      "counter": 19,
+      "date": "21/05/2026 20:16"
+    },
+    {
+      "name": "Moved A Mountain",
+      "description": "You know how to drag a cart! Dragged a cart over 250+ tiles.",
+      "rarity_id": 2,
+      "rarity": "Normal",
+      "counter": 14,
+      "date": "19/05/2025 17:14"
+    },
+    {
+      "name": "Epic Finalizer",
+      "description": "You delivered the crucial final step or item to accomplish an Epic mission.",
+      "rarity_id": 2,
+      "rarity": "Normal",
+      "counter": 12,
+      "date": "09/11/2025 20:46"
+    },
+    {
+      "name": "Sailboat Sailor",
+      "description": "Look, it floats! Commanded a small sailboat.",
+      "rarity_id": 2,
+      "rarity": "Normal",
+      "counter": 9,
+      "date": "02/02/2025 23:43"
+    },
+    {
+      "name": "The Lucky One",
+      "description": "Survived a deadly encounter by the skin of your teeth.",
+      "rarity_id": 2,
+      "rarity": "Normal",
+      "counter": 3,
+      "date": "20/09/2025 23:07"
+    },
+    {
+      "name": "Brother In Spars",
+      "description": "You're quite popular to spar against. Sparred repeatedly with companions.",
+      "rarity_id": 2,
+      "rarity": "Normal",
+      "counter": 2,
+      "date": "26/07/2025 19:58"
+    },
+    {
+      "name": "Maul Kill",
+      "description": "Crushed an enemy using a heavy maul hammer.",
+      "rarity_id": 2,
+      "rarity": "Normal",
+      "counter": 1,
+      "date": "18/01/2026 19:10"
+    },
+    {
+      "name": "Headsman",
+      "description": "Executed an opponent with a clean two-handed or critical blow.",
+      "rarity_id": 2,
+      "rarity": "Normal",
+      "counter": 1,
+      "date": "26/07/2025 19:58"
+    },
+    {
+      "name": "Finish Him!",
+      "description": "Delivered the final coup de grâce in mortal combat.",
+      "rarity_id": 2,
+      "rarity": "Normal",
+      "counter": 1,
+      "date": "03/04/2026 13:50"
+    },
+    {
+      "name": "Chief Mate",
+      "description": "Yarr Matey! Embarked ships as captain many times.",
+      "rarity_id": 2,
+      "rarity": "Normal",
+      "counter": 1,
+      "date": "02/02/2025 23:43"
+    },
+    {
+      "name": "Cap'n",
+      "description": "Aye aye, Cap'n! Commanded all the major ship types across the seas.",
+      "rarity_id": 2,
+      "rarity": "Normal",
+      "counter": 1,
+      "date": "16/10/2025 21:41"
+    },
+    {
+      "name": "Wanderer",
+      "description": "Walked long journeys across the wild lands.",
+      "rarity_id": 2,
+      "rarity": "Normal",
+      "counter": 1,
+      "date": "31/10/2024 18:24"
+    },
+    {
+      "name": "Tradesman",
+      "description": "Successfully traded goods through the commercial trade interface.",
+      "rarity_id": 2,
+      "rarity": "Normal",
+      "counter": 1,
+      "date": "25/03/2025 14:06"
+    },
+    {
+      "name": "Wet Feet",
+      "description": "Waded into the water and learned how to swim.",
+      "rarity_id": 2,
+      "rarity": "Normal",
+      "counter": 1,
+      "date": "17/11/2024 16:50"
+    },
+    {
+      "name": "Dead End",
+      "description": "Sometimes it's hard to survive while driving. Died while operating a vehicle/cart.",
+      "rarity_id": 2,
+      "rarity": "Normal",
+      "counter": 1,
+      "date": "05/12/2024 20:29"
+    },
+    {
+      "name": "Trucker",
+      "description": "Drove a large cart or wagon across the realm.",
+      "rarity_id": 2,
+      "rarity": "Normal",
+      "counter": 1,
+      "date": "17/11/2024 23:01"
+    },
+    {
+      "name": "Joyrider",
+      "description": "Accelerated and enjoyed riding a fast steed or cart.",
+      "rarity_id": 2,
+      "rarity": "Normal",
+      "counter": 1,
+      "date": "25/07/2025 19:31"
+    },
+    {
+      "name": "Rider Of The Apocalypse",
+      "description": "Rode upon a fiery Hell Horse, creature of the nether.",
+      "rarity_id": 2,
+      "rarity": "Normal",
+      "counter": 1,
+      "date": "24/12/2024 10:57"
+    },
+    {
+      "name": "Sore Bottom",
+      "description": "Rode long hours continuously upon mount back.",
+      "rarity_id": 2,
+      "rarity": "Normal",
+      "counter": 1,
+      "date": "30/11/2024 16:57"
+    },
+    {
+      "name": "Out At Sea",
+      "description": "Sailed far away from the coastline into the vast ocean deeps.",
+      "rarity_id": 2,
+      "rarity": "Normal",
+      "counter": 1,
+      "date": "28/11/2024 17:57"
+    },
+    {
+      "name": "Went Up A Hill",
+      "description": "Climbed high upon the peaks and steep mountain ridges.",
+      "rarity_id": 2,
+      "rarity": "Normal",
+      "counter": 1,
+      "date": "21/12/2024 19:37"
+    }
+  ]
+}
