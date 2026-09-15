@@ -1215,9 +1215,11 @@
       <a href="https://ko-fi.com/aguildanode" target="_blank" rel="noopener noreferrer" class="kofi-btn">
         ☕ <span>Support Us</span>
       </a>
-      <div class="player-sync-tag">
+      <div class="player-sync-tag" style="padding: 2px 8px; gap: 6px;">
         <span class="sync-dot"></span>
-        <span id="playerName" style="color:#fff; font-weight:700;">jotasiete</span>
+        <select id="guildPlayerSelector" style="background: transparent; border: none; color: #fff; font-family: var(--font-mono); font-size: 0.78rem; font-weight: 700; cursor: pointer; padding: 2px 4px; outline: none;">
+          <option value="jotasiete" selected>jotasiete (Guilda)</option>
+        </select>
       </div>
     </div>
   </header>
@@ -1616,19 +1618,80 @@
       {"name":"Went Up A Hill","description":"Climbed high upon the peaks and steep mountain ridges.","rarity":"Normal","counter":1,"date":"21/12/2024 19:37"}
     ];
 
-    // ─── LOAD DATA ────────────────────────────────────────────
-    async function loadAchievements() {
+    // ─── SUPABASE CLOUD CONFIG ──────────────────────────────
+    const SUPABASE_URL = "https://gzhvqprdrtudyokhgxlj.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd6aHZxcHJkcnR1ZHlva2hneGxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc3NTQ2MTUsImV4cCI6MjA4MzMzMDYxNX0.aSJIhfViQsb0dBjb5bOup49GCrQBt93uSkZySZAXcNo";
+    let guildPlayers = [];
+    let selectedPlayerName = "jotasiete";
+
+    // ─── LOAD DATA (Supabase Cloud + Local Live Polling) ──────
+    async function fetchGuildPlayers() {
       try {
-        const res = await fetch('achievements_latest.json?t=' + Date.now());
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/player_achievements?select=player_name,total_count,gold_count,updated_at`, {
+          headers: { "apikey": SUPABASE_KEY, "Authorization": "Bearer " + SUPABASE_KEY }
+        });
         if (res.ok) {
-          const json = await res.json();
-          if (json.achievements && json.achievements.length > 0) {
-            currentData = json.achievements;
-            if (json.player) document.getElementById('playerName').textContent = json.player;
-            if (json.last_updated) document.getElementById('syncStatus').textContent = 'Sync: ' + json.last_updated;
-          } else { currentData = fallbackData; }
-        } else { currentData = fallbackData; }
-      } catch { currentData = fallbackData; }
+          const players = await res.json();
+          if (players && players.length > 0) {
+            guildPlayers = players;
+            updatePlayerSelector();
+          }
+        }
+      } catch (e) {
+        console.warn("[Supabase] Offline ou erro ao listar membros:", e);
+      }
+    }
+
+    function updatePlayerSelector() {
+      const select = document.getElementById('guildPlayerSelector');
+      if (!select) return;
+      const current = select.value || selectedPlayerName;
+      select.innerHTML = guildPlayers.map(p => {
+        const isSel = p.player_name === current ? 'selected' : '';
+        return `<option value="${p.player_name}" ${isSel}>${p.player_name} (${p.total_count}🏅)</option>`;
+      }).join('');
+      if (!guildPlayers.some(p => p.player_name === current)) {
+        select.innerHTML += `<option value="${current}" selected>${current} (Local)</option>`;
+      }
+    }
+
+    async function loadAchievements() {
+      // 1. Se estiver visualizando o próprio player local, tentar arquivo local recente
+      if (selectedPlayerName === "jotasiete" || !selectedPlayerName) {
+        try {
+          const res = await fetch('achievements_latest.json?t=' + Date.now());
+          if (res.ok) {
+            const json = await res.json();
+            if (json.achievements && json.achievements.length > 0) {
+              currentData = json.achievements;
+              if (json.last_updated) document.getElementById('syncStatus').textContent = 'Sincronizado: ' + json.last_updated;
+              enrichAndRender();
+              return;
+            }
+          }
+        } catch { /* continuar para o Supabase */ }
+      }
+
+      // 2. Buscar do Supabase (para qualquer jogador da guilda)
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/player_achievements?player_name=eq.${encodeURIComponent(selectedPlayerName)}&select=*`, {
+          headers: { "apikey": SUPABASE_KEY, "Authorization": "Bearer " + SUPABASE_KEY }
+        });
+        if (res.ok) {
+          const rows = await res.json();
+          if (rows && rows.length > 0) {
+            currentData = rows[0].achievements || [];
+            document.getElementById('syncStatus').textContent = 'Nuvem A Guilda (Supabase)';
+            enrichAndRender();
+            return;
+          }
+        }
+      } catch (e) {
+        console.warn("[Supabase] Falha ao carregar jogador:", e);
+      }
+
+      // 3. Fallback seguro
+      currentData = fallbackData;
       enrichAndRender();
     }
 
@@ -1917,9 +1980,19 @@
       });
     });
 
+    const playerSelector = document.getElementById('guildPlayerSelector');
+    if (playerSelector) {
+      playerSelector.addEventListener('change', (e) => {
+        selectedPlayerName = e.target.value;
+        loadAchievements();
+      });
+    }
+
     // ─── INITIAL LOAD + LIVE REFRESH ──────────────────────────
-    setInterval(loadAchievements, 5000);
+    fetchGuildPlayers();
     loadAchievements();
+    setInterval(loadAchievements, 5000);
+    setInterval(fetchGuildPlayers, 30000); // atualiza lista de membros a cada 30s
   </script>
 </body>
 </html>
