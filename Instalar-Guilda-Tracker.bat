@@ -54,39 +54,35 @@ echo [OK] Pasta do Wurm encontrada com sucesso!
 echo      "%WURM_DIR%"
 echo.
 
-:: Copiar o JAR do tracker para a pasta do Wurm
-echo Copiando arquivo seguro do tracker (wurm_achievements.jar)...
-copy /Y "%~dp0wurm_achievements.jar" "%WURM_DIR%\wurm_achievements.jar" >nul
+:: Integrar o leitor de conquistas diretamente ao client do Wurm
+echo Integrando leitor de conquistas de forma 100%% segura e transparente...
+set "JAVA_EXE=%WURM_DIR%\21-win64\runtime\bin\java.exe"
+if not exist "%JAVA_EXE%" set "JAVA_EXE=java"
+
+"%JAVA_EXE%" -cp "%~dp0wurm_tracker_patch.jar" wurm.tracker.ClientPatcher "%WURM_DIR%"
 if errorlevel 1 (
-    echo [ERRO] Falha ao copiar o arquivo. Tente executar este instalador como Administrador.
-    pause
-    exit /b
+    echo.
+    echo [AVISO] O patch direto nao pode ser aplicado (verifique se o jogo esta fechado).
+    echo Configurando modo alternativo...
+    copy /Y "%~dp0wurm_achievements.jar" "%WURM_DIR%\wurm_achievements.jar" >nul
 )
 
-:: Criar o inicializador oficial na pasta do Wurm
-echo Configurando launcher com Tracker integrado...
-(
-echo @echo off
-echo cd /d "%%~dp0"
-echo set JAVA_TOOL_OPTIONS=-javaagent:wurm_achievements.jar
-echo start "" "WurmLauncher64.exe"
-echo exit
-) > "%WURM_DIR%\iniciar_wurm_com_tracker.bat"
-
-:: Criar Atalho na Area de Trabalho do jogador via PowerShell
-echo Criando atalho na sua Area de Trabalho...
-powershell -NoProfile -ExecutionPolicy Bypass -Command "$ws = New-Object -ComObject WScript.Shell; $sc = $ws.CreateShortcut([System.IO.Path]::Combine([Environment]::GetFolderPath('Desktop'), 'Wurm Online (Guilda Tracker).lnk')); $sc.TargetPath = '%WURM_DIR%\iniciar_wurm_com_tracker.bat'; $sc.WorkingDirectory = '%WURM_DIR%'; if (Test-Path '%WURM_DIR%\WurmLauncher64.exe') { $sc.IconLocation = '%WURM_DIR%\WurmLauncher64.exe,0' }; $sc.Save()"
+:: Limpar atalhos antigos caso existam
+if exist "%USERPROFILE%\Desktop\Wurm Online (Guilda Tracker).lnk" (
+    del /f /q "%USERPROFILE%\Desktop\Wurm Online (Guilda Tracker).lnk" >nul 2>&1
+)
 
 echo.
 echo ================================================================
 echo           INSTALACAO CONCLUIDA COM SUCESSO!
 echo ================================================================
 echo.
-echo [1] Um novo atalho foi criado na sua Area de Trabalho:
-echo     "Wurm Online (Guilda Tracker)"
+echo [1] O leitor de conquistas foi integrado com sucesso ao Wurm!
+echo     NENHUM atalho novo foi criado na sua Area de Trabalho.
 echo.
-echo [2] Basta abrir o Wurm atraves desse atalho.
-echo     Ele vai ler suas conquistas normalmente enquanto voce joga
-echo     e gerar seus dados de forma 100%% segura!
+echo [2] Basta abrir seu jogo NORMALMENTE (pela Steam ou onde voce sempre abre).
+echo     Suas conquistas vao atualizar no site automaticamente
+echo     enquanto voce joga, sem que voce precise fazer mais nada!
 echo.
 pause
+

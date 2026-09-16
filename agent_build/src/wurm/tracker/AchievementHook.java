@@ -1,12 +1,17 @@
 package wurm.tracker;
 
 import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.*;
 
 public class AchievementHook {
+
+    private static final String SUPABASE_URL = "https://gzhvqprdrtudyokhgxlj.supabase.co/rest/v1/player_achievements";
+    private static final String SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd6aHZxcHJkcnR1ZHlva2hneGxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc3NTQ2MTUsImV4cCI6MjA4MzMzMDYxNX0.aSJIhfViQsb0dBjb5bOup49GCrQBt93uSkZySZAXcNo";
 
     public static class Entry {
         public String name;
@@ -136,33 +141,91 @@ public class AchievementHook {
             }
         });
 
+        int goldCount = 0;
         for (int i = 0; i < list.size(); i++) {
             Entry e = list.get(i);
+            String rName = getRarityName(e.rarity);
+            if ("Gold".equals(rName)) goldCount++;
             sb.append("    {\n");
             sb.append("      \"name\": \"").append(escapeJson(e.name)).append("\",\n");
             sb.append("      \"description\": \"").append(escapeJson(e.description)).append("\",\n");
             sb.append("      \"rarity_id\": ").append(e.rarity).append(",\n");
-            sb.append("      \"rarity\": \"").append(getRarityName(e.rarity)).append("\",\n");
+            sb.append("      \"rarity\": \"").append(rName).append("\",\n");
             sb.append("      \"counter\": ").append(e.counter).append(",\n");
             sb.append("      \"timestamp\": ").append(e.timestamp).append(",\n");
             sb.append("      \"date\": \"").append(e.timestamp > 0 ? sdf.format(new Date(e.timestamp)) : "").append("\"\n");
             sb.append("    }").append(i < list.size() - 1 ? ",\n" : "\n");
         }
         sb.append("  ]\n");
+        String arrayJson = sb.toString().substring(sb.indexOf("[\n"));
         sb.append("}\n");
 
         String json = sb.toString();
 
-        File dest1 = new File("C:\\Users\\Metalgear\\Documents\\antigravity\\fervent-lovelace\\achievements_" + player + ".json");
-        writeFile(dest1, json);
+        File destPlayer = new File("gamedata/players/" + player + "/achievements_" + player + ".json");
+        writeFile(destPlayer, json);
 
-        File destLatest = new File("C:\\Users\\Metalgear\\Documents\\antigravity\\fervent-lovelace\\achievements_latest.json");
+        File destLatest = new File("achievements_latest.json");
         writeFile(destLatest, json);
 
-        File dest2 = new File("D:\\SteamLibrary\\steamapps\\common\\Wurm Online\\gamedata\\players\\" + player + "\\achievements_" + player + ".json");
-        writeFile(dest2, json);
+        File destAbsolute = new File("D:\\SteamLibrary\\steamapps\\common\\Wurm Online\\gamedata\\players\\" + player + "\\achievements_" + player + ".json");
+        if (!destAbsolute.equals(destPlayer.getAbsoluteFile())) {
+            writeFile(destAbsolute, json);
+        }
 
-        System.out.println("[WurmTracker] Achievements successfully written to " + dest1.getAbsolutePath());
+        System.out.println("[WurmTracker] Achievements saved locally. Triggering Supabase cloud sync...");
+
+        final int totalCount = list.size();
+        final int finalGoldCount = goldCount;
+        final String topName = list.isEmpty() ? "" : list.get(0).name;
+        final int maxCounter = list.isEmpty() ? 0 : list.get(0).counter;
+
+        sendToSupabase(player, arrayJson, totalCount, finalGoldCount, topName, maxCounter);
+    }
+
+    private static void sendToSupabase(final String player, final String arrayJson, final int total, final int goldCount, final String topName, final int maxCounter) {
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL(SUPABASE_URL);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("POST");
+                    conn.setRequestProperty("apikey", SUPABASE_KEY);
+                    conn.setRequestProperty("Authorization", "Bearer " + SUPABASE_KEY);
+                    conn.setRequestProperty("Content-Type", "application/json");
+                    conn.setRequestProperty("Prefer", "resolution=merge-duplicates");
+                    conn.setDoOutput(true);
+                    conn.setConnectTimeout(8000);
+                    conn.setReadTimeout(8000);
+
+                    SimpleDateFormat iso = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+                    iso.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+                    StringBuilder body = new StringBuilder();
+                    body.append("[{\n");
+                    body.append("  \"player_name\": \"").append(escapeJson(player)).append("\",\n");
+                    body.append("  \"achievements\": ").append(arrayJson).append(",\n");
+                    body.append("  \"total_count\": ").append(total).append(",\n");
+                    body.append("  \"gold_count\": ").append(goldCount).append(",\n");
+                    body.append("  \"max_counter\": ").append(maxCounter).append(",\n");
+                    body.append("  \"top_achievement\": \"").append(escapeJson(topName)).append("\",\n");
+                    body.append("  \"updated_at\": \"").append(iso.format(new Date())).append("\"\n");
+                    body.append("}]");
+
+                    byte[] bytes = body.toString().getBytes(StandardCharsets.UTF_8);
+                    try (OutputStream os = conn.getOutputStream()) {
+                        os.write(bytes);
+                    }
+                    int code = conn.getResponseCode();
+                    System.out.println("[WurmTracker] Supabase auto-sync response: " + code);
+                } catch (Throwable t) {
+                    System.err.println("[WurmTracker] Supabase auto-sync error: " + t.getMessage());
+                }
+            }
+        });
+        t.setDaemon(true);
+        t.start();
     }
 
     private static void writeFile(File f, String content) {
