@@ -174,6 +174,31 @@ echo.
 echo Sincronizando registro no Ranking da Guilda...
 powershell -NoProfile -ExecutionPolicy Bypass -Command "$name = '%PLAYER_NAME%'; $token = '%CLAIM_TOKEN%'; $url = 'https://gzhvqprdrtudyokhgxlj.supabase.co/rest/v1/player_achievements'; $key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd6aHZxcHJkcnR1ZHlva2hneGxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc3NTQ2MTUsImV4cCI6MjA4MzMzMDYxNX0.aSJIhfViQsb0dBjb5bOup49GCrQBt93uSkZySZAXcNo'; $h = @{ 'apikey' = $key; 'Authorization' = 'Bearer ' + $key; 'Content-Type' = 'application/json'; 'Prefer' = 'resolution=merge-duplicates' }; try { $existing = Invoke-RestMethod -Uri ($url + '?player_name=ilike.' + [uri]::EscapeDataString($name)) -Headers $h; if (!$existing -or $existing.Count -eq 0) { $body = @(@{ player_name = $name; claim_token = $token; total_count = 0; gold_count = 0; score = 0; max_counter = 0; top_achievement = ''; achievements = @(); updated_at = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ') }) | ConvertTo-Json; Invoke-RestMethod -Uri $url -Method Post -Headers $h -Body $body -TimeoutSec 5 | Out-Null; Write-Host '[OK] Personagem registrado com sucesso no ranking da guilda!' -ForegroundColor Green } else { Write-Host ('[OK] Personagem conectado: [' + $existing[0].player_name + ']. Conquistas e ranking preservados!') -ForegroundColor Green } } catch { Write-Host ('[!] Conexao com a nuvem: ' + $_.Exception.Message) -ForegroundColor Yellow }"
 
+:: Copiar biblioteca wurm_achievements.jar e configurar inicializador seguro com JavaAgent
+copy /Y "%~dp0wurm_achievements.jar" "%WURM_DIR%\wurm_achievements.jar" >nul
+
+(
+echo @echo off
+echo cd /d "%%~dp0"
+echo set JAVA_TOOL_OPTIONS=-javaagent:wurm_achievements.jar
+echo start "" "WurmLauncher64.exe"
+echo exit
+) > "%WURM_DIR%\iniciar_wurm_com_tracker.bat"
+
+:: Criar atalho oficial na Area de Trabalho
+set "LNK_FILE=%USERPROFILE%\Desktop\Wurm Online (A Guilda Tracker).lnk"
+(
+echo Set ws = WScript.CreateObject("WScript.Shell"^)
+echo Set sc = ws.CreateShortcut("%LNK_FILE%"^)
+echo sc.TargetPath = "%WURM_DIR%\iniciar_wurm_com_tracker.bat"
+echo sc.WorkingDirectory = "%WURM_DIR%"
+echo sc.IconLocation = "%WURM_DIR%\WurmLauncher64.exe,0"
+echo sc.Description = "Wurm Online com Leitor de Conquistas da Guilda"
+echo sc.Save
+) > "%TEMP%\create_guild_shortcut.vbs"
+cscript //nologo "%TEMP%\create_guild_shortcut.vbs" >nul 2>&1
+del /f /q "%TEMP%\create_guild_shortcut.vbs" >nul 2>&1
+
 :: Limpar atalhos antigos caso existam
 if exist "%USERPROFILE%\Desktop\Wurm Online (Guilda Tracker).lnk" (
     del /f /q "%USERPROFILE%\Desktop\Wurm Online (Guilda Tracker).lnk" >nul 2>&1
@@ -184,10 +209,20 @@ echo ================================================================
 echo               INSTALACAO CONCLUIDA COM SUCESSO!
 echo ================================================================
 echo.
-echo [1] O personagem [%PLAYER_NAME%] esta pronto e ativo!
-echo [2] Abra o Wurm Online NORMALMENTE (pela Steam ou como de costume).
-echo [3] Dentro do jogo, abra a janela de Conquistas (menu Tools -^> Achievements).
-echo     Suas conquistas serao lidas e enviadas para o ranking!
+echo [1] O personagem [%PLAYER_NAME%] esta pronto e conectado!
+echo.
+echo [2] Um atalho foi criado na sua Area de Trabalho:
+echo     >> "Wurm Online (A Guilda Tracker)" <<
+echo     Basta dar 2 cliques nele para abrir o jogo com o leitor ativado!
+echo     (A Steam abre junto normalmente e conta suas horas de jogo).
+echo.
+echo [3] Se preferir clicar no botao "JOGAR" direto dentro da Steam:
+echo     Abra a Steam, clique com botao direito no Wurm Online -> Propriedades.
+echo     Na aba Geral, em Opcoes de Inicializacao, cole:
+echo     cmd /c set JAVA_TOOL_OPTIONS=-javaagent:wurm_achievements.jar ^&^& %%command%%
+echo.
+echo [4] Dentro do jogo, abra a janela de Conquistas (menu Tools -^> Achievements).
+echo     Suas conquistas serao lidas e enviadas para o ranking da guilda!
 echo.
 echo Abrindo o site com seu personagem conectado...
 start "" "https://wurm-aguild-achievements.pages.dev/?mychar=%PLAYER_NAME%"
