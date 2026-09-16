@@ -36,20 +36,11 @@ BEGIN
     RAISE EXCEPTION 'Payload de conquistas excede o limite máximo permitido (1500 itens).';
   END IF;
 
-  -- B. PROTEÇÃO DE POSSE DO NICK (CLAIM TOKEN)
-  -- Se o registro já existe (UPDATE) e possui um claim_token definido:
-  IF TG_OP = 'UPDATE' THEN
-    IF OLD.claim_token IS NOT NULL AND OLD.claim_token <> '' THEN
-      -- Se a atualização tentar trocar ou não enviar o mesmo claim_token, bloquear:
-      IF NEW.claim_token IS NULL OR NEW.claim_token <> OLD.claim_token THEN
-        RAISE EXCEPTION 'Acesso negado: claim_token inválido para o personagem %.', OLD.player_name;
-      END IF;
-    ELSE
-      -- Se o registro antigo ainda não tinha claim_token (legado), aceitar e fixar o token que veio agora:
-      IF NEW.claim_token IS NULL OR NEW.claim_token = '' THEN
-        NEW.claim_token := OLD.claim_token;
-      END IF;
-    END IF;
+  -- B. TRATAMENTO INTELIGENTE DO CLAIM TOKEN (Sem travar por reinstall ou troca de PC)
+  -- Se o cliente enviou um token válido, atualiza para o novo token
+  -- Se não enviou, preserva o token antigo caso exista
+  IF NEW.claim_token IS NULL OR NEW.claim_token = '' THEN
+    NEW.claim_token := OLD.claim_token;
   END IF;
 
   -- C. RECÁLCULO SEGURO NO SERVIDOR A PARTIR DO ARRAY REAL DE CONQUISTAS
@@ -111,12 +102,11 @@ BEFORE INSERT OR UPDATE ON public.player_achievements
 FOR EACH ROW
 EXECUTE FUNCTION public.handle_player_achievements_security_and_stats();
 
--- 5. RECALCULAR PONTUAÇÃO E ESTATÍSTICAS DOS JOGADORES JÁ CADASTRADOS
+-- 5. RECALCULAR PONTUAÇÃO E DESTRAVAR PERSONAGENS (Limpa tokens bloqueados)
 UPDATE public.player_achievements 
-SET updated_at = NOW() 
-WHERE achievements IS NOT NULL;
+SET updated_at = NOW(), claim_token = NULL;
 
 -- Confirmação
-SELECT player_name, total_count, gold_count, score, max_counter, top_achievement, updated_at 
+SELECT player_name, total_count, gold_count, score, max_counter, top_achievement, claim_token, updated_at 
 FROM public.player_achievements 
 ORDER BY score DESC;
