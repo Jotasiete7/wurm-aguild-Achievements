@@ -652,6 +652,98 @@
       font-weight: 700;
     }
 
+    /* STATUS FILTER SEGMENTED BUTTONS (Todas | Conquistadas | Faltando) */
+    .status-filter-group {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid var(--wurm-border);
+      border-radius: 6px;
+      padding: 3px;
+      gap: 3px;
+    }
+    .status-btn {
+      background: transparent;
+      border: none;
+      color: var(--wurm-muted);
+      padding: 5px 11px;
+      border-radius: 4px;
+      font-size: 0.76rem;
+      font-family: var(--font-mono);
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+    .status-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .status-btn.active {
+      background: var(--wurm-panel);
+      color: var(--wurm-accent);
+      border: 1px solid rgba(212, 180, 131, 0.4);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+    }
+    .status-badge {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--wurm-muted);
+      font-size: 0.68rem;
+      padding: 1px 6px;
+      border-radius: 9999px;
+    }
+    .status-btn.active .status-badge {
+      background: rgba(212, 180, 131, 0.2);
+      color: var(--wurm-accent);
+      font-weight: 700;
+    }
+
+    /* STYLES FOR LOCKED / MISSING ACHIEVEMENTS */
+    .row-locked {
+      opacity: 0.68;
+      background: rgba(18, 18, 22, 0.4);
+    }
+    .row-locked:hover {
+      opacity: 0.98;
+      background: rgba(255, 255, 255, 0.035);
+    }
+    .card-locked {
+      opacity: 0.72;
+      border-style: dashed;
+      background: rgba(18, 18, 22, 0.65);
+    }
+    .card-locked:hover {
+      opacity: 1;
+      border-color: rgba(212, 180, 131, 0.5);
+    }
+    .compact-row.compact-locked {
+      opacity: 0.65;
+    }
+    .compact-row.compact-locked:hover {
+      opacity: 0.98;
+    }
+    .tag-locked {
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #f87171;
+    }
+    .tag-unlocked {
+      background: rgba(126, 231, 135, 0.12);
+      border: 1px solid rgba(126, 231, 135, 0.3);
+      color: #7ee787;
+    }
+    .ach-counter-badge.locked-badge {
+      border-color: rgba(239, 68, 68, 0.3);
+      background: rgba(239, 68, 68, 0.06);
+    }
+    .ach-counter-badge.locked-badge .num {
+      color: #f87171;
+      font-size: 1.1rem;
+    }
+
     /* CATEGORY PILLS (Same as Mining Tool: rounded-full pills) */
     .category-pills {
       display: flex;
@@ -2200,6 +2292,17 @@
           <input type="text" id="searchInput" placeholder="Buscar conquista, tradução, significado, barco ou arma..." data-i18n-placeholder="search_placeholder">
         </div>
         <div class="filter-actions">
+          <div class="status-filter-group" id="statusFilterGroup">
+            <button class="status-btn active" data-status="all" onclick="setStatusFilter('all')">
+              <span data-i18n="status_all">Todas</span> <span class="status-badge" id="countStatusAll">0</span>
+            </button>
+            <button class="status-btn" data-status="unlocked" onclick="setStatusFilter('unlocked')">
+              <span data-i18n="status_unlocked">✅ Conquistadas</span> <span class="status-badge" id="countStatusUnlocked">0</span>
+            </button>
+            <button class="status-btn" data-status="locked" onclick="setStatusFilter('locked')">
+              <span data-i18n="status_locked">🔒 Faltando</span> <span class="status-badge" id="countStatusLocked">0</span>
+            </button>
+          </div>
           <select id="sortSelect">
             <option value="counter_desc" data-i18n="sort_counter_desc">Ranking: Maior Contador</option>
             <option value="date_desc">Mais Recentes Primeiro</option>
@@ -2410,6 +2513,7 @@
     let currentData = [];
     let currentCategory = 'all';
     let currentSort = 'counter_desc';
+    let currentStatusFilter = 'all'; // 'all' | 'unlocked' | 'locked'
     let currentViewMode = 'table';
     let currentTab = 'achievements';
 
@@ -2519,6 +2623,11 @@
         view_table: "Tabela",
         view_cards: "Cards",
         view_compact: "Compacto",
+        status_all: "Todas",
+        status_unlocked: "✅ Conquistadas",
+        status_locked: "🔒 Faltando",
+        tag_locked: "A Conquistar",
+        badge_locked_status: "🔒 Pendente",
         cat_all: "Todas",
         cat_combat: "⚔️ Combate",
         cat_work: "📦 Trabalho & Forja",
@@ -2598,6 +2707,11 @@
         view_table: "Table",
         view_cards: "Cards",
         view_compact: "Compact",
+        status_all: "All",
+        status_unlocked: "✅ Unlocked",
+        status_locked: "🔒 Missing",
+        tag_locked: "To Unlock",
+        badge_locked_status: "🔒 Locked",
         cat_all: "All",
         cat_combat: "⚔️ Combat",
         cat_work: "📦 Craft & Forge",
@@ -2721,20 +2835,27 @@
 
         const titleEl = document.getElementById('ttTitle');
         const subEl = document.getElementById('ttSub');
+        const playerItem = currentData.find(d => d.name.toLowerCase().trim() === achName.toLowerCase().trim());
+        const isUnlocked = !!playerItem;
+        const statusBadge = isUnlocked ? ` • ✅ ${playerItem.counter}×` : ` • 🔒 ${t('tag_locked')}`;
+
         if (currentLang === 'en') {
           if (titleEl) titleEl.textContent = achName;
-          if (subEl) subEl.textContent = meta.ptName ? `PT: ${meta.ptName}` : '';
+          if (subEl) subEl.textContent = (meta.ptName ? `PT: ${meta.ptName}` : '') + statusBadge;
         } else {
           if (titleEl) titleEl.textContent = meta.ptName || achName;
-          if (subEl) subEl.textContent = `Original: ${achName}`;
+          if (subEl) subEl.textContent = `Original: ${achName}` + statusBadge;
         }
 
-        const desc = meta.description || meta.meaning || '';
+        const desc = (playerItem && playerItem.description) || meta.description || meta.meaning || '';
         const descEl = document.getElementById('ttDesc');
         if (descEl) descEl.textContent = desc ? `"${desc}"` : '';
 
         const howToEl = document.getElementById('ttHowTo');
-        if (howToEl) howToEl.textContent = meta.unlock || meta.howTo || (currentLang === 'en' ? 'Perform action in-game.' : 'Realizar a ação no jogo.');
+        if (howToEl) {
+          howToEl.textContent = meta.unlock || meta.howTo || (currentLang === 'en' ? 'Perform action in-game.' : 'Realizar a ação no jogo.');
+          howToEl.style.color = isUnlocked ? 'var(--wurm-accent)' : '#ffb088';
+        }
         
         positionTooltip({ clientX, clientY });
         tt.classList.add('visible');
@@ -2775,8 +2896,9 @@
       hideAchTooltip();
       const meta = getMeta(achName);
       const playerItem = currentData.find(d => d.name.toLowerCase().trim() === achName.toLowerCase().trim());
-      const counter = playerItem ? playerItem.counter : 0;
-      const date = playerItem ? (playerItem.date || '—') : '—';
+      const isUnlocked = !!playerItem;
+      const counter = isUnlocked ? playerItem.counter : 0;
+      const date = isUnlocked ? (playerItem.date || '—') : '—';
       const rarity = (playerItem && playerItem.rarity) || meta.rarity || 'Normal';
 
       const icon = meta.categoryIcon || '🎯';
@@ -2795,18 +2917,34 @@
 
       const rarityEl = document.getElementById('modalRarityTag');
       if (rarityEl) {
-        rarityEl.textContent = rarity;
-        rarityEl.className = 'badge-tag ' + (rarity === 'Gold' ? 'tag-gold' : rarity === 'Diamond' ? 'tag-diamond' : rarity === 'Silver' ? 'tag-silver' : 'tag-normal');
+        rarityEl.textContent = isUnlocked ? rarity : `${rarity} (🔒 ${t('tag_locked')})`;
+        rarityEl.className = 'badge-tag ' + (rarity === 'Gold' ? 'tag-gold' : rarity === 'Diamond' ? 'tag-diamond' : rarity === 'Silver' ? 'tag-silver' : isUnlocked ? 'tag-normal' : 'tag-locked');
       }
 
       const counterEl = document.getElementById('modalCounter');
-      if (counterEl) counterEl.textContent = counter + '×';
+      if (counterEl) {
+        if (isUnlocked) {
+          counterEl.textContent = Number(counter).toLocaleString(currentLang === 'en' ? 'en-US' : 'pt-BR') + '×';
+          counterEl.style.color = 'var(--wurm-accent)';
+        } else {
+          counterEl.textContent = currentLang === 'en' ? '🔒 Locked' : '🔒 Não Conquistada';
+          counterEl.style.color = 'var(--wurm-muted)';
+        }
+      }
 
       const catEl = document.getElementById('modalCategory');
       if (catEl) catEl.textContent = `${icon} ${meta.categoryLabel || 'Geral'}`;
 
       const dateEl = document.getElementById('modalDate');
-      if (dateEl) dateEl.textContent = date;
+      if (dateEl) {
+        if (isUnlocked) {
+          dateEl.textContent = date;
+          dateEl.style.color = 'var(--wurm-muted)';
+        } else {
+          dateEl.textContent = t('badge_locked_status');
+          dateEl.style.color = 'rgba(231, 76, 60, 0.9)';
+        }
+      }
 
       const desc = (playerItem && playerItem.description) || meta.description || meta.meaning || '';
       const quoteEl = document.getElementById('modalQuote');
@@ -2816,7 +2954,10 @@
       if (meaningEl) meaningEl.textContent = meta.meaning || meta.description || (currentLang === 'en' ? 'Recognized accomplishment in Wurm Online.' : 'Feito registrado no Wurm Online.');
 
       const howToEl = document.getElementById('modalHowTo');
-      if (howToEl) howToEl.textContent = meta.unlock || meta.howTo || (currentLang === 'en' ? 'Perform corresponding in-game actions.' : 'Realizar as ações correspondentes no jogo.');
+      if (howToEl) {
+        howToEl.textContent = meta.unlock || meta.howTo || (currentLang === 'en' ? 'Perform corresponding in-game actions.' : 'Realizar as ações correspondentes no jogo.');
+        howToEl.style.color = isUnlocked ? '#fff' : 'var(--wurm-accent)';
+      }
 
       const triviaCont = document.getElementById('modalTriviaContainer');
       const triviaEl = document.getElementById('modalTrivia');
@@ -3438,33 +3579,131 @@
       };
     }
 
+    // ─── STATUS FILTER (Todas | Conquistadas | Faltando) ─────
+    function setStatusFilter(status) {
+      currentStatusFilter = status;
+      document.querySelectorAll('#statusFilterGroup .status-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.status === status);
+      });
+      updateCategoryPillCounts();
+      renderItems();
+    }
+
+    function getPlayerMasterList() {
+      const unlockedMap = new Map();
+      currentData.forEach(d => {
+        unlockedMap.set(d.name.toLowerCase().trim(), d);
+      });
+
+      const list = [];
+      const seenNames = new Set();
+
+      if (typeof WIKI_ACHIEVEMENTS !== 'undefined' && Array.isArray(WIKI_ACHIEVEMENTS)) {
+        WIKI_ACHIEVEMENTS.forEach(wa => {
+          const key = wa.name.toLowerCase().trim();
+          seenNames.add(key);
+          const p = unlockedMap.get(key);
+          list.push({
+            name: wa.name,
+            ptName: wa.ptName || wa.name,
+            description: (p && p.description) ? p.description : (wa.description || wa.meaning || ''),
+            category: wa.category || 'exploration',
+            categoryLabel: wa.categoryLabel || 'Exploração',
+            categoryIcon: wa.categoryIcon || '🧭',
+            rarity: (p && p.rarity) ? p.rarity : (wa.rarity || 'Silver'),
+            counter: p ? (p.counter || 0) : 0,
+            date: p ? (p.date || '—') : '—',
+            timestamp: p ? (p.timestamp || 0) : 0,
+            unlocked: !!p,
+            howTo: wa.howTo || wa.unlock || '',
+            meaning: wa.meaning || '',
+            trivia: wa.trivia || ''
+          });
+        });
+      }
+
+      currentData.forEach(d => {
+        const key = d.name.toLowerCase().trim();
+        if (!seenNames.has(key)) {
+          const meta = getMeta(d.name);
+          list.push({
+            name: d.name,
+            ptName: meta.ptName || d.name,
+            description: d.description || meta.meaning || '',
+            category: meta.category || 'exploration',
+            categoryLabel: meta.categoryLabel || 'Exploração',
+            categoryIcon: meta.categoryIcon || '🧭',
+            rarity: d.rarity || meta.rarity || 'Silver',
+            counter: d.counter || 1,
+            date: d.date || '—',
+            timestamp: d.timestamp || 0,
+            unlocked: true,
+            howTo: meta.unlock || meta.howTo || '',
+            meaning: meta.meaning || '',
+            trivia: meta.trivia || ''
+          });
+        }
+      });
+
+      return list;
+    }
+
+    function updateCategoryPillCounts() {
+      const all = getPlayerMasterList();
+      const counts = { all: 0, sailing: 0, combat: 0, exploration: 0, mounts: 0, epic: 0, work: 0, survival: 0 };
+      all.forEach(item => {
+        if (currentStatusFilter === 'unlocked' && !item.unlocked) return;
+        if (currentStatusFilter === 'locked' && item.unlocked) return;
+        counts.all++;
+        const cat = item.category || 'exploration';
+        if (counts[cat] !== undefined) counts[cat]++;
+      });
+
+      const pAll = document.getElementById('pillAllCount'); if (pAll) pAll.textContent = counts.all;
+      const pSail = document.getElementById('pillSailingCount'); if (pSail) pSail.textContent = counts.sailing;
+      const pComb = document.getElementById('pillCombatCount'); if (pComb) pComb.textContent = counts.combat;
+      const pExpl = document.getElementById('pillExplorationCount'); if (pExpl) pExpl.textContent = counts.exploration;
+      const pMount = document.getElementById('pillMountsCount'); if (pMount) pMount.textContent = counts.mounts;
+      const pEpic = document.getElementById('pillEpicCount'); if (pEpic) pEpic.textContent = counts.epic;
+      const pWork = document.getElementById('pillWorkCount'); if (pWork) pWork.textContent = counts.work;
+      const pSurv = document.getElementById('pillSurvivalCount'); if (pSurv) pSurv.textContent = counts.survival;
+    }
+
     // ─── STATS ────────────────────────────────────────────────
     function updateStats() {
-      const counts = { all: currentData.length, sailing: 0, combat: 0, exploration: 0, mounts: 0, epic: 0, work: 0, survival: 0 };
+      const all = getPlayerMasterList();
+      const unlockedCount = all.filter(x => x.unlocked).length;
+      const lockedCount = all.length - unlockedCount;
+
+      const btnAll = document.getElementById('countStatusAll'); if (btnAll) btnAll.textContent = all.length;
+      const btnUn = document.getElementById('countStatusUnlocked'); if (btnUn) btnUn.textContent = unlockedCount;
+      const btnLk = document.getElementById('countStatusLocked'); if (btnLk) btnLk.textContent = lockedCount;
+
       let navalTrips = 0, goldCount = 0, maxCount = 0;
       currentData.forEach(item => {
         const meta = getMeta(item.name);
         const cat = meta.category || 'exploration';
-        if (counts[cat] !== undefined) counts[cat]++;
         if (item.rarity === 'Gold' || meta.rarity === 'Gold') goldCount++;
-        if (item.counter > maxCount) { maxCount = item.counter; }
+        if (item.counter > maxCount) maxCount = item.counter;
         if (cat === 'sailing') navalTrips += item.counter;
       });
-      document.getElementById('statTotal').textContent = currentData.length;
-      document.getElementById('statTotalHero').textContent = currentData.length;
-      document.getElementById('statGold').textContent = goldCount;
-      document.getElementById('statTopCount').textContent = maxCount;
-      document.getElementById('statTopHero').textContent = maxCount;
-      document.getElementById('statNaval').textContent = navalTrips;
-      document.getElementById('tabMyCount').textContent = currentData.length;
-      document.getElementById('pillAllCount').textContent = counts.all;
-      document.getElementById('pillSailingCount').textContent = counts.sailing;
-      document.getElementById('pillCombatCount').textContent = counts.combat;
-      document.getElementById('pillExplorationCount').textContent = counts.exploration;
-      document.getElementById('pillMountsCount').textContent = counts.mounts;
-      document.getElementById('pillEpicCount').textContent = counts.epic;
-      document.getElementById('pillWorkCount').textContent = counts.work;
-      document.getElementById('pillSurvivalCount').textContent = counts.survival;
+
+      const statTotalEl = document.getElementById('statTotal');
+      if (statTotalEl) statTotalEl.textContent = `${unlockedCount} / ${all.length}`;
+      const heroTotalEl = document.getElementById('statTotalHero');
+      if (heroTotalEl) heroTotalEl.textContent = `${unlockedCount} / ${all.length}`;
+      const statGoldEl = document.getElementById('statGold');
+      if (statGoldEl) statGoldEl.textContent = goldCount;
+      const statTopEl = document.getElementById('statTopCount');
+      if (statTopEl) statTopEl.textContent = maxCount;
+      const statTopHeroEl = document.getElementById('statTopHero');
+      if (statTopHeroEl) statTopHeroEl.textContent = maxCount;
+      const statNavalEl = document.getElementById('statNaval');
+      if (statNavalEl) statNavalEl.textContent = navalTrips;
+      const tabCountEl = document.getElementById('tabMyCount');
+      if (tabCountEl) tabCountEl.textContent = `${unlockedCount} / ${all.length}`;
+
+      updateCategoryPillCounts();
     }
 
     // ─── PODIUM ───────────────────────────────────────────────
@@ -3490,26 +3729,45 @@
 
     // ─── FILTER + SORT ────────────────────────────────────────
     function filterAndSortData() {
-      const query = document.getElementById('searchInput').value.toLowerCase().trim();
-      let filtered = currentData.filter(item => {
-        const meta = getMeta(item.name);
-        const cat = meta.category || 'exploration';
-        if (currentCategory !== 'all' && cat !== currentCategory) return false;
+      const allItems = getPlayerMasterList();
+      const query = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+
+      let filtered = allItems.filter(item => {
+        if (currentStatusFilter === 'unlocked' && !item.unlocked) return false;
+        if (currentStatusFilter === 'locked' && item.unlocked) return false;
+
+        if (currentCategory !== 'all' && item.category !== currentCategory) return false;
+
         if (query) {
-          const s = [item.name, meta.ptName||'', item.description||'', meta.meaning||'', meta.trivia||''].join(' ').toLowerCase();
+          const s = [item.name, item.ptName, item.description, item.meaning, item.howTo, item.trivia].join(' ').toLowerCase();
           if (!s.includes(query)) return false;
         }
         return true;
       });
+
       filtered.sort((a, b) => {
-        if (currentSort === 'counter_desc') return b.counter - a.counter;
-        if (currentSort === 'name_asc') return a.name.localeCompare(b.name);
+        if (currentSort === 'counter_desc') {
+          if (b.counter !== a.counter) return b.counter - a.counter;
+          if (a.unlocked !== b.unlocked) return a.unlocked ? -1 : 1;
+          return a.name.localeCompare(b.name);
+        }
+        if (currentSort === 'date_desc') {
+          return (b.timestamp || 0) - (a.timestamp || 0);
+        }
+        if (currentSort === 'name_asc') {
+          const nameA = currentLang === 'en' ? a.name : a.ptName;
+          const nameB = currentLang === 'en' ? b.name : b.ptName;
+          return nameA.localeCompare(nameB);
+        }
         if (currentSort === 'rarity_desc') {
-          const r = x => x.rarity === 'Gold' ? 3 : x.rarity === 'Silver' ? 2 : 1;
-          return r(b) - r(a);
+          const r = x => x.rarity === 'Diamond' ? 4 : x.rarity === 'Gold' ? 3 : x.rarity === 'Silver' ? 2 : 1;
+          const diff = r(b) - r(a);
+          if (diff !== 0) return diff;
+          return b.counter - a.counter;
         }
         return b.counter - a.counter;
       });
+
       return filtered;
     }
 
@@ -3529,72 +3787,84 @@
 
       // CARDS
       grid.innerHTML = items.map((item, idx) => {
-        const meta = getMeta(item.name);
-        const isGold = item.rarity === 'Gold' || meta.rarity === 'Gold';
-        const icon = meta.categoryIcon || '🎯';
+        const isGold = item.rarity === 'Gold';
+        const icon = item.categoryIcon || '🎯';
         const escaped = escapeJs(item.name);
-        const primaryTitle = currentLang === 'en' ? item.name : (meta.ptName || item.name);
-        const secondaryTitle = currentLang === 'en' ? (meta.ptName ? `PT: ${meta.ptName}` : '') : `Original: ${item.name}`;
+        const primaryTitle = currentLang === 'en' ? item.name : item.ptName;
+        const secondaryTitle = currentLang === 'en' ? (item.ptName ? `PT: ${item.ptName}` : '') : `Original: ${item.name}`;
 
-        return `<div class="ach-card ${isGold?'gold-tier':''}" onclick="openAchievementModal('${escaped}')" style="cursor:pointer;" title="${t('tt_hint')}">
+        return `<div class="ach-card ${isGold ? 'gold-tier' : ''} ${item.unlocked ? '' : 'card-locked'}" onclick="openAchievementModal('${escaped}')" style="cursor:pointer;" title="${t('tt_hint')}">
           <div class="ach-top">
             <div class="ach-title-area">
               <h3>${icon} ${primaryTitle}</h3>
               <div class="ach-pt-name">${secondaryTitle}</div>
             </div>
-            <div class="ach-counter-badge">
-              <div class="num">${item.counter}</div>
-              <div class="lbl">${t('modal_times')}</div>
+            <div class="ach-counter-badge ${item.unlocked ? '' : 'locked-badge'}">
+              <div class="num">${item.unlocked ? item.counter : '🔒'}</div>
+              <div class="lbl">${item.unlocked ? t('modal_times') : t('badge_locked_status')}</div>
             </div>
           </div>
-          <div class="ach-desc-box">"${item.description || meta.meaning || ''}"</div>
+          <div class="ach-desc-box">"${item.description || item.meaning || ''}"</div>
           <div class="ach-details">
-            <div class="detail-item"><span class="detail-label">${t('modal_meaning')}:</span><span class="detail-val">${meta.meaning || 'Ação produtiva ou façanha reconhecida.'}</span></div>
-            <div class="detail-item"><span class="detail-label">${t('modal_how_to')}:</span><span class="detail-val">${meta.unlock || 'Realizar a ação no jogo.'}</span></div>
-            ${meta.trivia ? `<div class="trivia-box">💡 <strong>Referência:</strong> ${meta.trivia}</div>` : ''}
+            <div class="detail-item"><span class="detail-label">${t('modal_meaning')}:</span><span class="detail-val">${item.meaning || 'Ação produtiva ou façanha reconhecida.'}</span></div>
+            <div class="detail-item"><span class="detail-label">${t('modal_how_to')}:</span><span class="detail-val" style="${item.unlocked ? '' : 'color:var(--wurm-accent); font-weight:600;'}">${item.howTo || 'Realizar a ação no jogo.'}</span></div>
+            ${item.trivia ? `<div class="trivia-box">💡 <strong>Referência:</strong> ${item.trivia}</div>` : ''}
           </div>
           <div class="ach-footer">
-            <span>📅 ${item.date || 'Desconhecida'}</span>
-            <span class="badge-tag ${isGold?'tag-gold':'tag-normal'}">${isGold?'Ouro':'Normal'}</span>
+            <span>📅 ${item.unlocked ? (item.date || 'Desconhecida') : t('badge_locked_status')}</span>
+            <span class="badge-tag ${isGold ? 'tag-gold' : item.unlocked ? 'tag-normal' : 'tag-locked'}">${isGold ? 'Ouro' : item.unlocked ? 'Normal' : t('tag_locked')}</span>
           </div>
         </div>`;
       }).join('');
 
       // COMPACT
       compact.innerHTML = items.map((item, idx) => {
-        const meta = getMeta(item.name);
-        const isGold = item.rarity === 'Gold' || meta.rarity === 'Gold';
-        const icon = meta.categoryIcon || '🎯';
+        const isGold = item.rarity === 'Gold';
+        const icon = item.categoryIcon || '🎯';
         const escaped = escapeJs(item.name);
-        const primaryTitle = currentLang === 'en' ? item.name : (meta.ptName || item.name);
-        const secondaryTitle = currentLang === 'en' ? (meta.ptName || item.name) : item.name;
+        const primaryTitle = currentLang === 'en' ? item.name : item.ptName;
+        const secondaryTitle = currentLang === 'en' ? (item.ptName || item.name) : item.name;
 
-        return `<div class="compact-row ${isGold?'gold-row':''}" onclick="openAchievementModal('${escaped}')" onmouseenter="showAchTooltip(event, '${escaped}')" onmousemove="updateAchTooltipPos(event)" onmouseleave="hideAchTooltip()" style="cursor:pointer;" title="${t('tt_hint')}">
+        return `<div class="compact-row ${isGold ? 'gold-row' : ''} ${item.unlocked ? '' : 'compact-locked'}" onclick="openAchievementModal('${escaped}')" onmouseenter="showAchTooltip(event, '${escaped}')" onmousemove="updateAchTooltipPos(event)" onmouseleave="hideAchTooltip()" style="cursor:pointer;" title="${t('tt_hint')}">
           <span class="compact-rank">#${idx+1}</span>
           <span class="compact-icon">${icon}</span>
           <div class="compact-names">
             <div class="compact-en">${primaryTitle}</div>
             <div class="compact-pt">${secondaryTitle}</div>
           </div>
-          <span class="compact-counter">${item.counter}×</span>
-          <span class="compact-date">${item.date || '—'}</span>
-          <span class="compact-rarity"><span class="badge-tag ${isGold?'tag-gold':'tag-normal'}">${isGold?'Ouro':'N'}</span></span>
+          <span class="compact-counter">${item.unlocked ? item.counter + '×' : '—'}</span>
+          <span class="compact-date">${item.unlocked ? (item.date || '—') : '🔒'}</span>
+          <span class="compact-rarity"><span class="badge-tag ${isGold ? 'tag-gold' : item.unlocked ? 'tag-normal' : 'tag-locked'}">${isGold ? 'Ouro' : item.unlocked ? 'N' : '🔒'}</span></span>
         </div>`;
       }).join('');
 
       // TABLE
       tableBody.innerHTML = items.map((item, idx) => {
-        const meta = getMeta(item.name);
-        const isGold = item.rarity === 'Gold' || meta.rarity === 'Gold';
+        const isGold = item.rarity === 'Gold';
         const escaped = escapeJs(item.name);
-        return `<tr onclick="openAchievementModal('${escaped}')" onmouseenter="showAchTooltip(event, '${escaped}')" onmousemove="updateAchTooltipPos(event)" onmouseleave="hideAchTooltip()" title="${t('tt_hint')}">
+
+        return `<tr class="ach-table-row ${item.unlocked ? '' : 'row-locked'}" onclick="openAchievementModal('${escaped}')" onmouseenter="showAchTooltip(event, '${escaped}')" onmousemove="updateAchTooltipPos(event)" onmouseleave="hideAchTooltip()" style="cursor:pointer;" title="${t('tt_hint')}">
           <td style="font-family:var(--font-mono);font-weight:700;">#${idx+1}</td>
-          <td><strong style="color:#fff;">${item.name}</strong></td>
-          <td style="color:var(--wurm-accent);font-weight:500;">${meta.ptName || item.name}</td>
-          <td>${meta.categoryIcon||'🎯'} ${meta.categoryLabel||'Geral'}</td>
-          <td><strong style="color:${isGold?'var(--wurm-accent)':'#fff'};font-family:var(--font-mono);">${item.counter}</strong></td>
-          <td style="font-family:var(--font-mono);font-size:0.75rem;color:var(--wurm-muted);">${item.date || '—'}</td>
-          <td><span class="badge-tag ${isGold?'tag-gold':'tag-normal'}">${isGold?'Ouro':'Normal'}</span></td>
+          <td><strong style="color:${item.unlocked ? '#fff' : 'var(--wurm-muted)'};">${item.name}</strong></td>
+          <td style="color:${item.unlocked ? 'var(--wurm-accent)' : 'var(--wurm-muted)'};font-weight:500;">${item.ptName}</td>
+          <td>${item.categoryIcon || '🎯'} ${item.categoryLabel || 'Geral'}</td>
+          <td>
+            ${item.unlocked
+              ? `<strong style="color:${isGold ? 'var(--wurm-accent)' : '#fff'};font-family:var(--font-mono);">${Number(item.counter).toLocaleString(currentLang === 'en' ? 'en-US' : 'pt-BR')}×</strong>`
+              : `<span style="color:var(--wurm-muted); font-family:var(--font-mono);">—</span>`
+            }
+          </td>
+          <td style="font-family:var(--font-mono);font-size:0.75rem;color:var(--wurm-muted);">
+            ${item.unlocked
+              ? (item.date || '—')
+              : `<span class="badge-tag tag-locked" style="font-size:0.68rem;">${t('badge_locked_status')}</span>`
+            }
+          </td>
+          <td>
+            <span class="badge-tag ${isGold ? 'tag-gold' : item.unlocked ? 'tag-normal' : 'tag-locked'}">
+              ${isGold ? 'Ouro' : item.unlocked ? 'Normal' : t('tag_locked')}
+            </span>
+          </td>
         </tr>`;
       }).join('');
     }
