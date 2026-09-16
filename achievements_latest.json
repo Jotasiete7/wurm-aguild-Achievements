@@ -1,263 +1,1753 @@
-﻿{
+{
   "player": "jotasiete",
-  "last_updated": "2026-09-15 19:20:00",
-  "total": 32,
+  "last_updated": "2026-09-15 21:48:09",
+  "total": 194,
   "achievements": [
     {
+      "name": "Actions Performed",
+      "description": "You did a thing! Now do it again.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1223675,
+      "timestamp": 1789427526000,
+      "date": "2026-09-14 20:12:06"
+    },
+    {
+      "name": "Improve",
+      "description": "There! That makes it better.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 193621,
+      "timestamp": 1788834090000,
+      "date": "2026-09-07 23:21:30"
+    },
+    {
+      "name": "Oops, That Went Wrong",
+      "description": "Hope it didn't break.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 89146,
+      "timestamp": 1788834077000,
+      "date": "2026-09-07 23:21:17"
+    },
+    {
+      "name": "Good Work",
+      "description": "You excel in improving things",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 30844,
+      "timestamp": 1784497304000,
+      "date": "2026-07-19 18:41:44"
+    },
+    {
+      "name": "Iron Item",
+      "description": "You created an iron item.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 21998,
+      "timestamp": 1788828794000,
+      "date": "2026-09-07 21:53:14"
+    },
+    {
+      "name": "Gravedigger",
+      "description": "You put the dead to rest",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 4509,
+      "timestamp": 1788222013000,
+      "date": "2026-08-31 21:20:13"
+    },
+    {
+      "name": "Skilled",
+      "description": "Skill points. Can't have too many of them",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 3784,
+      "timestamp": 1789425736000,
+      "date": "2026-09-14 19:42:16"
+    },
+    {
+      "name": "Silver Item",
+      "description": "You created a silver item.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 3413,
+      "timestamp": 1784493342000,
+      "date": "2026-07-19 17:35:42"
+    },
+    {
+      "name": "Rift Specialist",
+      "description": "You've defeated all sorts of Rift Creatures",
+      "rarity_id": 4,
+      "rarity": "Gold",
+      "counter": 2112,
+      "timestamp": 1786578628000,
+      "date": "2026-08-12 20:50:28"
+    },
+    {
+      "name": "Rift Jackals",
+      "description": "You've vanquished a Rift Jackal",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 2112,
+      "timestamp": 1786578628000,
+      "date": "2026-08-12 20:50:28"
+    },
+    {
+      "name": "Exceptional Craftsman",
+      "description": "You can do really fine things",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1768,
+      "timestamp": 1788832170000,
+      "date": "2026-09-07 22:49:30"
+    },
+    {
+      "name": "Spiders Killed",
+      "description": "You've killed a spider",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1451,
+      "timestamp": 1789426110000,
+      "date": "2026-09-14 19:48:30"
+    },
+    {
+      "name": "Rift Beasts",
+      "description": "You've vanquished a Rift Beast",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1174,
+      "timestamp": 1786578212000,
+      "date": "2026-08-12 20:43:32"
+    },
+    {
+      "name": "Brass Item",
+      "description": "You created a brass item.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1066,
+      "timestamp": 1788107945000,
+      "date": "2026-08-30 13:39:05"
+    },
+    {
+      "name": "Pursuit Of Excellence",
+      "description": "You manage to improve yourself",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 966,
+      "timestamp": 1788832326000,
+      "date": "2026-09-07 22:52:06"
+    },
+    {
+      "name": "Steel Item",
+      "description": "You created a steel item.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 893,
+      "timestamp": 1787872414000,
+      "date": "2026-08-27 20:13:34"
+    },
+    {
+      "name": "Scrapion",
+      "description": "Scorpions are at your mercy",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 815,
+      "timestamp": 1789425615000,
+      "date": "2026-09-14 19:40:15"
+    },
+    {
+      "name": "Tin Item",
+      "description": "You created a tin item.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 611,
+      "timestamp": 1785803835000,
+      "date": "2026-08-03 21:37:15"
+    },
+    {
+      "name": "On The Path To Perfection",
+      "description": "You are soon at the highest levels of creation",
+      "rarity_id": 4,
+      "rarity": "Gold",
+      "counter": 603,
+      "timestamp": 1788834090000,
+      "date": "2026-09-07 23:21:30"
+    },
+    {
+      "name": "Bear Hunt",
+      "description": "You've killed the bear",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 572,
+      "timestamp": 1789424690000,
+      "date": "2026-09-14 19:24:50"
+    },
+    {
+      "name": "Electrum Item",
+      "description": "You created an electrum item.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 546,
+      "timestamp": 1756749970000,
+      "date": "2025-09-01 15:06:10"
+    },
+    {
+      "name": "Slayer Of The Champ",
+      "description": "You've killed a champion creature",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 493,
+      "timestamp": 1788810078000,
+      "date": "2026-09-07 16:41:18"
+    },
+    {
+      "name": "Trolls Killed",
+      "description": "You've killed the fearsome Troll",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 481,
+      "timestamp": 1789424763000,
+      "date": "2026-09-14 19:26:03"
+    },
+    {
+      "name": "Lava Spiders Killed",
+      "description": "You've killed the Lava Spider",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 406,
+      "timestamp": 1789423637000,
+      "date": "2026-09-14 19:07:17"
+    },
+    {
+      "name": "Crocodiles Killed",
+      "description": "You need them shoes, belts and bags",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 377,
+      "timestamp": 1779586897000,
+      "date": "2026-05-23 22:41:37"
+    },
+    {
+      "name": "Copper Item",
+      "description": "You created a copper item.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 371,
+      "timestamp": 1771174751000,
+      "date": "2026-02-15 13:59:11"
+    },
+    {
+      "name": "Wolves Killed",
+      "description": "You're a wolf slayer",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 330,
+      "timestamp": 1789424710000,
+      "date": "2026-09-14 19:25:10"
+    },
+    {
+      "name": "Rift Ogre",
+      "description": "You've vanquished a Rift Ogre",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 327,
+      "timestamp": 1786578827000,
+      "date": "2026-08-12 20:53:47"
+    },
+    {
+      "name": "Gold Item",
+      "description": "You created a gold item.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 301,
+      "timestamp": 1786035878000,
+      "date": "2026-08-06 14:04:38"
+    },
+    {
+      "name": "Slayer of Fiercity",
+      "description": "You've killed a fierce creature",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 276,
+      "timestamp": 1788809546000,
+      "date": "2026-09-07 16:32:26"
+    },
+    {
       "name": "Nomad",
-      "description": "You love visiting different places and discovering deeds across the lands.",
+      "description": "Are you restless?",
       "rarity_id": 4,
       "rarity": "Gold",
       "counter": 275,
-      "date": "28/08/2026 22:34"
+      "timestamp": 1787967288000,
+      "date": "2026-08-28 22:34:48"
+    },
+    {
+      "name": "Zinc Item",
+      "description": "You created a zinc item.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 253,
+      "timestamp": 1785455236000,
+      "date": "2026-07-30 20:47:16"
+    },
+    {
+      "name": "Speedfighter",
+      "description": "You've killed an alert creature",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 246,
+      "timestamp": 1789424919000,
+      "date": "2026-09-14 19:28:39"
+    },
+    {
+      "name": "Rat Race",
+      "description": "The rat race has begun!",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 242,
+      "timestamp": 1788802593000,
+      "date": "2026-09-07 14:36:33"
+    },
+    {
+      "name": "To Hell With It",
+      "description": "You've killed the Hell Hound",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 242,
+      "timestamp": 1789422836000,
+      "date": "2026-09-14 18:53:56"
+    },
+    {
+      "name": "Bronze Item",
+      "description": "You created a bronze item.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 236,
+      "timestamp": 1774897351000,
+      "date": "2026-03-30 16:02:31"
+    },
+    {
+      "name": "Debugger",
+      "description": "You've killed the bug. Thank you.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 234,
+      "timestamp": 1788807861000,
+      "date": "2026-09-07 16:04:21"
+    },
+    {
+      "name": "Soilent Green",
+      "description": "You've killed a greenish creature",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 231,
+      "timestamp": 1789425015000,
+      "date": "2026-09-14 19:30:15"
+    },
+    {
+      "name": "Becalmer",
+      "description": "You've killed an angry creature",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 221,
+      "timestamp": 1789423244000,
+      "date": "2026-09-14 19:00:44"
+    },
+    {
+      "name": "Just A Cold",
+      "description": "Sniffle. You've got a cold.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 204,
+      "timestamp": 1786578045000,
+      "date": "2026-08-12 20:40:45"
+    },
+    {
+      "name": "Willbreaker",
+      "description": "You've killed a hardened creature",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 200,
+      "timestamp": 1788808833000,
+      "date": "2026-09-07 16:20:33"
     },
     {
       "name": "Epic Helper",
-      "description": "You contributed significantly to divine epic scenarios on Valrei/Epic.",
-      "rarity_id": 2,
-      "rarity": "Normal",
+      "description": "You did your part in helping the gods advance on their journey on Valrei.",
+      "rarity_id": 3,
+      "rarity": "Silver",
       "counter": 199,
-      "date": "14/08/2026 17:46"
+      "timestamp": 1786740368000,
+      "date": "2026-08-14 17:46:08"
+    },
+    {
+      "name": "Slayer Of The Sly",
+      "description": "You've killed a sly creature",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 195,
+      "timestamp": 1789423039000,
+      "date": "2026-09-14 18:57:19"
+    },
+    {
+      "name": "Lead Item",
+      "description": "You created a lead item.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 195,
+      "timestamp": 1773017929000,
+      "date": "2026-03-08 21:58:49"
+    },
+    {
+      "name": "Goblin Slayer",
+      "description": "You've killed the goblin",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 191,
+      "timestamp": 1789426838000,
+      "date": "2026-09-14 20:00:38"
     },
     {
       "name": "Knarr Sailor",
-      "description": "Look, it floats! Commanded a Knarr on the waters.",
-      "rarity_id": 2,
-      "rarity": "Normal",
+      "description": "Look, it floats!",
+      "rarity_id": 3,
+      "rarity": "Silver",
       "counter": 185,
-      "date": "14/06/2026 16:08"
+      "timestamp": 1781464082000,
+      "date": "2026-06-14 16:08:02"
+    },
+    {
+      "name": "Lava Fiends Killed",
+      "description": "You've killed the Lava Fiend",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 182,
+      "timestamp": 1789424301000,
+      "date": "2026-09-14 19:18:21"
+    },
+    {
+      "name": "Hello Goodbye",
+      "description": "You've killed the Hell Scorpius",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 164,
+      "timestamp": 1789426628000,
+      "date": "2026-09-14 19:57:08"
     },
     {
       "name": "Corbita Sailor",
-      "description": "Look, it floats! Commanded a Corbita merchant ship.",
-      "rarity_id": 2,
-      "rarity": "Normal",
+      "description": "Look, it floats!",
+      "rarity_id": 3,
+      "rarity": "Silver",
       "counter": 157,
-      "date": "29/11/2025 09:38"
+      "timestamp": 1764419929000,
+      "date": "2025-11-29 09:38:49"
+    },
+    {
+      "name": "Slayer Of The Lurker",
+      "description": "You've killed a lurking creature",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 157,
+      "timestamp": 1788799254000,
+      "date": "2026-09-07 13:40:54"
+    },
+    {
+      "name": "Meoww!",
+      "description": "Wild Cats try to put up a fight",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 150,
+      "timestamp": 1789425056000,
+      "date": "2026-09-14 19:30:56"
+    },
+    {
+      "name": "Cavalier Kills",
+      "description": "After 10 serious creature kills you may become a Cavalier!",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 145,
+      "timestamp": 1789426110000,
+      "date": "2026-09-14 19:48:30"
+    },
+    {
+      "name": "Silencer",
+      "description": "You've killed a raging creature",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 142,
+      "timestamp": 1789426838000,
+      "date": "2026-09-14 20:00:38"
+    },
+    {
+      "name": "Slayer Of Procastination",
+      "description": "You've killed a slow creature",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 139,
+      "timestamp": 1788806599000,
+      "date": "2026-09-07 15:43:19"
+    },
+    {
+      "name": "Slayer Of The Meek",
+      "description": "You've killed a scared creature",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 131,
+      "timestamp": 1788808466000,
+      "date": "2026-09-07 16:14:26"
+    },
+    {
+      "name": "Investigating The Rift",
+      "description": "What's up there?",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 123,
+      "timestamp": 1786575122000,
+      "date": "2026-08-12 19:52:02"
+    },
+    {
+      "name": "Rrreoww!",
+      "description": "Mountain Lions try to put up a fight",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 119,
+      "timestamp": 1788807761000,
+      "date": "2026-09-07 16:02:41"
+    },
+    {
+      "name": "Really Rare",
+      "description": "You've manufactured a really rare item",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 111,
+      "timestamp": 1780443645000,
+      "date": "2026-06-02 20:40:45"
+    },
+    {
+      "name": "If Looks Could Kill",
+      "description": "Supposedly if you dye them red, you'll move faster.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 105,
+      "timestamp": 1757817690000,
+      "date": "2025-09-13 23:41:30"
+    },
+    {
+      "name": "Unicorns Killed",
+      "description": "You've slain the Unicorn",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 93,
+      "timestamp": 1789426147000,
+      "date": "2026-09-14 19:49:07"
+    },
+    {
+      "name": "Unknown",
+      "description": "",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 92,
+      "timestamp": 1767658620000,
+      "date": "2026-01-05 21:17:00"
     },
     {
       "name": "Ouch That Hurt",
-      "description": "You suffered severe falling or impact damage from climbing cliffs or slopes.",
-      "rarity_id": 2,
-      "rarity": "Normal",
+      "description": "",
+      "rarity_id": 3,
+      "rarity": "Silver",
       "counter": 88,
-      "date": "24/05/2026 11:13"
+      "timestamp": 1779632018000,
+      "date": "2026-05-24 11:13:38"
+    },
+    {
+      "name": "Adamantine Item",
+      "description": "You created an adamantine item.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 87,
+      "timestamp": 1786211403000,
+      "date": "2026-08-08 14:50:03"
+    },
+    {
+      "name": "Bovine Master",
+      "description": "You slay bovine like none other",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 82,
+      "timestamp": 1788810716000,
+      "date": "2026-09-07 16:51:56"
+    },
+    {
+      "name": "Talented Investigator",
+      "description": "The ancient world cannot hide any secrets from you!",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 81,
+      "timestamp": 1780871735000,
+      "date": "2026-06-07 19:35:35"
+    },
+    {
+      "name": "Fire Extinguisher",
+      "description": "You're the nemesis of Lava creatures",
+      "rarity_id": 4,
+      "rarity": "Gold",
+      "counter": 81,
+      "timestamp": 1788812827000,
+      "date": "2026-09-07 17:27:07"
+    },
+    {
+      "name": "Careful Identifier",
+      "description": "Care and attention to detail let you identify ancient items.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 81,
+      "timestamp": 1781481793000,
+      "date": "2026-06-14 21:03:13"
+    },
+    {
+      "name": "Rack 'Em Up",
+      "description": "Keepin' things tidy with some storage racks.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 79,
+      "timestamp": 1779657706000,
+      "date": "2026-05-24 18:21:46"
     },
     {
       "name": "Hauler",
-      "description": "Transported heavy loads and dragged carts across the territory.",
-      "rarity_id": 2,
-      "rarity": "Normal",
+      "description": "You've worked hard today",
+      "rarity_id": 3,
+      "rarity": "Silver",
       "counter": 71,
-      "date": "30/01/2026 21:24"
+      "timestamp": 1769819094000,
+      "date": "2026-01-30 21:24:54"
+    },
+    {
+      "name": "Rift Opener",
+      "description": "You have sacrificed at the Rift Altar",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 69,
+      "timestamp": 1786579144000,
+      "date": "2026-08-12 20:59:04"
+    },
+    {
+      "name": "Hellova Fight",
+      "description": "You've killed the Hell Horse",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 67,
+      "timestamp": 1789424793000,
+      "date": "2026-09-14 19:26:33"
+    },
+    {
+      "name": "Glimmersteel Item",
+      "description": "You created a glimmersteel item.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 67,
+      "timestamp": 1784243860000,
+      "date": "2026-07-16 20:17:40"
+    },
+    {
+      "name": "Off Horse",
+      "description": "You slay horses",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 56,
+      "timestamp": 1789425704000,
+      "date": "2026-09-14 19:41:44"
     },
     {
       "name": "Caravel Sailor",
-      "description": "Look, it floats! Commanded a majestic Caravel ship.",
-      "rarity_id": 2,
-      "rarity": "Normal",
+      "description": "Look, it floats!",
+      "rarity_id": 3,
+      "rarity": "Silver",
       "counter": 47,
-      "date": "17/10/2025 17:44"
+      "timestamp": 1760733849000,
+      "date": "2025-10-17 17:44:09"
+    },
+    {
+      "name": "Cavalier Skills",
+      "description": "After 80 new skill points you may become a Cavalier!",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 47,
+      "timestamp": 1780962308000,
+      "date": "2026-06-08 20:45:08"
+    },
+    {
+      "name": "Undertaker",
+      "description": "You keep souls to rest and the world free from rotting corpses",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 45,
+      "timestamp": 1781654545000,
+      "date": "2026-06-16 21:02:25"
+    },
+    {
+      "name": "Shutting Down",
+      "description": "You were there when the Rift was shut",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 44,
+      "timestamp": 1786579146000,
+      "date": "2026-08-12 20:59:06"
+    },
+    {
+      "name": "Settler",
+      "description": "A house is like a heart just bigger.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 43,
+      "timestamp": 1780272058000,
+      "date": "2026-05-31 21:00:58"
+    },
+    {
+      "name": "Mercykiller",
+      "description": "You've killed a diseased creature",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 42,
+      "timestamp": 1789423813000,
+      "date": "2026-09-14 19:10:13"
+    },
+    {
+      "name": "Rift Warmaster",
+      "description": "You've vanquished a Rift Warmaster",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 39,
+      "timestamp": 1786578825000,
+      "date": "2026-08-12 20:53:45"
+    },
+    {
+      "name": "Fragmental",
+      "description": "The ancients apparently used these tools too, who knew?",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 38,
+      "timestamp": 1761533126000,
+      "date": "2025-10-26 23:45:26"
+    },
+    {
+      "name": "Kill the Pig",
+      "description": "You require pork",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 35,
+      "timestamp": 1788810245000,
+      "date": "2026-09-07 16:44:05"
     },
     {
       "name": "Rowboat Sailor",
-      "description": "Look, it floats! Rowed a rowboat across the waters.",
-      "rarity_id": 2,
-      "rarity": "Normal",
+      "description": "Look, it floats!",
+      "rarity_id": 3,
+      "rarity": "Silver",
       "counter": 33,
-      "date": "09/03/2026 09:49"
+      "timestamp": 1773060546000,
+      "date": "2026-03-09 09:49:06"
     },
     {
-      "name": "Just Killed A Man",
-      "description": "Defeated an opponent player in combat. Mama, just killed a man...",
-      "rarity_id": 2,
-      "rarity": "Normal",
-      "counter": 24,
-      "date": "18/01/2026 19:10"
+      "name": "Bisons",
+      "description": "You've killed the bison",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 29,
+      "timestamp": 1788803199000,
+      "date": "2026-09-07 14:46:39"
     },
     {
       "name": "Be Gentle Please",
-      "description": "You won a sparring session with a fellow adventurer.",
-      "rarity_id": 2,
-      "rarity": "Normal",
+      "description": "You won a spar, hooray!",
+      "rarity_id": 3,
+      "rarity": "Silver",
       "counter": 24,
-      "date": "18/01/2026 19:10"
+      "timestamp": 1768774205000,
+      "date": "2026-01-18 19:10:05"
+    },
+    {
+      "name": "Just Killed A Man",
+      "description": "Now he's dead.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 24,
+      "timestamp": 1768774205000,
+      "date": "2026-01-18 19:10:05"
     },
     {
       "name": "Axe Kill",
-      "description": "Slain an enemy using an axe.",
-      "rarity_id": 2,
-      "rarity": "Normal",
+      "description": "Count of players killed with any type of axe",
+      "rarity_id": 3,
+      "rarity": "Silver",
       "counter": 23,
-      "date": "26/07/2025 20:00"
+      "timestamp": 1753570826000,
+      "date": "2025-07-26 20:00:26"
+    },
+    {
+      "name": "Seryll Item",
+      "description": "You created a seryll item.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 22,
+      "timestamp": 1766877417000,
+      "date": "2025-12-27 20:16:57"
+    },
+    {
+      "name": "Jackal Hunter",
+      "description": "You've vanquished a lot of Rift Jackals",
+      "rarity_id": 4,
+      "rarity": "Gold",
+      "counter": 21,
+      "timestamp": 1786578239000,
+      "date": "2026-08-12 20:43:59"
     },
     {
       "name": "Cog Sailor",
-      "description": "Look, it floats! Commanded a sturdy Cog vessel.",
-      "rarity_id": 2,
-      "rarity": "Normal",
+      "description": "Look, it floats!",
+      "rarity_id": 3,
+      "rarity": "Silver",
       "counter": 19,
-      "date": "21/05/2026 20:16"
+      "timestamp": 1779405364000,
+      "date": "2026-05-21 20:16:04"
+    },
+    {
+      "name": "Tastes Like Chicken",
+      "description": "You know how to get crocodile meat",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 18,
+      "timestamp": 1772400613000,
+      "date": "2026-03-01 18:30:13"
+    },
+    {
+      "name": "Rarity",
+      "description": "You crafted something which is better than everything there ever was before.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 15,
+      "timestamp": 1749914444000,
+      "date": "2025-06-14 12:20:44"
+    },
+    {
+      "name": "Party King",
+      "description": "You've reached the highest levels",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 15,
+      "timestamp": 1768170687000,
+      "date": "2026-01-11 19:31:27"
+    },
+    {
+      "name": "Arachnophile",
+      "description": "You hate spiders",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 14,
+      "timestamp": 1781219159000,
+      "date": "2026-06-11 20:05:59"
     },
     {
       "name": "Moved A Mountain",
-      "description": "You know how to drag a cart! Dragged a cart over 250+ tiles.",
-      "rarity_id": 2,
-      "rarity": "Normal",
+      "description": "You know how to drag that cart",
+      "rarity_id": 3,
+      "rarity": "Silver",
       "counter": 14,
-      "date": "19/05/2025 17:14"
+      "timestamp": 1747685669000,
+      "date": "2025-05-19 17:14:29"
+    },
+    {
+      "name": "Demons",
+      "description": "You've killed the demon",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 13,
+      "timestamp": 1733004145000,
+      "date": "2024-11-30 19:02:25"
+    },
+    {
+      "name": "Moonshine",
+      "description": "Yeee-haw!",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 13,
+      "timestamp": 1780360190000,
+      "date": "2026-06-01 21:29:50"
     },
     {
       "name": "Epic Finalizer",
-      "description": "You delivered the crucial final step or item to accomplish an Epic mission.",
-      "rarity_id": 2,
-      "rarity": "Normal",
+      "description": "You managed to finish that mission. Good job!",
+      "rarity_id": 3,
+      "rarity": "Silver",
       "counter": 12,
-      "date": "09/11/2025 20:46"
+      "timestamp": 1762731998000,
+      "date": "2025-11-09 20:46:38"
+    },
+    {
+      "name": "Ambitious",
+      "description": "You're not fooling around. You're doing things!",
+      "rarity_id": 4,
+      "rarity": "Gold",
+      "counter": 12,
+      "timestamp": 1784246253000,
+      "date": "2026-07-16 20:57:33"
+    },
+    {
+      "name": "Supreme Being",
+      "description": "You've created a supreme item",
+      "rarity_id": 4,
+      "rarity": "Gold",
+      "counter": 12,
+      "timestamp": 1760923341000,
+      "date": "2025-10-19 22:22:21"
+    },
+    {
+      "name": "Death Comes Crawling",
+      "description": "You've killed the Deathcrawler",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 12,
+      "timestamp": 1738444321000,
+      "date": "2025-02-01 18:12:01"
+    },
+    {
+      "name": "Tree Hugger",
+      "description": "You plant trees",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 11,
+      "timestamp": 1771850390000,
+      "date": "2026-02-23 09:39:50"
+    },
+    {
+      "name": "Peace Of Mind",
+      "description": "You're getting in to not getting in to things",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 11,
+      "timestamp": 1783634071000,
+      "date": "2026-07-09 18:54:31"
+    },
+    {
+      "name": "Uttacha Spawn Slayer",
+      "description": "You've killed the Uttacha Spawn",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 11,
+      "timestamp": 1738444428000,
+      "date": "2025-02-01 18:13:48"
+    },
+    {
+      "name": "Rift Beast Nemesis",
+      "description": "You've vanquished a lot of Rift Beasts",
+      "rarity_id": 4,
+      "rarity": "Gold",
+      "counter": 11,
+      "timestamp": 1785792851000,
+      "date": "2026-08-03 18:34:11"
+    },
+    {
+      "name": "Zombies Killed",
+      "description": "Zombie! Zombie!",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 11,
+      "timestamp": 1784491218000,
+      "date": "2026-07-19 17:00:18"
+    },
+    {
+      "name": "Master of Recreation",
+      "description": "Just like pieces of a puzzle.",
+      "rarity_id": 4,
+      "rarity": "Gold",
+      "counter": 10,
+      "timestamp": 1758311923000,
+      "date": "2025-09-19 16:58:43"
+    },
+    {
+      "name": "Deer Killed",
+      "description": "You've killed the dear deer",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 10,
+      "timestamp": 1740365218000,
+      "date": "2025-02-23 23:46:58"
+    },
+    {
+      "name": "You Cannot Pass",
+      "description": "You've defeated many Lava Fiends",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 9,
+      "timestamp": 1789423002000,
+      "date": "2026-09-14 18:56:42"
+    },
+    {
+      "name": "Drakeslayer",
+      "description": "You've killed a Drake",
+      "rarity_id": 4,
+      "rarity": "Gold",
+      "counter": 9,
+      "timestamp": 1786572813000,
+      "date": "2026-08-12 19:13:33"
     },
     {
       "name": "Sailboat Sailor",
-      "description": "Look, it floats! Commanded a small sailboat.",
-      "rarity_id": 2,
-      "rarity": "Normal",
+      "description": "Look, it floats!",
+      "rarity_id": 3,
+      "rarity": "Silver",
       "counter": 9,
-      "date": "02/02/2025 23:43"
+      "timestamp": 1738550627000,
+      "date": "2025-02-02 23:43:47"
+    },
+    {
+      "name": "Almost As Good As An Axe",
+      "description": "There's always a way to bring down a tree",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 9,
+      "timestamp": 1731928872000,
+      "date": "2024-11-18 08:21:12"
+    },
+    {
+      "name": "Dragonslayer",
+      "description": "You've killed the Red Dragon",
+      "rarity_id": 4,
+      "rarity": "Gold",
+      "counter": 9,
+      "timestamp": 1783820038000,
+      "date": "2026-07-11 22:33:58"
+    },
+    {
+      "name": "Whisky",
+      "description": "Always carry a small flask of whiskey in case of snake bite.  Also, always carry a small snake.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 8,
+      "timestamp": 1746482294000,
+      "date": "2025-05-05 18:58:14"
+    },
+    {
+      "name": "Brilliant!",
+      "description": "You've mined a brilliant gem",
+      "rarity_id": 4,
+      "rarity": "Gold",
+      "counter": 8,
+      "timestamp": 1783905053000,
+      "date": "2026-07-12 22:10:53"
+    },
+    {
+      "name": "Die By The Rift",
+      "description": "You died in the Rift Area",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 6,
+      "timestamp": 1786578679000,
+      "date": "2026-08-12 20:51:19"
+    },
+    {
+      "name": "Moby Dick",
+      "description": "You've killed the Huge Shark",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 5,
+      "timestamp": 1761515854000,
+      "date": "2025-10-26 18:57:34"
+    },
+    {
+      "name": "Cleanup Operation",
+      "description": "You are recycling things. Good.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 5,
+      "timestamp": 1765168404000,
+      "date": "2025-12-08 01:33:24"
+    },
+    {
+      "name": "Citizen",
+      "description": "Congratulations! You've joined your first settlement!",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 5,
+      "timestamp": 1730574687000,
+      "date": "2024-11-02 16:11:27"
+    },
+    {
+      "name": "Hippie",
+      "description": "Flower Power!",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 5,
+      "timestamp": 1770431740000,
+      "date": "2026-02-06 23:35:40"
+    },
+    {
+      "name": "Deforestation",
+      "description": "There's something with you and trees",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 5,
+      "timestamp": 1777585605000,
+      "date": "2026-04-30 18:46:45"
+    },
+    {
+      "name": "Master of Runes",
+      "description": "Just a few more bonuses.",
+      "rarity_id": 4,
+      "rarity": "Gold",
+      "counter": 4,
+      "timestamp": 1773716162000,
+      "date": "2026-03-16 23:56:02"
+    },
+    {
+      "name": "Tower Builder",
+      "description": "You finished the guard tower. Will you finally be safe now?",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 4,
+      "timestamp": 1743015055000,
+      "date": "2025-03-26 15:50:55"
+    },
+    {
+      "name": "Exquisite Gem",
+      "description": "You've found a very special gem",
+      "rarity_id": 4,
+      "rarity": "Gold",
+      "counter": 4,
+      "timestamp": 1761147565000,
+      "date": "2025-10-22 12:39:25"
+    },
+    {
+      "name": "Crude Canoe Sailor",
+      "description": "Look, it barely floats!",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 4,
+      "timestamp": 1742156259000,
+      "date": "2025-03-16 17:17:39"
+    },
+    {
+      "name": "Rift Ogre Hero",
+      "description": "You've vanquished a lot of Rift Ogres",
+      "rarity_id": 4,
+      "rarity": "Gold",
+      "counter": 3,
+      "timestamp": 1784232211000,
+      "date": "2026-07-16 17:03:31"
+    },
+    {
+      "name": "Wood Bridge Maker",
+      "description": "You finished a Wood Bridge",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 3,
+      "timestamp": 1763693601000,
+      "date": "2025-11-20 23:53:21"
+    },
+    {
+      "name": "Troll King Assassination",
+      "description": "You've killed the Troll King",
+      "rarity_id": 4,
+      "rarity": "Gold",
+      "counter": 3,
+      "timestamp": 1735413005000,
+      "date": "2024-12-28 16:10:05"
+    },
+    {
+      "name": "Sea Mastership",
+      "description": "You've killed the Sea Serpent",
+      "rarity_id": 4,
+      "rarity": "Gold",
+      "counter": 3,
+      "timestamp": 1772147306000,
+      "date": "2026-02-26 20:08:26"
     },
     {
       "name": "The Lucky One",
-      "description": "Survived a deadly encounter by the skin of your teeth.",
-      "rarity_id": 2,
-      "rarity": "Normal",
+      "description": "Wow, that was really, really close.",
+      "rarity_id": 3,
+      "rarity": "Silver",
       "counter": 3,
-      "date": "20/09/2025 23:07"
+      "timestamp": 1758420447000,
+      "date": "2025-09-20 23:07:27"
+    },
+    {
+      "name": "Dances With Wolves",
+      "description": "You know how to kill wolves now",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 3,
+      "timestamp": 1757097301000,
+      "date": "2025-09-05 15:35:01"
+    },
+    {
+      "name": "The First",
+      "description": "You're all alone here!",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 3,
+      "timestamp": 1738679763000,
+      "date": "2025-02-04 11:36:03"
+    },
+    {
+      "name": "One Eyed Snake",
+      "description": "You've killed the Kyklops",
+      "rarity_id": 4,
+      "rarity": "Gold",
+      "counter": 3,
+      "timestamp": 1775412465000,
+      "date": "2026-04-05 15:07:45"
+    },
+    {
+      "name": "Founder",
+      "description": "There's nothing like home.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 2,
+      "timestamp": 1732152231000,
+      "date": "2024-11-20 22:23:51"
+    },
+    {
+      "name": "Janitor",
+      "description": "You keep the place in good order",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 2,
+      "timestamp": 1741373269000,
+      "date": "2025-03-07 15:47:49"
     },
     {
       "name": "Brother In Spars",
-      "description": "You're quite popular to spar against. Sparred repeatedly with companions.",
-      "rarity_id": 2,
-      "rarity": "Normal",
+      "description": "You're quite popular to spar against.",
+      "rarity_id": 3,
+      "rarity": "Silver",
       "counter": 2,
-      "date": "26/07/2025 19:58"
+      "timestamp": 1753570731000,
+      "date": "2025-07-26 19:58:51"
     },
     {
-      "name": "Maul Kill",
-      "description": "Crushed an enemy using a heavy maul hammer.",
-      "rarity_id": 2,
-      "rarity": "Normal",
-      "counter": 1,
-      "date": "18/01/2026 19:10"
+      "name": "Neat and Tidy",
+      "description": "Now that looks a lot better!",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 2,
+      "timestamp": 1745773962000,
+      "date": "2025-04-27 14:12:42"
     },
     {
-      "name": "Headsman",
-      "description": "Executed an opponent with a clean two-handed or critical blow.",
-      "rarity_id": 2,
-      "rarity": "Normal",
-      "counter": 1,
-      "date": "26/07/2025 19:58"
+      "name": "Fo's Favourite",
+      "description": "You start to become popular with the gods of nature",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 2,
+      "timestamp": 1754855926000,
+      "date": "2025-08-10 16:58:46"
     },
     {
-      "name": "Finish Him!",
-      "description": "Delivered the final coup de grâce in mortal combat.",
-      "rarity_id": 2,
-      "rarity": "Normal",
-      "counter": 1,
-      "date": "03/04/2026 13:50"
+      "name": "Rarity Discoverer",
+      "description": "You have no trouble finding the best secrets of the past.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 2,
+      "timestamp": 1736810906000,
+      "date": "2025-01-13 20:28:26"
     },
     {
-      "name": "Chief Mate",
-      "description": "Yarr Matey! Embarked ships as captain many times.",
-      "rarity_id": 2,
-      "rarity": "Normal",
-      "counter": 1,
-      "date": "02/02/2025 23:43"
-    },
-    {
-      "name": "Cap'n",
-      "description": "Aye aye, Cap'n! Commanded all the major ship types across the seas.",
-      "rarity_id": 2,
-      "rarity": "Normal",
-      "counter": 1,
-      "date": "16/10/2025 21:41"
-    },
-    {
-      "name": "Wanderer",
-      "description": "Walked long journeys across the wild lands.",
-      "rarity_id": 2,
-      "rarity": "Normal",
-      "counter": 1,
-      "date": "31/10/2024 18:24"
-    },
-    {
-      "name": "Tradesman",
-      "description": "Successfully traded goods through the commercial trade interface.",
-      "rarity_id": 2,
-      "rarity": "Normal",
-      "counter": 1,
-      "date": "25/03/2025 14:06"
-    },
-    {
-      "name": "Wet Feet",
-      "description": "Waded into the water and learned how to swim.",
-      "rarity_id": 2,
-      "rarity": "Normal",
-      "counter": 1,
-      "date": "17/11/2024 16:50"
-    },
-    {
-      "name": "Dead End",
-      "description": "Sometimes it's hard to survive while driving. Died while operating a vehicle/cart.",
-      "rarity_id": 2,
-      "rarity": "Normal",
-      "counter": 1,
-      "date": "05/12/2024 20:29"
-    },
-    {
-      "name": "Trucker",
-      "description": "Drove a large cart or wagon across the realm.",
-      "rarity_id": 2,
-      "rarity": "Normal",
-      "counter": 1,
-      "date": "17/11/2024 23:01"
-    },
-    {
-      "name": "Joyrider",
-      "description": "Accelerated and enjoyed riding a fast steed or cart.",
-      "rarity_id": 2,
-      "rarity": "Normal",
-      "counter": 1,
-      "date": "25/07/2025 19:31"
-    },
-    {
-      "name": "Rider Of The Apocalypse",
-      "description": "Rode upon a fiery Hell Horse, creature of the nether.",
-      "rarity_id": 2,
-      "rarity": "Normal",
-      "counter": 1,
-      "date": "24/12/2024 10:57"
-    },
-    {
-      "name": "Sore Bottom",
-      "description": "Rode long hours continuously upon mount back.",
-      "rarity_id": 2,
-      "rarity": "Normal",
-      "counter": 1,
-      "date": "30/11/2024 16:57"
+      "name": "Goblin Leadership",
+      "description": "You slayed the Goblin Leader",
+      "rarity_id": 4,
+      "rarity": "Gold",
+      "counter": 2,
+      "timestamp": 1735171697000,
+      "date": "2024-12-25 21:08:17"
     },
     {
       "name": "Out At Sea",
-      "description": "Sailed far away from the coastline into the vast ocean deeps.",
-      "rarity_id": 2,
-      "rarity": "Normal",
+      "description": "Hope you're not out of your depth",
+      "rarity_id": 3,
+      "rarity": "Silver",
       "counter": 1,
-      "date": "28/11/2024 17:57"
+      "timestamp": 1732827465000,
+      "date": "2024-11-28 17:57:45"
+    },
+    {
+      "name": "Wanderer",
+      "description": "You know how to move around",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1730409876000,
+      "date": "2024-10-31 18:24:36"
+    },
+    {
+      "name": "Scouted",
+      "description": "You have been premium for 6 months",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1748041730000,
+      "date": "2025-05-23 20:08:50"
+    },
+    {
+      "name": "Drunken Sailor",
+      "description": "What shall we do with you?",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1734974016000,
+      "date": "2024-12-23 14:13:36"
+    },
+    {
+      "name": "Cowboy",
+      "description": "Bovine is your thing",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1739751826000,
+      "date": "2025-02-16 21:23:46"
+    },
+    {
+      "name": "Sailboat Maker",
+      "description": "You finished the sailboat",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1736115023000,
+      "date": "2025-01-05 19:10:23"
+    },
+    {
+      "name": "Irresponsible Driving",
+      "description": "Haven't you heard? Don't drink and drive!",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1733185915000,
+      "date": "2024-12-02 21:31:55"
+    },
+    {
+      "name": "Wet Feet",
+      "description": "It's cold. It's wet. I don't like it.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1731873017000,
+      "date": "2024-11-17 16:50:17"
+    },
+    {
+      "name": "Statue Bro?",
+      "description": "A really big puzzle with a lot of pieces - easy.",
+      "rarity_id": 4,
+      "rarity": "Gold",
+      "counter": 1,
+      "timestamp": 1758478280000,
+      "date": "2025-09-21 15:11:20"
+    },
+    {
+      "name": "Bodhisattva",
+      "description": "Meditating cleans the mind and elevates your soul",
+      "rarity_id": 4,
+      "rarity": "Gold",
+      "counter": 1,
+      "timestamp": 1777330782000,
+      "date": "2026-04-27 19:59:42"
+    },
+    {
+      "name": "Pheasant Hunt",
+      "description": "You've killed the pheasant",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1755085379000,
+      "date": "2025-08-13 08:42:59"
+    },
+    {
+      "name": "No Fuel For The Flame Of Udun",
+      "description": "You've defeated a lot of Lava Fiends",
+      "rarity_id": 4,
+      "rarity": "Gold",
+      "counter": 1,
+      "timestamp": 1774967421000,
+      "date": "2026-03-31 11:30:21"
+    },
+    {
+      "name": "Joyrider",
+      "description": "You had the chance to view the surroundings quite a while there",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1753482668000,
+      "date": "2025-07-25 19:31:08"
+    },
+    {
+      "name": "Crocodile Dundee",
+      "description": "It was the croc and not you this time",
+      "rarity_id": 4,
+      "rarity": "Gold",
+      "counter": 1,
+      "timestamp": 1757098461000,
+      "date": "2025-09-05 15:54:21"
+    },
+    {
+      "name": "Dead End",
+      "description": "Sometimes it's hard to survive while driving",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1733441368000,
+      "date": "2024-12-05 20:29:28"
+    },
+    {
+      "name": "Hedgehog",
+      "description": "You're a one for hedges",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1758583730000,
+      "date": "2025-09-22 20:28:50"
+    },
+    {
+      "name": "Landed",
+      "description": "You have been premium for 1 month",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1734690057000,
+      "date": "2024-12-20 07:20:57"
+    },
+    {
+      "name": "Dog Life",
+      "description": "You put dogs out of their misery",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1762305949000,
+      "date": "2025-11-04 22:25:49"
+    },
+    {
+      "name": "Abstinence",
+      "description": "You wouldn't mind something to eat. Really really really.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1731662739000,
+      "date": "2024-11-15 06:25:39"
+    },
+    {
+      "name": "Honey, Guess What's For Dinner!",
+      "description": "Too many spiders!",
+      "rarity_id": 4,
+      "rarity": "Gold",
+      "counter": 1,
+      "timestamp": 1774964338000,
+      "date": "2026-03-31 10:38:58"
+    },
+    {
+      "name": "Obsessive Eater",
+      "description": "Welp, don't have any space left now. *BURP*",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1730595380000,
+      "date": "2024-11-02 21:56:20"
+    },
+    {
+      "name": "Deep Pockets",
+      "description": "You can't possibly carry more",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1730577949000,
+      "date": "2024-11-02 17:05:49"
+    },
+    {
+      "name": "Tradesman",
+      "description": "You're seeing the world!",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1742922392000,
+      "date": "2025-03-25 14:06:32"
+    },
+    {
+      "name": "Owning",
+      "description": "You have been premium for 12 months",
+      "rarity_id": 4,
+      "rarity": "Gold",
+      "counter": 1,
+      "timestamp": 1765768637000,
+      "date": "2025-12-15 00:17:17"
+    },
+    {
+      "name": "Stone Bridge Maker",
+      "description": "You finished a Stone Bridge",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1775097343000,
+      "date": "2026-04-01 23:35:43"
+    },
+    {
+      "name": "Animal Care",
+      "description": "How nice of you to feed the pet",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1732325077000,
+      "date": "2024-11-22 22:24:37"
+    },
+    {
+      "name": "Hens Killed",
+      "description": "You've killed hens",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1733268432000,
+      "date": "2024-12-03 20:27:12"
+    },
+    {
+      "name": "Experienced",
+      "description": "You have been premium for 9 months",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1755808527000,
+      "date": "2025-08-21 17:35:27"
+    },
+    {
+      "name": "Headsman",
+      "description": "You like to axe people.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1753570731000,
+      "date": "2025-07-26 19:58:51"
+    },
+    {
+      "name": "Maul Kill",
+      "description": "",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1768774205000,
+      "date": "2026-01-18 19:10:05"
+    },
+    {
+      "name": "Juggernaut's Demise",
+      "description": "You've vanquished the Juggernaut",
+      "rarity_id": 4,
+      "rarity": "Gold",
+      "counter": 1,
+      "timestamp": 1739244339000,
+      "date": "2025-02-11 00:25:39"
+    },
+    {
+      "name": "Chief Mate",
+      "description": "Yarrr matey.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1738550627000,
+      "date": "2025-02-02 23:43:47"
+    },
+    {
+      "name": "Glittered",
+      "description": "You have been premium for 20 months",
+      "rarity_id": 4,
+      "rarity": "Gold",
+      "counter": 1,
+      "timestamp": 1783753518000,
+      "date": "2026-07-11 04:05:18"
+    },
+    {
+      "name": "Paul Bunyan",
+      "description": "You can measure yourself with the greatest of lumberjacks",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1777585605000,
+      "date": "2026-04-30 18:46:45"
+    },
+    {
+      "name": "Cap'n",
+      "description": "Aye aye, Cap'n",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1760661692000,
+      "date": "2025-10-16 21:41:32"
+    },
+    {
+      "name": "Singing While Eating",
+      "description": "Who was that cook?",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1733186101000,
+      "date": "2024-12-02 21:35:01"
+    },
+    {
+      "name": "Vynora Commands You",
+      "description": "The fish bring secrets from the deep",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1743946004000,
+      "date": "2025-04-06 10:26:44"
+    },
+    {
+      "name": "Popular Joe",
+      "description": "You have many friends!",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1742831994000,
+      "date": "2025-03-24 12:59:54"
+    },
+    {
+      "name": "Trucker",
+      "description": "You drove that cart really far",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1731895286000,
+      "date": "2024-11-17 23:01:26"
+    },
+    {
+      "name": "Rider Of The Apocalypse",
+      "description": "You rode, and rode, and rode.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1735048637000,
+      "date": "2024-12-24 10:57:17"
+    },
+    {
+      "name": "Bumble Bee",
+      "description": "Are you in it for the honey, honey?",
+      "rarity_id": 4,
+      "rarity": "Gold",
+      "counter": 1,
+      "timestamp": 1776559914000,
+      "date": "2026-04-18 21:51:54"
+    },
+    {
+      "name": "Survived",
+      "description": "You have been premium for 3 months",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1740330007000,
+      "date": "2025-02-23 14:00:07"
+    },
+    {
+      "name": "Finish Him!",
+      "description": "No mercy was shown that day.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1775235055000,
+      "date": "2026-04-03 13:50:55"
+    },
+    {
+      "name": "The Tortoise",
+      "description": "You turned that sweet poor thing into a shield!",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1742258841000,
+      "date": "2025-03-17 21:47:21"
+    },
+    {
+      "name": "Rowboat Maker",
+      "description": "You finished the rowboat",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1732441910000,
+      "date": "2024-11-24 06:51:50"
+    },
+    {
+      "name": "Longterm Attachments",
+      "description": "May they never detach.",
+      "rarity_id": 4,
+      "rarity": "Gold",
+      "counter": 1,
+      "timestamp": 1776544821000,
+      "date": "2026-04-18 17:40:21"
+    },
+    {
+      "name": "Sore Bottom",
+      "description": "Ok that horse got me pretty far, now where's my farmer's salve.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1732996622000,
+      "date": "2024-11-30 16:57:02"
+    },
+    {
+      "name": "Last Rope",
+      "description": "The more the merrier",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1732050032000,
+      "date": "2024-11-19 18:00:32"
+    },
+    {
+      "name": "Horse Whisperer",
+      "description": "You communicate with them.",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1733332762000,
+      "date": "2024-12-04 14:19:22"
+    },
+    {
+      "name": "All Hell",
+      "description": "You've held your ground against the Hell creatures",
+      "rarity_id": 4,
+      "rarity": "Gold",
+      "counter": 1,
+      "timestamp": 1734815835000,
+      "date": "2024-12-21 18:17:15"
+    },
+    {
+      "name": "Braaains",
+      "description": "Zombies stand no chance",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1784491166000,
+      "date": "2026-07-19 16:59:26"
     },
     {
       "name": "Went Up A Hill",
-      "description": "Climbed high upon the peaks and steep mountain ridges.",
-      "rarity_id": 2,
-      "rarity": "Normal",
+      "description": "The view is pretty up here",
+      "rarity_id": 3,
+      "rarity": "Silver",
       "counter": 1,
-      "date": "21/12/2024 19:37"
+      "timestamp": 1734820631000,
+      "date": "2024-12-21 19:37:11"
+    },
+    {
+      "name": "Shined",
+      "description": "You have been premium for 16 months",
+      "rarity_id": 4,
+      "rarity": "Gold",
+      "counter": 1,
+      "timestamp": 1773115934000,
+      "date": "2026-03-10 01:12:14"
+    },
+    {
+      "name": "Free Hugs",
+      "description": "You're the cuddly type",
+      "rarity_id": 3,
+      "rarity": "Silver",
+      "counter": 1,
+      "timestamp": 1733000143000,
+      "date": "2024-11-30 17:55:43"
     }
   ]
 }

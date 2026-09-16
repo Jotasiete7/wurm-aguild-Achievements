@@ -67,10 +67,9 @@ if errorlevel 1 (
 echo Configurando launcher com Tracker integrado...
 (
 echo @echo off
-echo title Wurm Online - A Guilda Tracker
-echo cd /d "%WURM_DIR%"
-echo set "JAVA_TOOL_OPTIONS=-javaagent:\"%WURM_DIR%\wurm_achievements.jar\""
-echo start "" "%WURM_DIR%\WurmLauncher64.exe"
+echo cd /d "%%~dp0"
+echo set JAVA_TOOL_OPTIONS=-javaagent:wurm_achievements.jar
+echo start "" "WurmLauncher64.exe"
 echo exit
 ) > "%WURM_DIR%\iniciar_wurm_com_tracker.bat"
 
