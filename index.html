@@ -1756,9 +1756,9 @@
             <option value="rarity_desc">Maior Raridade</option>
           </select>
           <div class="view-mode-group">
-            <button class="view-mode-btn active" id="modeCards" onclick="setViewMode('cards')">Cards</button>
+            <button class="view-mode-btn active" id="modeTable" onclick="setViewMode('table')">Tabela</button>
+            <button class="view-mode-btn" id="modeCards" onclick="setViewMode('cards')">Cards</button>
             <button class="view-mode-btn" id="modeCompact" onclick="setViewMode('compact')">Compacto</button>
-            <button class="view-mode-btn" id="modeTable" onclick="setViewMode('table')">Tabela</button>
           </div>
           <button class="action-btn" id="reloadBtn" title="Recarregar dados do arquivo">🔄 Atualizar</button>
         </div>
@@ -1777,13 +1777,13 @@
       </div>
 
       <!-- 1. CARDS VIEW -->
-      <div class="achievements-grid" id="achievementsGrid"></div>
+      <div class="achievements-grid" id="achievementsGrid" style="display:none;"></div>
 
       <!-- 2. COMPACT ROW VIEW -->
       <div class="compact-list" id="compactList" style="display:none;"></div>
 
-      <!-- 3. TABLE VIEW -->
-      <div class="table-container" id="tableContainer" style="display:none;">
+      <!-- 3. TABLE VIEW (Default nativo) -->
+      <div class="table-container" id="tableContainer" style="display:block;">
         <table>
           <thead>
             <tr>
@@ -1864,7 +1864,7 @@
     let currentData = [];
     let currentCategory = 'all';
     let currentSort = 'counter_desc';
-    let currentViewMode = 'cards';
+    let currentViewMode = 'table';
     let currentTab = 'achievements';
 
     // ─── DROPDOWN TOGGLE ─────────────────────────────────────
