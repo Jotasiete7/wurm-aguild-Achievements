@@ -2086,31 +2086,40 @@
 
     // ─── COMPUTE STATS & SCORE ───────────────────────────────
     function computePlayerStats(p) {
-      const achs = p.achievements || [];
-      let score = 0;
-      let diamonds = 0;
-      let golds = 0;
-      let silvers = 0;
-      let bronzes = 0;
+      let score = (typeof p.score === 'number' && !isNaN(p.score)) ? p.score : 0;
+      let golds = p.gold_count || 0;
+      let total = p.total_count || 0;
       let maxCount = p.max_counter || 0;
       let topAch = p.top_achievement || '';
+      let diamonds = 0;
+      let silvers = 0;
+      let bronzes = 0;
 
-      achs.forEach(a => {
-        const r = (a.rarity || '').toLowerCase();
-        if (r === 'diamond') { score += 50; diamonds++; }
-        else if (r === 'gold') { score += 25; golds++; }
-        else if (r === 'silver') { score += 10; silvers++; }
-        else if (r === 'bronze') { score += 5; bronzes++; }
-        else { score += 1; }
+      const achs = p.achievements || [];
+      if (achs.length > 0) {
+        score = 0;
+        golds = 0;
+        total = achs.length;
+        achs.forEach(a => {
+          const r = (a.rarity || '').toLowerCase();
+          if (r === 'diamond') { score += 50; diamonds++; }
+          else if (r === 'gold') { score += 25; golds++; }
+          else if (r === 'silver') { score += 10; silvers++; }
+          else if (r === 'bronze') { score += 5; bronzes++; }
+          else { score += 1; }
 
-        if (a.counter > maxCount) {
-          maxCount = a.counter;
-          topAch = a.name;
-        }
-      });
+          if (a.counter > maxCount) {
+            maxCount = a.counter;
+            topAch = a.name;
+          }
+        });
+      } else if (!score && (golds > 0 || total > 0)) {
+        score = (golds * 25) + Math.max(0, total - golds);
+      }
 
       return {
         ...p,
+        total_count: total,
         score: score,
         diamond_count: diamonds,
         gold_count: golds,
@@ -2423,9 +2432,18 @@
     // ─── LOAD DATA (Supabase Cloud + Local Live Polling) ──────
     async function fetchGuildPlayers() {
       try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/player_achievements?select=*`, {
+        // 1. Tentar busca leve de resumo (Lazy Loading - sem baixar centenas de conquistas no ranking)
+        let res = await fetch(`${SUPABASE_URL}/rest/v1/player_achievements?select=player_name,score,total_count,gold_count,max_counter,top_achievement,updated_at&order=score.desc`, {
           headers: { "apikey": SUPABASE_KEY, "Authorization": "Bearer " + SUPABASE_KEY }
         });
+
+        // 2. Se a coluna score ainda não existir no banco (antes do script SQL), faz fallback automático
+        if (!res.ok && res.status === 400) {
+          res = await fetch(`${SUPABASE_URL}/rest/v1/player_achievements?select=*`, {
+            headers: { "apikey": SUPABASE_KEY, "Authorization": "Bearer " + SUPABASE_KEY }
+          });
+        }
+
         if (res.ok) {
           const players = await res.json();
           if (players && players.length > 0) {
@@ -2850,6 +2868,16 @@
       });
     }
 
+    function getOrCreatePlayerClaimToken(playerName) {
+      const key = 'wurm_claim_token_' + playerName.toLowerCase().trim();
+      let token = localStorage.getItem(key);
+      if (!token) {
+        token = 'token_' + Math.random().toString(36).substring(2, 12) + '_' + Math.random().toString(36).substring(2, 12) + '_' + Date.now();
+        localStorage.setItem(key, token);
+      }
+      return token;
+    }
+
     // ─── MANUAL JSON UPLOAD ──────────────────────────────────
     async function handleManualJsonUpload(file) {
       if (!file) return;
@@ -2870,6 +2898,7 @@
           if (a.counter > maxCounter) { maxCounter = a.counter; topName = a.name; }
         });
 
+        const token = getOrCreatePlayerClaimToken(playerName);
         const payload = [{
           player_name: playerName,
           achievements: json.achievements,
@@ -2877,6 +2906,7 @@
           gold_count: goldCount,
           max_counter: maxCounter,
           top_achievement: topName,
+          claim_token: token,
           updated_at: new Date().toISOString()
         }];
 
@@ -2892,19 +2922,33 @@
         });
 
         if (res.ok) {
-          alert(`Sucesso! Conquistas de ${playerName} enviadas para o ranking comunitário!`);
+          alert(`Sucesso! Conquistas de ${playerName} sincronizadas com segurança no ranking comunitário!`);
           addMyAltChar(playerName);
           setMyMainChar(playerName);
           await fetchGuildPlayers();
           switchMainView('player', playerName);
         } else {
           const err = await res.text();
-          alert("Erro ao enviar: " + err);
+          if (err.includes('claim_token')) {
+            alert(`Acesso Negado: O personagem "${playerName}" já foi registrado por outro usuário/computador com proteção de nick ativa.`);
+          } else {
+            alert("Erro ao enviar: " + err);
+          }
         }
       } catch (e) {
         alert("Erro ao ler arquivo: " + e.message);
       }
     }
+
+    // ─── SINCRONIZAÇÃO ENTRE ABAS ────────────────────────────
+    window.addEventListener('storage', (e) => {
+      if (e.key === STORAGE_KEY_MAIN_CHAR || e.key === STORAGE_KEY_MY_CHARS) {
+        updateMyCharUI();
+        if (currentMainView === 'player' && (!selectedPlayerName || selectedPlayerName === e.oldValue)) {
+          goToMyProfile();
+        }
+      }
+    });
 
     // ─── INITIAL LOAD + LIVE REFRESH ──────────────────────────
     updateMyCharUI();
@@ -2921,7 +2965,7 @@
       } else {
         fetchGuildPlayers();
       }
-    }, 10000);
+    }, 15000);
   </script>
 </body>
 </html>

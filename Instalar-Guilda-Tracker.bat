@@ -108,10 +108,26 @@ if "%PLAYER_NAME%"=="" (
     exit /b
 )
 
+:: Gerar ou manter claim_token de seguranca unico para este PC/personagem
+set "CLAIM_TOKEN="
+if exist "%WURM_DIR%\wurm_tracker.cfg" (
+    for /f "tokens=2 delims==" %%G in ('findstr /b "claim_token=" "%WURM_DIR%\wurm_tracker.cfg" 2^>nul') do set "CLAIM_TOKEN=%%G"
+)
+if "%CLAIM_TOKEN%"=="" (
+    for /f "usebackq delims=" %%T in (`powershell -NoProfile -Command "[guid]::NewGuid().ToString('N')"`) do set "CLAIM_TOKEN=%%T"
+)
+
 :: Salvar configuracao
-echo player_name=%PLAYER_NAME%> "%WURM_DIR%\wurm_tracker.cfg"
+(
+echo player_name=%PLAYER_NAME%
+echo claim_token=%CLAIM_TOKEN%
+) > "%WURM_DIR%\wurm_tracker.cfg"
+
 if exist "%WURM_DIR%\gamedata" (
-    echo player_name=%PLAYER_NAME%> "%WURM_DIR%\gamedata\wurm_tracker.cfg"
+    (
+    echo player_name=%PLAYER_NAME%
+    echo claim_token=%CLAIM_TOKEN%
+    ) > "%WURM_DIR%\gamedata\wurm_tracker.cfg"
 )
 
 echo [OK] Personagem configurado: [%PLAYER_NAME%]
@@ -134,10 +150,10 @@ if errorlevel 1 (
     echo [OK] client_live.jar atualizado com sucesso!
 )
 
-:: 7. Registrar no Supabase via PowerShell
+:: 7. Registrar no Supabase via PowerShell com token de seguranca
 echo.
 echo Registrando seu personagem no Ranking da Guilda...
-powershell -NoProfile -ExecutionPolicy Bypass -Command "$name = '%PLAYER_NAME%'; $url = 'https://gzhvqprdrtudyokhgxlj.supabase.co/rest/v1/player_achievements'; $key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd6aHZxcHJkcnR1ZHlva2hneGxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc3NTQ2MTUsImV4cCI6MjA4MzMzMDYxNX0.aSJIhfViQsb0dBjb5bOup49GCrQBt93uSkZySZAXcNo'; $h = @{ 'apikey' = $key; 'Authorization' = 'Bearer ' + $key; 'Content-Type' = 'application/json'; 'Prefer' = 'resolution=merge-duplicates' }; $body = @(@{ player_name = $name; total_count = 0; gold_count = 0; max_counter = 0; top_achievement = ''; achievements = @(); updated_at = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ') }) | ConvertTo-Json; try { Invoke-RestMethod -Uri $url -Method Post -Headers $h -Body $body -TimeoutSec 5 | Out-Null; Write-Host '[OK] Personagem registrado com sucesso no ranking da guilda!' -ForegroundColor Green } catch { Write-Host '[!] Conexao com a nuvem sera confirmada ao abrir o jogo.' -ForegroundColor Yellow }"
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$name = '%PLAYER_NAME%'; $token = '%CLAIM_TOKEN%'; $url = 'https://gzhvqprdrtudyokhgxlj.supabase.co/rest/v1/player_achievements'; $key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd6aHZxcHJkcnR1ZHlva2hneGxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc3NTQ2MTUsImV4cCI6MjA4MzMzMDYxNX0.aSJIhfViQsb0dBjb5bOup49GCrQBt93uSkZySZAXcNo'; $h = @{ 'apikey' = $key; 'Authorization' = 'Bearer ' + $key; 'Content-Type' = 'application/json'; 'Prefer' = 'resolution=merge-duplicates' }; $bodyWithToken = @(@{ player_name = $name; claim_token = $token; total_count = 0; gold_count = 0; max_counter = 0; top_achievement = ''; achievements = @(); updated_at = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ') }) | ConvertTo-Json; $bodyLegacy = @(@{ player_name = $name; total_count = 0; gold_count = 0; max_counter = 0; top_achievement = ''; achievements = @(); updated_at = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ') }) | ConvertTo-Json; try { try { Invoke-RestMethod -Uri $url -Method Post -Headers $h -Body $bodyWithToken -TimeoutSec 5 | Out-Null; } catch { Invoke-RestMethod -Uri $url -Method Post -Headers $h -Body $bodyLegacy -TimeoutSec 5 | Out-Null; } Write-Host '[OK] Personagem registrado com sucesso no ranking da guilda!' -ForegroundColor Green } catch { Write-Host '[!] Conexao com a nuvem sera confirmada ao abrir o jogo.' -ForegroundColor Yellow }"
 
 :: Limpar atalhos antigos caso existam
 if exist "%USERPROFILE%\Desktop\Wurm Online (Guilda Tracker).lnk" (

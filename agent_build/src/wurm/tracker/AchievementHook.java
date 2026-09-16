@@ -33,6 +33,7 @@ public class AchievementHook {
     private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private static ScheduledFuture<?> saveTask = null;
     private static String cachedPlayerName = null;
+    private static String cachedClaimToken = null;
 
     public static void record(String name, String description, byte rarity, long timestamp, int counter) {
         if (name == null || name.isEmpty()) return;
@@ -151,6 +152,31 @@ public class AchievementHook {
         return "Desconhecido";
     }
 
+    public static String detectClaimToken() {
+        if (cachedClaimToken != null && !cachedClaimToken.isEmpty()) return cachedClaimToken;
+
+        String[] configPaths = {"wurm_tracker.cfg", "gamedata/wurm_tracker.cfg", "../wurm_tracker.cfg"};
+        for (String cp : configPaths) {
+            File cfg = new File(cp);
+            if (cfg.exists()) {
+                try (BufferedReader br = new BufferedReader(new FileReader(cfg, StandardCharsets.UTF_8))) {
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        line = line.trim();
+                        if (line.startsWith("claim_token=")) {
+                            String token = line.substring("claim_token=".length()).trim();
+                            if (!token.isEmpty()) {
+                                cachedClaimToken = token;
+                                return token;
+                            }
+                        }
+                    }
+                } catch (Throwable ignored) {}
+            }
+        }
+        return null;
+    }
+
     private static String getRarityName(byte r) {
         switch (r) {
             case 2: return "Bronze";
@@ -244,40 +270,44 @@ public class AchievementHook {
     }
 
     private static void sendToSupabase(final String player, final String arrayJson, final int total, final int goldCount, final int diamondCount, final int score, final String topName, final int maxCounter) {
+        final String claimToken = detectClaimToken();
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    URL url = new URL(SUPABASE_URL);
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.setRequestMethod("POST");
-                    conn.setRequestProperty("apikey", SUPABASE_KEY);
-                    conn.setRequestProperty("Authorization", "Bearer " + SUPABASE_KEY);
-                    conn.setRequestProperty("Content-Type", "application/json");
-                    conn.setRequestProperty("Prefer", "resolution=merge-duplicates");
-                    conn.setDoOutput(true);
-                    conn.setConnectTimeout(8000);
-                    conn.setReadTimeout(8000);
-
                     SimpleDateFormat iso = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
                     iso.setTimeZone(TimeZone.getTimeZone("UTC"));
 
                     StringBuilder body = new StringBuilder();
                     body.append("[{\n");
                     body.append("  \"player_name\": \"").append(escapeJson(player)).append("\",\n");
+                    if (claimToken != null && !claimToken.isEmpty()) {
+                        body.append("  \"claim_token\": \"").append(escapeJson(claimToken)).append("\",\n");
+                    }
                     body.append("  \"achievements\": ").append(arrayJson).append(",\n");
                     body.append("  \"total_count\": ").append(total).append(",\n");
                     body.append("  \"gold_count\": ").append(goldCount).append(",\n");
+                    body.append("  \"score\": ").append(score).append(",\n");
                     body.append("  \"max_counter\": ").append(maxCounter).append(",\n");
                     body.append("  \"top_achievement\": \"").append(escapeJson(topName)).append("\",\n");
                     body.append("  \"updated_at\": \"").append(iso.format(new Date())).append("\"\n");
                     body.append("}]");
 
-                    byte[] bytes = body.toString().getBytes(StandardCharsets.UTF_8);
-                    try (OutputStream os = conn.getOutputStream()) {
-                        os.write(bytes);
+                    int code = postJson(SUPABASE_URL, body.toString());
+                    if (code == 400 && (claimToken != null || score > 0)) {
+                        // Fallback de retrocompatibilidade caso as novas colunas ainda nao existam no banco
+                        StringBuilder legacyBody = new StringBuilder();
+                        legacyBody.append("[{\n");
+                        legacyBody.append("  \"player_name\": \"").append(escapeJson(player)).append("\",\n");
+                        legacyBody.append("  \"achievements\": ").append(arrayJson).append(",\n");
+                        legacyBody.append("  \"total_count\": ").append(total).append(",\n");
+                        legacyBody.append("  \"gold_count\": ").append(goldCount).append(",\n");
+                        legacyBody.append("  \"max_counter\": ").append(maxCounter).append(",\n");
+                        legacyBody.append("  \"top_achievement\": \"").append(escapeJson(topName)).append("\",\n");
+                        legacyBody.append("  \"updated_at\": \"").append(iso.format(new Date())).append("\"\n");
+                        legacyBody.append("}]");
+                        code = postJson(SUPABASE_URL, legacyBody.toString());
                     }
-                    int code = conn.getResponseCode();
                     System.out.println("[WurmTracker] Supabase auto-sync response: " + code);
                 } catch (Throwable t) {
                     System.err.println("[WurmTracker] Supabase auto-sync error: " + t.getMessage());
@@ -286,6 +316,25 @@ public class AchievementHook {
         });
         t.setDaemon(true);
         t.start();
+    }
+
+    private static int postJson(String urlStr, String jsonBody) throws IOException {
+        URL url = new URL(urlStr);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("apikey", SUPABASE_KEY);
+        conn.setRequestProperty("Authorization", "Bearer " + SUPABASE_KEY);
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setRequestProperty("Prefer", "resolution=merge-duplicates");
+        conn.setDoOutput(true);
+        conn.setConnectTimeout(8000);
+        conn.setReadTimeout(8000);
+
+        byte[] bytes = jsonBody.getBytes(StandardCharsets.UTF_8);
+        try (OutputStream os = conn.getOutputStream()) {
+            os.write(bytes);
+        }
+        return conn.getResponseCode();
     }
 
 
