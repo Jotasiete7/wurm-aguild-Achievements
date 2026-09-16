@@ -1201,15 +1201,6 @@
       </a>
     </div>
 
-    <!-- Center Navigation across tools -->
-    <nav class="guild-header-center">
-      <a href="https://wurm-aguild-site.pages.dev" target="_blank" class="eco-nav-link">Portal</a>
-      <a href="https://wurm-mining-tool.pages.dev" target="_blank" class="eco-nav-link">Mineração</a>
-      <a href="https://wurm-recipe-tool.pages.dev" target="_blank" class="eco-nav-link">Receitas</a>
-      <a href="#" class="eco-nav-link current">Achievements</a>
-      <a href="https://wurm-analytics-journal.pages.dev" target="_blank" class="eco-nav-link">Analytics</a>
-    </nav>
-
     <!-- Right Area: Support + Player Live Tag -->
     <div class="guild-header-right">
       <a href="https://ko-fi.com/aguildanode" target="_blank" rel="noopener noreferrer" class="kofi-btn">
@@ -1276,6 +1267,111 @@
       </div>
     </div>
 
+    <!-- ====== CARD FIXO: COMO CONECTAR & TRANSPARÊNCIA (GUILDA TRACKER) ====== -->
+    <div id="installCard" style="margin-bottom: 28px;">
+
+      <!-- Top Action Download Banner -->
+      <div style="background: var(--wurm-panel); border: 1px solid rgba(212,180,131,0.4); border-radius: 6px; padding: 24px 28px; margin-bottom: 20px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px; background: linear-gradient(180deg, rgba(212,180,131,0.06) 0%, var(--wurm-panel) 100%);">
+        <div>
+          <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: #fff; margin-bottom: 4px;">
+            Pacote Oficial: <span>Wurm Online Guild Tracker</span>
+          </h2>
+          <p style="color: var(--wurm-muted); font-size: 0.88rem;">
+            Extrator leve, 100% seguro, sem necessidade de instalar o Java ou procurar pastas manualmente.
+          </p>
+        </div>
+        <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+          <a href="Wurm-Guilda-Tracker.zip" download class="pill-btn active" style="padding: 10px 22px; font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; gap: 8px;">
+            📥 Baixar Extrator da Guilda (ZIP · ~750 KB)
+          </a>
+        </div>
+      </div>
+
+      <!-- 3-Step Setup Cards Grid -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-bottom: 20px;">
+        
+        <div style="background: var(--wurm-panel); border: 1px solid var(--wurm-border); border-radius: 6px; padding: 20px; position: relative;">
+          <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--wurm-accent); font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em;">
+            Passo 01
+          </div>
+          <h3 style="font-family: var(--font-serif); font-size: 1.2rem; color: #fff; margin-bottom: 8px;">
+            Baixar & Extrair
+          </h3>
+          <p style="color: var(--wurm-muted); font-size: 0.84rem; line-height: 1.5;">
+            Clique no botão acima para baixar o <code style="color:var(--wurm-accent); font-family:var(--font-mono);">Wurm-Guilda-Tracker.zip</code> e extraia os dois arquivos em qualquer pasta do seu computador (como Downloads ou Área de Trabalho).
+          </p>
+        </div>
+
+        <div style="background: var(--wurm-panel); border: 1px solid var(--wurm-border); border-radius: 6px; padding: 20px; position: relative;">
+          <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--wurm-accent); font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em;">
+            Passo 02 · Automático
+          </div>
+          <h3 style="font-family: var(--font-serif); font-size: 1.2rem; color: #fff; margin-bottom: 8px;">
+            Executar o Instalador
+          </h3>
+          <p style="color: var(--wurm-muted); font-size: 0.84rem; line-height: 1.5;">
+            Dê dois cliques em <strong style="color:#fff;">Instalar-Guilda-Tracker.bat</strong>. Ele busca sozinho sua instalação do Wurm na Steam (C:, D:, E: etc.) e cria um atalho na sua Área de Trabalho chamado <strong style="color:var(--wurm-accent);">"Wurm Online (Guilda Tracker)"</strong>.
+          </p>
+        </div>
+
+        <div style="background: var(--wurm-panel); border: 1px solid var(--wurm-border); border-radius: 6px; padding: 20px; position: relative;">
+          <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--wurm-accent); font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em;">
+            Passo 03
+          </div>
+          <h3 style="font-family: var(--font-serif); font-size: 1.2rem; color: #fff; margin-bottom: 8px;">
+            Jogar & Comparar
+          </h3>
+          <p style="color: var(--wurm-muted); font-size: 0.84rem; line-height: 1.5;">
+            Abra o jogo através do novo atalho. Quando você abrir sua janela de Achievements no jogo, o tracker captura a lista e atualiza o seu perfil no Codex automaticamente!
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Transparency & Security Section -->
+      <div style="background: var(--wurm-panel); border: 1px solid var(--wurm-border); border-radius: 6px; padding: 24px;">
+        <div class="section-header" style="margin-bottom: 18px;">
+          <h2>🛡️ Transparência & Segurança: <span>O que cada arquivo faz?</span></h2>
+          <span class="subtext">Código 100% auditável e seguro</span>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          
+          <div style="background: #050505; border: 1px solid var(--wurm-border); border-radius: 4px; padding: 14px 18px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <strong style="color:var(--wurm-accent); font-family:var(--font-mono); font-size:0.88rem;">📦 wurm_achievements.jar (800 KB)</strong>
+              <span class="badge-tag tag-gold">Agente Premain</span>
+            </div>
+            <p style="color: var(--wurm-muted); font-size: 0.82rem; line-height: 1.5;">
+              Utiliza a API oficial de instrumentação do próprio Java da Oracle (<code style="font-family:var(--font-mono);">javaagent</code>). Ele atua como um ouvinte passivo: quando os pacotes da lista de conquistas chegam do servidor oficial e são desenhados na janela de interface, ele apenas anota o nome, contador e data em um arquivo de texto local (<code style="font-family:var(--font-mono);">.json</code>). <strong style="color:#fff;">Não altera mecânicas do jogo, não dá vantagens (não é bot nem hack), não toca em senhas nem lê outros arquivos do computador.</strong>
+            </p>
+          </div>
+
+          <div style="background: #050505; border: 1px solid var(--wurm-border); border-radius: 4px; padding: 14px 18px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <strong style="color:var(--wurm-accent); font-family:var(--font-mono); font-size:0.88rem;">⚙️ Instalar-Guilda-Tracker.bat (Script de Configuração)</strong>
+              <span class="badge-tag tag-silver">Script Batch</span>
+            </div>
+            <p style="color: var(--wurm-muted); font-size: 0.82rem; line-height: 1.5;">
+              Script transparente em lote do Windows. Ele apenas consulta o Registro do Windows e as pastas de biblioteca da Steam para encontrar o caminho onde o Wurm está instalado, copia o arquivo JAR para lá e gera um atalho na Área de Trabalho com o parâmetro de inicialização seguro. Pode ser aberto e inspecionado no Bloco de Notas por qualquer jogador.
+            </p>
+          </div>
+
+          <div style="background: #050505; border: 1px solid var(--wurm-border); border-radius: 4px; padding: 14px 18px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <strong style="color:var(--wurm-accent); font-family:var(--font-mono); font-size:0.88rem;">☕ Preciso instalar o Java no meu PC?</strong>
+              <span class="badge-tag tag-diamond">Já Incluso</span>
+            </div>
+            <p style="color: var(--wurm-muted); font-size: 0.82rem; line-height: 1.5;">
+              <strong style="color:#fff;">Não!</strong> O próprio Wurm Online (tanto na Steam quanto no cliente oficial) já vem com o Java 21 oficial da desenvolvedora embutido na pasta do jogo (<code style="font-family:var(--font-mono);">runtime\bin\java.exe</code>). O atalho gerado utiliza diretamente o mesmo Java que o próprio jogo já usa.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
     <!-- STATS CARDS -->
     <div class="stats-grid">
       <div class="stat-card">
@@ -1326,10 +1422,6 @@
       <button class="tab-btn" id="tabJournal" onclick="switchTab('journal')">
         📖 Journal 2.0 — Mapa de Metas
         <span class="tab-badge" id="tabJournalCount">? restantes</span>
-      </button>
-      <button class="tab-btn" id="tabInstall" onclick="switchTab('install')">
-        📥 Como Conectar seu Personagem
-        <span class="tab-badge" style="color:var(--wurm-accent); border-color:rgba(212,180,131,0.4);">Auto-Setup</span>
       </button>
     </div>
 
@@ -1437,114 +1529,6 @@
 
       <!-- JOURNAL LIST -->
       <div class="journal-grid" id="journalGrid"></div>
-
-    </div>
-
-    <!-- ====== TAB 3: COMO CONECTAR (SETUP & TRANSPARÊNCIA) ====== -->
-    <div id="installTab" style="display:none;">
-
-      <!-- Top Action Download Banner -->
-      <div style="background: var(--wurm-panel); border: 1px solid rgba(212,180,131,0.4); border-radius: 6px; padding: 24px 28px; margin-bottom: 24px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px; background: linear-gradient(180deg, rgba(212,180,131,0.06) 0%, var(--wurm-panel) 100%);">
-        <div>
-          <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: #fff; margin-bottom: 4px;">
-            Pacote Oficial: <span>Wurm Online Guild Tracker</span>
-          </h2>
-          <p style="color: var(--wurm-muted); font-size: 0.88rem;">
-            Extrator leve, 100% seguro, sem necessidade de instalar o Java ou procurar pastas manualmente.
-          </p>
-        </div>
-        <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
-          <a href="Wurm-Guilda-Tracker.zip" download class="pill-btn active" style="padding: 10px 22px; font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; gap: 8px;">
-            📥 Baixar Extrator da Guilda (ZIP · ~750 KB)
-          </a>
-          <a href="https://github.com/Jotasiete7/wurm-aguild-Achievements" target="_blank" class="pill-btn" style="padding: 10px 16px; font-size: 0.8rem;">
-            💻 Ver Código no GitHub
-          </a>
-        </div>
-      </div>
-
-      <!-- 3-Step Setup Cards Grid -->
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-bottom: 28px;">
-        
-        <div style="background: var(--wurm-panel); border: 1px solid var(--wurm-border); border-radius: 6px; padding: 20px; position: relative;">
-          <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--wurm-accent); font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em;">
-            Passo 01
-          </div>
-          <h3 style="font-family: var(--font-serif); font-size: 1.2rem; color: #fff; margin-bottom: 8px;">
-            Baixar & Extrair
-          </h3>
-          <p style="color: var(--wurm-muted); font-size: 0.84rem; line-height: 1.5;">
-            Clique no botão acima para baixar o <code style="color:var(--wurm-accent); font-family:var(--font-mono);">Wurm-Guilda-Tracker.zip</code> e extraia os dois arquivos em qualquer pasta do seu computador (como Downloads ou Área de Trabalho).
-          </p>
-        </div>
-
-        <div style="background: var(--wurm-panel); border: 1px solid var(--wurm-border); border-radius: 6px; padding: 20px; position: relative;">
-          <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--wurm-accent); font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em;">
-            Passo 02 · Automático
-          </div>
-          <h3 style="font-family: var(--font-serif); font-size: 1.2rem; color: #fff; margin-bottom: 8px;">
-            Executar o Instalador
-          </h3>
-          <p style="color: var(--wurm-muted); font-size: 0.84rem; line-height: 1.5;">
-            Dê dois cliques em <strong style="color:#fff;">Instalar-Guilda-Tracker.bat</strong>. Ele busca sozinho sua instalação do Wurm na Steam (C:, D:, E: etc.) e cria um atalho na sua Área de Trabalho chamado <strong style="color:var(--wurm-accent);">"Wurm Online (Guilda Tracker)"</strong>.
-          </p>
-        </div>
-
-        <div style="background: var(--wurm-panel); border: 1px solid var(--wurm-border); border-radius: 6px; padding: 20px; position: relative;">
-          <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--wurm-accent); font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em;">
-            Passo 03
-          </div>
-          <h3 style="font-family: var(--font-serif); font-size: 1.2rem; color: #fff; margin-bottom: 8px;">
-            Jogar & Comparar
-          </h3>
-          <p style="color: var(--wurm-muted); font-size: 0.84rem; line-height: 1.5;">
-            Abra o jogo através do novo atalho. Quando você abrir sua janela de Achievements no jogo, o tracker captura a lista e atualiza o seu perfil no Codex automaticamente!
-          </p>
-        </div>
-
-      </div>
-
-      <!-- Transparency & Security Section -->
-      <div style="background: var(--wurm-panel); border: 1px solid var(--wurm-border); border-radius: 6px; padding: 24px; margin-bottom: 24px;">
-        <div class="section-header" style="margin-bottom: 18px;">
-          <h2>🛡️ Transparência & Segurança: <span>O que cada arquivo faz?</span></h2>
-          <span class="subtext">Código 100% auditável e open source</span>
-        </div>
-
-        <div style="display: flex; flex-direction: column; gap: 16px;">
-          
-          <div style="background: #050505; border: 1px solid var(--wurm-border); border-radius: 4px; padding: 14px 18px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-              <strong style="color:var(--wurm-accent); font-family:var(--font-mono); font-size:0.88rem;">📦 wurm_achievements.jar (800 KB)</strong>
-              <span class="badge-tag tag-gold">Agente Premain</span>
-            </div>
-            <p style="color: var(--wurm-muted); font-size: 0.82rem; line-height: 1.5;">
-              Utiliza a API oficial de instrumentação do próprio Java da Oracle (<code style="font-family:var(--font-mono);">javaagent</code>). Ele atua como um ouvinte passivo: quando os pacotes da lista de conquistas chegam do servidor oficial e são desenhados na janela de interface, ele apenas anota o nome, contador e data em um arquivo de texto local (<code style="font-family:var(--font-mono);">.json</code>). <strong style="color:#fff;">Não altera mecânicas do jogo, não dá vantagens (não é bot nem hack), não toca em senhas nem lê outros arquivos do computador.</strong>
-            </p>
-          </div>
-
-          <div style="background: #050505; border: 1px solid var(--wurm-border); border-radius: 4px; padding: 14px 18px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-              <strong style="color:var(--wurm-accent); font-family:var(--font-mono); font-size:0.88rem;">⚙️ Instalar-Guilda-Tracker.bat (Script de Configuração)</strong>
-              <span class="badge-tag tag-silver">Script Batch</span>
-            </div>
-            <p style="color: var(--wurm-muted); font-size: 0.82rem; line-height: 1.5;">
-              Script transparente em lote do Windows. Ele apenas consulta o Registro do Windows e as pastas de biblioteca da Steam para encontrar o caminho onde o Wurm está instalado, copia o arquivo JAR para lá e gera um atalho na Área de Trabalho com o parâmetro de inicialização seguro. Pode ser aberto e inspecionado no Bloco de Notas por qualquer jogador.
-            </p>
-          </div>
-
-          <div style="background: #050505; border: 1px solid var(--wurm-border); border-radius: 4px; padding: 14px 18px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-              <strong style="color:var(--wurm-accent); font-family:var(--font-mono); font-size:0.88rem;">☕ Preciso instalar o Java no meu PC?</strong>
-              <span class="badge-tag tag-diamond">Já Incluso</span>
-            </div>
-            <p style="color: var(--wurm-muted); font-size: 0.82rem; line-height: 1.5;">
-              <strong style="color:#fff;">Não!</strong> O próprio Wurm Online (tanto na Steam quanto no cliente oficial) já vem com o Java 21 oficial da desenvolvedora embutido na pasta do jogo (<code style="font-family:var(--font-mono);">runtime\bin\java.exe</code>). O atalho gerado utiliza diretamente o mesmo Java que o próprio jogo já usa.
-            </p>
-          </div>
-
-        </div>
-      </div>
 
     </div>
 
@@ -1707,11 +1691,9 @@
       currentTab = tab;
       document.getElementById('achievementsTab').style.display = tab === 'achievements' ? 'block' : 'none';
       document.getElementById('journalTab').style.display = tab === 'journal' ? 'block' : 'none';
-      document.getElementById('installTab').style.display = tab === 'install' ? 'block' : 'none';
       
       document.getElementById('tabMyAch').classList.toggle('active', tab === 'achievements');
       document.getElementById('tabJournal').classList.toggle('active', tab === 'journal');
-      document.getElementById('tabInstall').classList.toggle('active', tab === 'install');
     }
 
     // ─── VIEW MODES ───────────────────────────────────────────
