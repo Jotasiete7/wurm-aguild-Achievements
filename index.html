@@ -908,15 +908,22 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 8px;
       padding-top: 10px;
       border-top: 1px solid var(--wurm-border);
       font-family: var(--font-mono);
       font-size: 0.72rem;
       color: var(--wurm-muted);
+      white-space: nowrap;
     }
 
     /* Badges & Tags */
     .badge-tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      white-space: nowrap;
       padding: 2px 8px;
       border-radius: 3px;
       font-family: var(--font-mono);
@@ -2258,7 +2265,7 @@
         <div class="stat-icon" style="color: #a78bfa;">🔥</div>
         <div>
           <div class="stat-val" id="statTopCount">0</div>
-          <div class="stat-lbl">Maior Recorde (Nomad)</div>
+          <div class="stat-lbl" id="statTopLabel">Maior Recorde</div>
         </div>
       </div>
       <div class="stat-card">
@@ -2350,13 +2357,13 @@
         <table>
           <thead>
             <tr>
-              <th data-i18n="th_rank">Rank</th>
+              <th style="width:50px;" data-i18n="th_rank">Rank</th>
               <th data-i18n="th_original">Nome Original</th>
               <th data-i18n="th_translation">Tradução PT</th>
-              <th data-i18n="th_category">Categoria</th>
-              <th data-i18n="th_counter">Contador</th>
-              <th data-i18n="th_date">Data</th>
-              <th data-i18n="th_rarity">Raridade</th>
+              <th style="width:130px;" data-i18n="th_category">Categoria</th>
+              <th style="width:110px;" data-i18n="th_counter">Contador</th>
+              <th style="width:140px; white-space:nowrap;" data-i18n="th_date">Data</th>
+              <th style="width:130px; white-space:nowrap;" data-i18n="th_rarity">Raridade</th>
             </tr>
           </thead>
           <tbody id="tableBody"></tbody>
@@ -2816,6 +2823,7 @@
 
       updateMyCharUI();
       if (currentMainView === 'player' && selectedPlayerName) {
+        updateStats();
         renderItems();
         renderJournal();
       } else {
@@ -3339,7 +3347,10 @@
         const rankMedal = idx === 0 ? '🥇 1º' : idx === 1 ? '🥈 2º' : idx === 2 ? '🥉 3º' : `${idx + 1}º`;
         const rankClass = idx === 0 ? 'rank-first' : idx === 1 ? 'rank-second' : idx === 2 ? 'rank-third' : '';
         const initial = p.player_name ? p.player_name.charAt(0).toUpperCase() : '?';
-        const progressPct = Math.min(100, Math.round((p.total_count / 200) * 100));
+        const totalAvailable = (typeof WIKI_ACHIEVEMENTS !== 'undefined' && Array.isArray(WIKI_ACHIEVEMENTS) && WIKI_ACHIEVEMENTS.length > 0)
+          ? WIKI_ACHIEVEMENTS.length
+          : 422;
+        const progressPct = Math.min(100, Math.round((p.total_count / totalAvailable) * 100));
 
         const isYou = myMain && (p.player_name.toLowerCase() === myMain.toLowerCase());
         const youBadge = isYou ? `<span class="badge-you">${t('you_badge')}</span>` : '';
@@ -3368,7 +3379,7 @@
             <span class="score-badge">${Number(p.score).toLocaleString(currentLang === 'en' ? 'en-US' : 'pt-BR')} pts</span>
           </td>
           <td>
-            <div style="font-family:var(--font-mono); font-weight:700; color:#fff; margin-bottom:4px;">${p.total_count} / 200</div>
+            <div style="font-family:var(--font-mono); font-weight:700; color:#fff; margin-bottom:4px;">${p.total_count} / ${totalAvailable}</div>
             <div style="width:100px; height:4px; background:#111; border-radius:2px; overflow:hidden;">
               <div style="width:${progressPct}%; height:100%; background:var(--wurm-accent);"></div>
             </div>
@@ -3688,12 +3699,15 @@
       const btnUn = document.getElementById('countStatusUnlocked'); if (btnUn) btnUn.textContent = unlockedCount;
       const btnLk = document.getElementById('countStatusLocked'); if (btnLk) btnLk.textContent = lockedCount;
 
-      let navalTrips = 0, goldCount = 0, maxCount = 0;
+      let navalTrips = 0, goldCount = 0, maxCount = 0, topAchName = '';
       currentData.forEach(item => {
         const meta = getMeta(item.name);
         const cat = meta.category || 'exploration';
         if (item.rarity === 'Gold' || meta.rarity === 'Gold') goldCount++;
-        if (item.counter > maxCount) maxCount = item.counter;
+        if (item.counter > maxCount) {
+          maxCount = item.counter;
+          topAchName = (currentLang === 'pt' && meta.ptName) ? meta.ptName : item.name;
+        }
         if (cat === 'sailing') navalTrips += item.counter;
       });
 
@@ -3705,6 +3719,11 @@
       if (statGoldEl) statGoldEl.textContent = goldCount;
       const statTopEl = document.getElementById('statTopCount');
       if (statTopEl) statTopEl.textContent = maxCount;
+      const statTopLblEl = document.getElementById('statTopLabel');
+      if (statTopLblEl) {
+        const baseRec = t('stat_record') || (currentLang === 'en' ? 'Top Record' : 'Maior Recorde');
+        statTopLblEl.textContent = topAchName ? `${baseRec} (${topAchName})` : baseRec;
+      }
       const statTopHeroEl = document.getElementById('statTopHero');
       if (statTopHeroEl) statTopHeroEl.textContent = maxCount;
       const statNavalEl = document.getElementById('statNaval');
@@ -3863,13 +3882,13 @@
               : `<span style="color:var(--wurm-muted); font-family:var(--font-mono);">—</span>`
             }
           </td>
-          <td style="font-family:var(--font-mono);font-size:0.75rem;color:var(--wurm-muted);">
+          <td style="font-family:var(--font-mono);font-size:0.75rem;color:var(--wurm-muted);white-space:nowrap;">
             ${item.unlocked
               ? (item.date || '—')
               : `<span class="badge-tag tag-locked" style="font-size:0.68rem;">${t('badge_locked_status')}</span>`
             }
           </td>
-          <td>
+          <td style="white-space:nowrap;">
             <span class="badge-tag ${isGold ? 'tag-gold' : item.unlocked ? 'tag-normal' : 'tag-locked'}">
               ${isGold ? 'Ouro' : item.unlocked ? 'Normal' : t('tag_locked')}
             </span>
