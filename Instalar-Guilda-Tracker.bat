@@ -97,7 +97,7 @@ if "%PLAYER_NAME%"=="" (
         )
     )
     echo.
-    set /p "PLAYER_NAME=Digite o nome exato do seu personagem (ex: Calvos): "
+    set /p "PLAYER_NAME=Digite o nome exato do seu personagem: "
 )
 
 set "PLAYER_NAME=%PLAYER_NAME: =%"

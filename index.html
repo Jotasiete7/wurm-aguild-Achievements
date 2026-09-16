@@ -2089,7 +2089,7 @@
           <span style="font-size:1.4rem;">👁️</span>
           <div>
             <div style="font-weight:700; color:#fff; font-size:0.95rem;">
-              Inspecionando perfil público de: <span style="color:var(--wurm-accent); font-family:var(--font-mono);" id="inspectPlayerNick">Calvos</span>
+              Inspecionando perfil público de: <span style="color:var(--wurm-accent); font-family:var(--font-mono);" id="inspectPlayerNick">—</span>
             </div>
             <div style="font-size:0.75rem; color:var(--wurm-muted);">
               Você está visualizando as conquistas públicas de outro jogador.
@@ -2142,28 +2142,28 @@
       <div class="stat-card">
         <div class="stat-icon" style="color: var(--wurm-accent);">🏆</div>
         <div>
-          <div class="stat-val" id="statTotal">32</div>
+          <div class="stat-val" id="statTotal">0</div>
           <div class="stat-lbl">Conquistas Desbloqueadas</div>
         </div>
       </div>
       <div class="stat-card">
         <div class="stat-icon" style="color: var(--wurm-accent);">⭐</div>
         <div>
-          <div class="stat-val" id="statGold">1</div>
+          <div class="stat-val" id="statGold">0</div>
           <div class="stat-lbl">Raridade Ouro (Gold)</div>
         </div>
       </div>
       <div class="stat-card">
         <div class="stat-icon" style="color: #a78bfa;">🔥</div>
         <div>
-          <div class="stat-val" id="statTopCount">275</div>
+          <div class="stat-val" id="statTopCount">0</div>
           <div class="stat-lbl">Maior Recorde (Nomad)</div>
         </div>
       </div>
       <div class="stat-card">
         <div class="stat-icon" style="color: var(--wurm-success);">⛵</div>
         <div>
-          <div class="stat-val" id="statNaval">450+</div>
+          <div class="stat-val" id="statNaval">0</div>
           <div class="stat-lbl">Viagens Náuticas Feitas</div>
         </div>
       </div>
@@ -2182,7 +2182,7 @@
     <div class="tab-nav">
       <button class="tab-btn active" id="tabMyAch" onclick="switchTab('achievements')">
         🏅 <span data-i18n="tab_achievements">Minhas Conquistas</span>
-        <span class="tab-badge" id="tabMyCount">32</span>
+        <span class="tab-badge" id="tabMyCount">0</span>
       </button>
       <button class="tab-btn" id="tabJournal" onclick="switchTab('journal')">
         📖 <span data-i18n="tab_journal">Diário de Metas (Journal 2.0)</span>
@@ -3335,24 +3335,22 @@
         console.warn("[Supabase] Falha ao carregar jogador:", e);
       }
 
-      // 2. Fallback para arquivo local apenas se for jotasiete
-      if (selectedPlayerName.toLowerCase() === 'jotasiete') {
-        try {
-          const res = await fetch('achievements_latest.json?t=' + Date.now());
-          if (res.ok) {
-            const json = await res.json();
-            if (json.achievements && json.achievements.length > 0) {
-              currentData = json.achievements;
-              setSyncStatus('Local', json.last_updated ? json.last_updated.substring(11, 16) : 'Recente');
-              enrichAndRender();
-              return;
-            }
+      // 2. Fallback para dump local (somente em desenvolvimento local se o arquivo pertencer ao mesmo jogador)
+      try {
+        const res = await fetch('achievements_latest.json?t=' + Date.now());
+        if (res.ok) {
+          const json = await res.json();
+          if (json && json.player && json.player.toLowerCase() === selectedPlayerName.toLowerCase() && json.achievements && json.achievements.length > 0) {
+            currentData = json.achievements;
+            setSyncStatus('Local', json.last_updated ? json.last_updated.substring(11, 16) : 'Recente');
+            enrichAndRender();
+            return;
           }
-        } catch {}
-      }
+        }
+      } catch {}
 
       // 3. Fallback neutro
-      setSyncStatus('Aguardando Conexão', 'Sem dados');
+      setSyncStatus(currentLang === 'en' ? 'Awaiting Sync' : 'Aguardando Conexão', currentLang === 'en' ? 'No data' : 'Sem dados');
       currentData = [];
       enrichAndRender();
       renderNotSyncedState(selectedPlayerName);
