@@ -1472,13 +1472,308 @@
       vertical-align: middle;
     }
 
-    /* Responsive */
+    /* Language Toggle */
+    .lang-toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--wurm-border);
+      color: #e5e5e5;
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+    .lang-toggle-btn:hover {
+      border-color: var(--wurm-accent);
+      color: var(--wurm-accent);
+      background: rgba(212, 180, 131, 0.08);
+    }
+
+    /* Table Interactive Rows */
+    tbody tr {
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    tbody tr:hover {
+      background: rgba(212, 180, 131, 0.08) !important;
+    }
+    tbody tr:active {
+      background: rgba(212, 180, 131, 0.16) !important;
+    }
+
+    .journal-row {
+      cursor: pointer;
+      transition: transform 0.12s ease, border-color 0.15s ease, background 0.15s ease;
+    }
+    .journal-row:hover {
+      border-color: rgba(212, 180, 131, 0.4);
+      background: rgba(212, 180, 131, 0.05);
+      transform: translateY(-1px);
+    }
+
+    /* FLOATING TOOLTIP */
+    .ach-tooltip {
+      position: fixed;
+      z-index: 99999;
+      pointer-events: none;
+      width: 320px;
+      max-width: 90vw;
+      background: #0f0f13;
+      border: 1px solid rgba(212, 180, 131, 0.45);
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.85), 0 0 16px rgba(212, 180, 131, 0.15);
+      border-radius: 8px;
+      padding: 12px 14px;
+      color: #e5e5e5;
+      font-size: 0.8rem;
+      line-height: 1.45;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(6px);
+      transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
+    }
+    .ach-tooltip.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    /* ACHIEVEMENT DETAIL MODAL */
+    .ach-modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.78);
+      backdrop-filter: blur(6px);
+      z-index: 100000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease, visibility 0.2s ease;
+    }
+    .ach-modal-backdrop.open {
+      opacity: 1;
+      visibility: visible;
+    }
+    .ach-modal-card {
+      background: #0d0d10;
+      border: 1px solid rgba(212, 180, 131, 0.35);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.92), 0 0 35px rgba(212, 180, 131, 0.12);
+      border-radius: 12px;
+      max-width: 580px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      padding: 24px;
+      transform: scale(0.95);
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .ach-modal-backdrop.open .ach-modal-card {
+      transform: scale(1);
+    }
+    .ach-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--wurm-border);
+      padding-bottom: 14px;
+    }
+    .ach-modal-icon {
+      font-size: 2.2rem;
+      min-width: 46px;
+      height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(212, 180, 131, 0.08);
+      border: 1px solid rgba(212, 180, 131, 0.25);
+      border-radius: 8px;
+    }
+    .ach-modal-close-btn {
+      background: transparent;
+      border: 1px solid var(--wurm-border);
+      color: var(--wurm-muted);
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .ach-modal-close-btn:hover {
+      color: #fff;
+      border-color: var(--wurm-accent);
+      background: rgba(212, 180, 131, 0.1);
+    }
+    .ach-modal-meta-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      background: #060608;
+      border: 1px solid var(--wurm-border);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin-bottom: 14px;
+    }
+    .ach-modal-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .ach-modal-meta-item .meta-lbl {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      color: var(--wurm-muted);
+      font-family: var(--font-mono);
+      letter-spacing: 0.05em;
+    }
+    .ach-modal-quote {
+      background: #050507;
+      border-left: 3px solid var(--wurm-accent);
+      padding: 10px 14px;
+      font-size: 0.85rem;
+      color: #ccc;
+      font-style: italic;
+      border-radius: 0 6px 6px 0;
+      margin-bottom: 14px;
+      line-height: 1.45;
+    }
+    .ach-modal-section {
+      margin-bottom: 12px;
+    }
+    .ach-modal-section .section-tag {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      font-family: var(--font-mono);
+      color: var(--wurm-muted);
+      font-weight: 700;
+      margin-bottom: 4px;
+      letter-spacing: 0.05em;
+    }
+    .ach-modal-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid var(--wurm-border);
+    }
+
+    /* MOBILE & RESPONSIVE IMPROVEMENTS */
+    .guild-nav-area {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: auto;
+      margin-right: 12px;
+    }
+
+    @media (max-width: 900px) {
+      .guild-header {
+        height: auto;
+        padding: 8px 14px;
+        flex-wrap: wrap;
+        row-gap: 8px;
+      }
+      .guild-nav-area {
+        order: 3;
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+        overflow-x: auto;
+        display: flex;
+        gap: 6px;
+        padding-bottom: 4px;
+        -webkit-overflow-scrolling: touch;
+      }
+      .guild-header-right {
+        margin-left: auto;
+      }
+    }
+
     @media (max-width: 768px) {
-      .guild-header { padding: 0 1rem; }
       .guild-header-center { display: none; }
       .hero-banner { flex-direction: column; align-items: flex-start; }
-      .hero-stats-inline { width: 100%; justify-content: space-between; }
+      .hero-stats-inline { width: 100%; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
       .inspect-banner { flex-direction: column; align-items: flex-start; }
+      .category-pills {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 6px;
+        -webkit-overflow-scrolling: touch;
+      }
+      .pill-btn {
+        flex-shrink: 0;
+      }
+      .view-mode-group {
+        width: 100%;
+        justify-content: stretch;
+      }
+      .view-mode-btn {
+        flex: 1;
+        text-align: center;
+      }
+      .filter-group {
+        flex-direction: column;
+        align-items: stretch !important;
+      }
+      .filter-group > * {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+      }
+      .stat-card {
+        padding: 10px 12px;
+      }
+      .stat-val {
+        font-size: 1.15rem;
+      }
+      .stat-icon {
+        font-size: 1.3rem;
+      }
+      .ach-modal-card {
+        padding: 16px;
+        max-height: 94vh;
+        border-radius: 8px;
+      }
+      .ach-modal-meta-row {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+      .ach-modal-header h2 {
+        font-size: 1.1rem !important;
+      }
+      .kofi-btn span {
+        display: none;
+      }
+      .player-sync-tag {
+        display: none;
+      }
+      th, td {
+        padding: 8px 10px;
+        font-size: 0.78rem;
+      }
     }
   </style>
 </head>
@@ -1505,20 +1800,25 @@
     </div>
 
     <!-- Navigation View Switcher -->
-    <div style="display:flex; align-items:center; gap:8px; margin-left:auto; margin-right:12px;">
-      <button class="view-switch-btn active" id="btnNavRanking" onclick="switchMainView('ranking')">
+    <div class="guild-nav-area">
+      <button class="view-switch-btn active" id="btnNavRanking" onclick="switchMainView('ranking')" data-i18n="nav_ranking">
         🏆 Ranking Geral
       </button>
       <button class="view-switch-btn" id="btnNavMyProfile" onclick="goToMyProfile()">
-        👤 Meu Perfil (<strong id="navMyProfileNick">jotasiete</strong>)
+        <span data-i18n="nav_my_profile">👤 Meu Perfil</span> (<strong id="navMyProfileNick">jotasiete</strong>)
       </button>
       <button class="view-switch-btn" id="btnNavInspect" style="display:none;" onclick="switchMainView('player', selectedPlayerName)">
-        👁️ Inspecionando: <strong id="navInspectNick">—</strong>
+        <span data-i18n="nav_inspect">👁️ Inspecionando</span>: <strong id="navInspectNick">—</strong>
       </button>
     </div>
 
-    <!-- Right Area: My Chars + Support + Cloud Live Tag -->
+    <!-- Right Area: Language Switcher + My Chars + Support + Cloud Live Tag -->
     <div class="guild-header-right">
+      <!-- Language Switcher -->
+      <button class="lang-toggle-btn" id="langToggleBtn" onclick="toggleLanguage()" title="Alternar idioma / Switch language">
+        🌐 <span id="langDisplay">EN</span>
+      </button>
+
       <!-- Dropdown: Meus Personagens (Apenas os chars do próprio jogador) -->
       <div class="my-chars-wrapper">
         <button class="my-chars-btn" id="btnMyCharsDropdown" onclick="toggleMyCharsMenu(event)" title="Gerenciar meus personagens neste computador">
@@ -1527,10 +1827,10 @@
           <span style="font-size:0.65rem; opacity:0.7;">▼</span>
         </button>
         <div class="my-chars-menu" id="myCharsMenu">
-          <div class="my-chars-header">Meus Personagens</div>
+          <div class="my-chars-header" data-i18n="my_chars_title">Meus Personagens</div>
           <div id="myCharsListContainer"></div>
-          <button class="my-chars-action-btn" onclick="promptAddMyChar()">+ Cadastrar Outro Char Meu (Alt)</button>
-          <button class="my-chars-action-btn" style="border-top:1px solid var(--wurm-border); color:var(--wurm-muted);" onclick="promptChangeMainChar()">✏️ Alterar Char Principal</button>
+          <button class="my-chars-action-btn" onclick="promptAddMyChar()" data-i18n="add_alt_btn">+ Cadastrar Outro Char Meu (Alt)</button>
+          <button class="my-chars-action-btn" style="border-top:1px solid var(--wurm-border); color:var(--wurm-muted);" onclick="promptChangeMainChar()" data-i18n="change_main_btn">✏️ Alterar Char Principal</button>
         </div>
       </div>
 
@@ -1592,15 +1892,15 @@
         <div class="hero-stats-inline">
           <div class="hero-stat-badge">
             <div class="num" id="statCommunityPlayers">0</div>
-            <div class="label">Jogadores no Ranking</div>
+            <div class="label" data-i18n="stat_comm_players">Jogadores no Ranking</div>
           </div>
           <div class="hero-stat-badge">
             <div class="num" id="statCommunityAchievements">0</div>
-            <div class="label">Conquistas Coletivas</div>
+            <div class="label" data-i18n="stat_comm_achs">Conquistas Coletivas</div>
           </div>
           <div class="hero-stat-badge">
             <div class="num" id="statCommunityLeader" style="color:var(--wurm-accent); font-size:1.05rem;">—</div>
-            <div class="label">Líder Geral 🥇</div>
+            <div class="label" data-i18n="stat_comm_leader">Líder Geral 🥇</div>
           </div>
           <div class="hero-stat-badge" style="cursor: pointer; min-width: 140px;" onclick="fetchGuildPlayers()" title="Clique para atualizar o ranking agora">
             <div class="num" style="font-size: 0.9rem; color: #7ee787; display: flex; align-items: center; justify-content: center; gap: 6px;">
@@ -1625,15 +1925,15 @@
       <div class="controls-bar" style="margin-bottom: 16px;">
         <div class="search-box">
           <span class="search-icon">🔍</span>
-          <input type="text" id="rankingSearchInput" placeholder="Buscar jogador no ranking por nick...">
+          <input type="text" id="rankingSearchInput" placeholder="Buscar jogador no ranking por nick..." data-i18n-placeholder="ranking_search_ph">
         </div>
         <div class="filter-actions">
           <div class="view-mode-group">
-            <button class="view-mode-btn active" id="rankFilterScore" onclick="setRankingSort('score')">🏆 Pontuação</button>
-            <button class="view-mode-btn" id="rankFilterTotal" onclick="setRankingSort('total')">🏅 Total Conquistas</button>
-            <button class="view-mode-btn" id="rankFilterGold" onclick="setRankingSort('gold')">✨ Ouro/Diamante</button>
-            <button class="view-mode-btn" id="rankFilterRecord" onclick="setRankingSort('record')">⚡ Maior Recorde</button>
-            <button class="view-mode-btn" id="rankFilterRecent" onclick="setRankingSort('recent')">⏱️ Recentes</button>
+            <button class="view-mode-btn active" id="rankFilterScore" onclick="setRankingSort('score')" data-i18n="rf_score">🏆 Pontuação</button>
+            <button class="view-mode-btn" id="rankFilterTotal" onclick="setRankingSort('total')" data-i18n="rf_total">🏅 Total Conquistas</button>
+            <button class="view-mode-btn" id="rankFilterGold" onclick="setRankingSort('gold')" data-i18n="rf_gold">✨ Ouro/Diamante</button>
+            <button class="view-mode-btn" id="rankFilterRecord" onclick="setRankingSort('record')" data-i18n="rf_record">⚡ Maior Recorde</button>
+            <button class="view-mode-btn" id="rankFilterRecent" onclick="setRankingSort('recent')" data-i18n="rf_recent">⏱️ Recentes</button>
           </div>
         </div>
       </div>
@@ -1644,13 +1944,13 @@
           <thead>
             <tr>
               <th style="width:60px; text-align:center;">#</th>
-              <th>Jogador</th>
-              <th style="width:130px;">Pontuação</th>
-              <th style="width:150px;">Conquistas</th>
-              <th style="width:150px;">Raridades</th>
-              <th>Maior Recorde Individual</th>
-              <th style="width:150px;">Última Atividade</th>
-              <th style="width:130px; text-align:center;">Ação</th>
+              <th data-i18n="th_player">Jogador</th>
+              <th style="width:130px;" data-i18n="th_score">Pontuação</th>
+              <th style="width:150px;" data-i18n="th_achievements">Conquistas</th>
+              <th style="width:150px;" data-i18n="th_rarities">Raridades</th>
+              <th data-i18n="th_top_record">Maior Recorde Individual</th>
+              <th style="width:150px;" data-i18n="th_last_activity">Última Atividade</th>
+              <th style="width:130px; text-align:center;" data-i18n="th_action">Ação</th>
             </tr>
           </thead>
           <tbody id="communityRankingBody">
@@ -1876,11 +2176,11 @@
     <!-- TAB NAVIGATION -->
     <div class="tab-nav">
       <button class="tab-btn active" id="tabMyAch" onclick="switchTab('achievements')">
-        🏅 Minhas Conquistas
+        🏅 <span data-i18n="tab_achievements">Minhas Conquistas</span>
         <span class="tab-badge" id="tabMyCount">32</span>
       </button>
       <button class="tab-btn" id="tabJournal" onclick="switchTab('journal')">
-        📖 Journal 2.0 — Mapa de Metas
+        📖 <span data-i18n="tab_journal">Diário de Metas (Journal 2.0)</span>
         <span class="tab-badge" id="tabJournalCount">? restantes</span>
       </button>
     </div>
@@ -1892,19 +2192,19 @@
       <div class="controls-bar">
         <div class="search-box">
           <span class="search-icon">🔍</span>
-          <input type="text" id="searchInput" placeholder="Buscar conquista, tradução, significado, barco ou arma...">
+          <input type="text" id="searchInput" placeholder="Buscar conquista, tradução, significado, barco ou arma..." data-i18n-placeholder="search_placeholder">
         </div>
         <div class="filter-actions">
           <select id="sortSelect">
-            <option value="counter_desc">Ranking: Maior Contador</option>
+            <option value="counter_desc" data-i18n="sort_counter_desc">Ranking: Maior Contador</option>
             <option value="date_desc">Mais Recentes Primeiro</option>
-            <option value="name_asc">Nome (A-Z)</option>
-            <option value="rarity_desc">Maior Raridade</option>
+            <option value="name_asc" data-i18n="sort_name_asc">Nome (A-Z)</option>
+            <option value="rarity_desc" data-i18n="sort_rarity_desc">Maior Raridade</option>
           </select>
           <div class="view-mode-group">
-            <button class="view-mode-btn active" id="modeTable" onclick="setViewMode('table')">Tabela</button>
-            <button class="view-mode-btn" id="modeCards" onclick="setViewMode('cards')">Cards</button>
-            <button class="view-mode-btn" id="modeCompact" onclick="setViewMode('compact')">Compacto</button>
+            <button class="view-mode-btn active" id="modeTable" onclick="setViewMode('table')" data-i18n="view_table">Tabela</button>
+            <button class="view-mode-btn" id="modeCards" onclick="setViewMode('cards')" data-i18n="view_cards">Cards</button>
+            <button class="view-mode-btn" id="modeCompact" onclick="setViewMode('compact')" data-i18n="view_compact">Compacto</button>
           </div>
           <button class="action-btn" id="reloadBtn" title="Recarregar dados do arquivo">🔄 Atualizar</button>
         </div>
@@ -1912,14 +2212,14 @@
 
       <!-- CATEGORY PILLS (Same style as Mining Tool) -->
       <div class="category-pills" id="categoryPills">
-        <button class="pill-btn active" data-cat="all">Todas <span class="pill-badge" id="pillAllCount">32</span></button>
-        <button class="pill-btn" data-cat="sailing">⛵ Náutica <span class="pill-badge" id="pillSailingCount">0</span></button>
-        <button class="pill-btn" data-cat="combat">⚔️ Combate <span class="pill-badge" id="pillCombatCount">0</span></button>
-        <button class="pill-btn" data-cat="exploration">🧭 Exploração <span class="pill-badge" id="pillExplorationCount">0</span></button>
-        <button class="pill-btn" data-cat="mounts">🐴 Montarias <span class="pill-badge" id="pillMountsCount">0</span></button>
-        <button class="pill-btn" data-cat="epic">⚡ Épico <span class="pill-badge" id="pillEpicCount">0</span></button>
-        <button class="pill-btn" data-cat="work">📦 Trabalho <span class="pill-badge" id="pillWorkCount">0</span></button>
-        <button class="pill-btn" data-cat="survival">💀 Sobrevivência <span class="pill-badge" id="pillSurvivalCount">0</span></button>
+        <button class="pill-btn active" data-cat="all"><span data-i18n="cat_all">Todas</span> <span class="pill-badge" id="pillAllCount">32</span></button>
+        <button class="pill-btn" data-cat="sailing"><span data-i18n="cat_sailing">⛵ Náutica</span> <span class="pill-badge" id="pillSailingCount">0</span></button>
+        <button class="pill-btn" data-cat="combat"><span data-i18n="cat_combat">⚔️ Combate</span> <span class="pill-badge" id="pillCombatCount">0</span></button>
+        <button class="pill-btn" data-cat="exploration"><span data-i18n="cat_exploration">🧭 Exploração</span> <span class="pill-badge" id="pillExplorationCount">0</span></button>
+        <button class="pill-btn" data-cat="mounts"><span data-i18n="cat_mounts">🐴 Montarias</span> <span class="pill-badge" id="pillMountsCount">0</span></button>
+        <button class="pill-btn" data-cat="epic"><span data-i18n="cat_epic">⚡ Épico</span> <span class="pill-badge" id="pillEpicCount">0</span></button>
+        <button class="pill-btn" data-cat="work"><span data-i18n="cat_work">📦 Trabalho</span> <span class="pill-badge" id="pillWorkCount">0</span></button>
+        <button class="pill-btn" data-cat="survival"><span data-i18n="cat_survival">💀 Sobrevivência</span> <span class="pill-badge" id="pillSurvivalCount">0</span></button>
       </div>
 
       <!-- 1. CARDS VIEW -->
@@ -1933,13 +2233,13 @@
         <table>
           <thead>
             <tr>
-              <th>Rank</th>
-              <th>Nome Original</th>
-              <th>Tradução PT</th>
-              <th>Categoria</th>
-              <th>Contador</th>
-              <th>Data</th>
-              <th>Raridade</th>
+              <th data-i18n="th_rank">Rank</th>
+              <th data-i18n="th_original">Nome Original</th>
+              <th data-i18n="th_translation">Tradução PT</th>
+              <th data-i18n="th_category">Categoria</th>
+              <th data-i18n="th_counter">Contador</th>
+              <th data-i18n="th_date">Data</th>
+              <th data-i18n="th_rarity">Raridade</th>
             </tr>
           </thead>
           <tbody id="tableBody"></tbody>
@@ -1995,6 +2295,101 @@
     </div> <!-- END playerViewSection -->
 
   </div> <!-- END container -->
+
+  <!-- ACHIEVEMENT DETAILS MODAL -->
+  <div class="ach-modal-backdrop" id="achModalBackdrop" onclick="closeAchievementModal(event)">
+    <div class="ach-modal-card" id="achModalCard" onclick="event.stopPropagation()">
+      <div class="ach-modal-header">
+        <div style="display:flex; align-items:center; gap:14px;">
+          <div class="ach-modal-icon" id="modalIcon">🎯</div>
+          <div>
+            <h2 id="modalTitle" style="margin:0; font-size:1.3rem; color:#fff; font-family:var(--font-heading);">Nome da Conquista</h2>
+            <div id="modalSubTitle" style="color:var(--wurm-accent); font-size:0.92rem; font-weight:600; margin-top:2px;">Tradução PT</div>
+          </div>
+        </div>
+        <button class="ach-modal-close-btn" onclick="closeAchievementModal()" title="Fechar (Esc)">✕</button>
+      </div>
+
+      <div class="ach-modal-body">
+        <!-- Rarity & Counter Row -->
+        <div class="ach-modal-meta-row">
+          <div class="ach-modal-meta-item">
+            <span class="meta-lbl" data-i18n="modal_rarity">Raridade</span>
+            <span id="modalRarityTag" class="badge-tag tag-gold">Ouro</span>
+          </div>
+          <div class="ach-modal-meta-item">
+            <span class="meta-lbl" data-i18n="modal_times">Vezes Feito</span>
+            <strong id="modalCounter" style="color:var(--wurm-accent); font-family:var(--font-mono); font-size:1.1rem;">0×</strong>
+          </div>
+          <div class="ach-modal-meta-item">
+            <span class="meta-lbl" data-i18n="modal_category">Categoria</span>
+            <span id="modalCategory" style="font-size:0.82rem; color:#fff;">Exploração</span>
+          </div>
+          <div class="ach-modal-meta-item">
+            <span class="meta-lbl" data-i18n="modal_date">Data</span>
+            <span id="modalDate" style="font-family:var(--font-mono); font-size:0.8rem; color:var(--wurm-muted);">—</span>
+          </div>
+        </div>
+
+        <!-- Official In-game Quote -->
+        <div class="ach-modal-quote" id="modalQuote">
+          "Descrição oficial do jogo..."
+        </div>
+
+        <!-- Meaning Section -->
+        <div class="ach-modal-section">
+          <div class="section-tag" data-i18n="modal_meaning">📜 Significado & Importância no Wurm</div>
+          <p id="modalMeaning" style="color:#d5d5d5; font-size:0.88rem; line-height:1.55; margin:0;">
+            Explicação detalhada...
+          </p>
+        </div>
+
+        <!-- How to Obtain Section (From Wurmpedia) -->
+        <div class="ach-modal-section" style="background:rgba(212, 180, 131, 0.05); border:1px solid rgba(212, 180, 131, 0.2); border-radius:6px; padding:14px 16px;">
+          <div class="section-tag" style="color:var(--wurm-accent);" data-i18n="modal_how_to">🎯 Como Obter (Wurmpedia Oficial)</div>
+          <div id="modalHowTo" style="color:#fff; font-size:0.9rem; line-height:1.55; font-weight:500;">
+            Passo a passo oficial...
+          </div>
+        </div>
+
+        <!-- Trivia / Reference (if any) -->
+        <div class="ach-modal-section" id="modalTriviaContainer" style="display:none;">
+          <div class="section-tag" data-i18n="modal_trivia">💡 Curiosidade / Referência</div>
+          <p id="modalTrivia" style="color:var(--wurm-muted); font-size:0.82rem; line-height:1.5; margin:0;"></p>
+        </div>
+      </div>
+
+      <div class="ach-modal-footer">
+        <span style="font-size:0.72rem; color:var(--wurm-muted); font-family:var(--font-mono);">
+          Wurm Online Codex · Base Oficial Wurmpedia
+        </span>
+        <button class="back-to-rank-btn" style="margin-bottom:0; padding:6px 16px;" onclick="closeAchievementModal()" data-i18n="modal_close_btn">
+          Fechar (Esc)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOATING TOOLTIP PREVIEW -->
+  <div class="ach-tooltip" id="achTooltip">
+    <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+      <span id="ttIcon" style="font-size:1.1rem;">🎯</span>
+      <div>
+        <strong id="ttTitle" style="color:#fff; font-size:0.88rem; display:block;">Achievement</strong>
+        <span id="ttSub" style="color:var(--wurm-accent); font-size:0.75rem; font-weight:600;">Tradução</span>
+      </div>
+    </div>
+    <div id="ttDesc" style="color:#bbb; font-size:0.76rem; font-style:italic; margin-bottom:8px; border-left:2px solid var(--wurm-accent); padding-left:8px;">
+      "Descrição..."
+    </div>
+    <div style="background:rgba(212,180,131,0.08); border-radius:4px; padding:6px 8px; font-size:0.75rem;">
+      <strong style="color:var(--wurm-accent); display:block; margin-bottom:2px;" data-i18n="tt_how_to">🎯 Como Obter:</strong>
+      <span id="ttHowTo" style="color:#eee;">...</span>
+    </div>
+    <div style="margin-top:8px; font-size:0.68rem; color:var(--wurm-muted); text-align:right;">
+      <span data-i18n="tt_hint">👆 Clique para ver detalhes completos</span>
+    </div>
+  </div>
 
   <!-- GUILD FOOTER -->
   <footer>
@@ -2083,6 +2478,357 @@
       currentMainView = "ranking";
       selectedPlayerName = null;
     }
+
+    // ─── UTILS & ESCAPING ─────────────────────────────────────
+    function escapeJs(str) {
+      if (!str) return '';
+      return String(str).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    }
+
+    // ─── INTERNATIONALIZATION (i18n) ─────────────────────────
+    let currentLang = localStorage.getItem('wurm_codex_lang') || 'pt';
+
+    const I18N = {
+      pt: {
+        nav_ranking: "🏆 Ranking Geral",
+        nav_my_profile: "👤 Meu Perfil",
+        nav_inspect: "👁️ Inspecionando",
+        my_chars_title: "Meus Personagens",
+        add_alt_btn: "+ Cadastrar Outro Char Meu (Alt)",
+        change_main_btn: "✏️ Alterar Char Principal",
+        tab_achievements: "Conquistas Desbloqueadas",
+        tab_journal: "Diário de Metas (Journal 2.0)",
+        view_table: "Tabela",
+        view_cards: "Cards",
+        view_compact: "Compacto",
+        cat_all: "Todas",
+        cat_combat: "⚔️ Combate",
+        cat_work: "📦 Trabalho & Forja",
+        cat_sailing: "⛵ Náutica",
+        cat_exploration: "🧭 Exploração",
+        cat_mounts: "🐴 Montarias",
+        cat_epic: "⚡ Épico & Fé",
+        cat_survival: "💀 Sobrevivência",
+        search_placeholder: "Buscar conquista, tradução, significado...",
+        sort_counter_desc: "Mais Realizadas (Contador ↓)",
+        sort_name_asc: "Nome Alfabético (A-Z)",
+        sort_rarity_desc: "Maior Raridade (Ouro Primeiro)",
+        th_rank: "Rank",
+        th_original: "Nome Original",
+        th_translation: "Tradução PT",
+        th_category: "Categoria",
+        th_counter: "Contador",
+        th_date: "Data",
+        th_rarity: "Raridade",
+        stat_unlocked: "Desbloqueadas",
+        stat_record: "Maior Recorde",
+        stat_sync: "Última Sincronização",
+        modal_rarity: "Raridade",
+        modal_times: "Vezes Feito",
+        modal_category: "Categoria",
+        modal_date: "Data",
+        modal_meaning: "📜 Significado & Importância no Wurm",
+        modal_how_to: "🎯 Como Obter (Wurmpedia Oficial)",
+        modal_trivia: "💡 Curiosidade / Referência",
+        modal_close_btn: "Fechar (Esc)",
+        tt_how_to: "🎯 Como Obter:",
+        tt_hint: "👆 Clique para ver detalhes completos",
+        journal_progress_title: "Progresso Geral no Wurm Online",
+        journal_search_placeholder: "Buscar meta ou método de obtenção...",
+        journal_status_all: "Todas",
+        journal_status_locked: "🔒 Não Desbloqueadas",
+        journal_status_unlocked: "✅ Já Feitas",
+        journal_sec_locked: "🔒 Metas Para Conquistar",
+        journal_sec_unlocked: "✅ Já Desbloqueadas",
+        inspect_banner_title: "Inspecionando perfil público de:",
+        inspect_banner_sub: "Você está visualizando as conquistas públicas de outro jogador.",
+        back_to_ranking: "← Voltar ao Ranking Geral da Comunidade",
+        btn_view_my_profile: "👤 Ver Meu Perfil",
+        you_badge: "Você",
+        community_member: "Membro da Comunidade",
+        your_character: "Seu Personagem",
+        inspect_btn: "Inspecionar ➔",
+        view_profile_btn: "Ver Meu Perfil ➔",
+        hero_profile_sub: "⭐ Seu perfil principal sincronizado com o jogo",
+        hero_inspect_sub: "Perfil comunitário de",
+        th_player: "Jogador",
+        th_score: "Pontuação",
+        th_achievements: "Conquistas",
+        th_rarities: "Raridades",
+        th_top_record: "Maior Recorde Individual",
+        th_last_activity: "Última Atividade",
+        th_action: "Ação",
+        rf_score: "🏆 Pontuação",
+        rf_total: "🏅 Total Conquistas",
+        rf_gold: "✨ Ouro/Diamante",
+        rf_record: "⚡ Maior Recorde",
+        rf_recent: "⏱️ Recentes",
+        ranking_search_ph: "Buscar jogador no ranking por nick...",
+        stat_comm_players: "Jogadores no Ranking",
+        stat_comm_achs: "Conquistas Coletivas",
+        stat_comm_leader: "Líder Geral 🥇"
+      },
+      en: {
+        nav_ranking: "🏆 Global Ranking",
+        nav_my_profile: "👤 My Profile",
+        nav_inspect: "👁️ Inspecting",
+        my_chars_title: "My Characters",
+        add_alt_btn: "+ Register Another Alt Character",
+        change_main_btn: "✏️ Change Main Character",
+        tab_achievements: "Unlocked Achievements",
+        tab_journal: "Goal Journal (Journal 2.0)",
+        view_table: "Table",
+        view_cards: "Cards",
+        view_compact: "Compact",
+        cat_all: "All",
+        cat_combat: "⚔️ Combat",
+        cat_work: "📦 Craft & Forge",
+        cat_sailing: "⛵ Sailing",
+        cat_exploration: "🧭 Exploration",
+        cat_mounts: "🐴 Mounts & Care",
+        cat_epic: "⚡ Epic & Faith",
+        cat_survival: "💀 Survival",
+        search_placeholder: "Search achievement, translation, meaning...",
+        sort_counter_desc: "Most Times Done (Counter ↓)",
+        sort_name_asc: "Alphabetical Name (A-Z)",
+        sort_rarity_desc: "Highest Rarity (Gold First)",
+        th_rank: "Rank",
+        th_original: "Achievement",
+        th_translation: "Translation",
+        th_category: "Category",
+        th_counter: "Count",
+        th_date: "Date",
+        th_rarity: "Rarity",
+        stat_unlocked: "Unlocked",
+        stat_record: "Top Record",
+        stat_sync: "Last Sync",
+        modal_rarity: "Rarity",
+        modal_times: "Times Done",
+        modal_category: "Category",
+        modal_date: "Date",
+        modal_meaning: "📜 Meaning & Significance in Wurm",
+        modal_how_to: "🎯 How to Unlock (Official Wurmpedia)",
+        modal_trivia: "💡 Trivia & References",
+        modal_close_btn: "Close (Esc)",
+        tt_how_to: "🎯 How to Unlock:",
+        tt_hint: "👆 Click row for full achievement sheet",
+        journal_progress_title: "Overall Wurm Online Progress",
+        journal_search_placeholder: "Search goal or unlock instructions...",
+        journal_status_all: "All",
+        journal_status_locked: "🔒 Locked",
+        journal_status_unlocked: "✅ Unlocked",
+        journal_sec_locked: "🔒 Goals to Accomplish",
+        journal_sec_unlocked: "✅ Already Accomplished",
+        inspect_banner_title: "Inspecting public profile of:",
+        inspect_banner_sub: "You are currently viewing achievements of another player.",
+        back_to_ranking: "← Back to Community Ranking",
+        btn_view_my_profile: "👤 View My Profile",
+        you_badge: "You",
+        community_member: "Community Member",
+        your_character: "Your Character",
+        inspect_btn: "Inspect ➔",
+        view_profile_btn: "View My Profile ➔",
+        hero_profile_sub: "⭐ Your main profile synced with the game",
+        hero_inspect_sub: "Community profile of",
+        th_player: "Player",
+        th_score: "Score",
+        th_achievements: "Achievements",
+        th_rarities: "Rarities",
+        th_top_record: "Top Record",
+        th_last_activity: "Last Activity",
+        th_action: "Action",
+        rf_score: "🏆 Score",
+        rf_total: "🏅 Total Unlocked",
+        rf_gold: "✨ Gold/Diamond",
+        rf_record: "⚡ Max Record",
+        rf_recent: "⏱️ Recent",
+        ranking_search_ph: "Search player in leaderboard by nick...",
+        stat_comm_players: "Registered Players",
+        stat_comm_achs: "Total Achievements",
+        stat_comm_leader: "Overall Leader 🥇"
+      }
+    };
+
+    function t(key) {
+      return (I18N[currentLang] && I18N[currentLang][key]) || (I18N['pt'] && I18N['pt'][key]) || key;
+    }
+
+    function toggleLanguage() {
+      currentLang = (currentLang === 'pt') ? 'en' : 'pt';
+      localStorage.setItem('wurm_codex_lang', currentLang);
+      applyLanguage();
+    }
+
+    function applyLanguage() {
+      const displayEl = document.getElementById('langDisplay');
+      if (displayEl) displayEl.textContent = (currentLang === 'pt') ? '🇺🇸 EN' : '🇧🇷 PT';
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (key && t(key)) el.textContent = t(key);
+      });
+
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (key && t(key)) el.setAttribute('placeholder', t(key));
+      });
+
+      updateMyCharUI();
+      if (currentMainView === 'player' && selectedPlayerName) {
+        renderItems();
+        renderJournal();
+      } else {
+        renderCommunityRanking();
+      }
+    }
+
+    // ─── MODAL & TOOLTIP CONTROLLERS ──────────────────────────
+    let tooltipTimeout = null;
+    let currentHoverAch = null;
+
+    function showAchTooltip(e, achName) {
+      clearTimeout(tooltipTimeout);
+      currentHoverAch = achName;
+      const clientX = e.clientX;
+      const clientY = e.clientY;
+      tooltipTimeout = setTimeout(() => {
+        if (currentHoverAch !== achName) return;
+        const meta = getMeta(achName);
+        const tt = document.getElementById('achTooltip');
+        if (!tt) return;
+
+        const icon = meta.categoryIcon || '🎯';
+        const iconEl = document.getElementById('ttIcon');
+        if (iconEl) iconEl.textContent = icon;
+
+        const titleEl = document.getElementById('ttTitle');
+        const subEl = document.getElementById('ttSub');
+        if (currentLang === 'en') {
+          if (titleEl) titleEl.textContent = achName;
+          if (subEl) subEl.textContent = meta.ptName ? `PT: ${meta.ptName}` : '';
+        } else {
+          if (titleEl) titleEl.textContent = meta.ptName || achName;
+          if (subEl) subEl.textContent = `Original: ${achName}`;
+        }
+
+        const desc = meta.description || meta.meaning || '';
+        const descEl = document.getElementById('ttDesc');
+        if (descEl) descEl.textContent = desc ? `"${desc}"` : '';
+
+        const howToEl = document.getElementById('ttHowTo');
+        if (howToEl) howToEl.textContent = meta.unlock || meta.howTo || (currentLang === 'en' ? 'Perform action in-game.' : 'Realizar a ação no jogo.');
+        
+        positionTooltip({ clientX, clientY });
+        tt.classList.add('visible');
+      }, 280);
+    }
+
+    function updateAchTooltipPos(e) {
+      if (currentHoverAch && document.getElementById('achTooltip')?.classList.contains('visible')) {
+        positionTooltip(e);
+      }
+    }
+
+    function positionTooltip(pos) {
+      const tt = document.getElementById('achTooltip');
+      if (!tt) return;
+      const padding = 15;
+      let x = pos.clientX + padding;
+      let y = pos.clientY + padding;
+
+      if (x + 340 > window.innerWidth) {
+        x = pos.clientX - 340 - padding;
+      }
+      if (y + 220 > window.innerHeight) {
+        y = pos.clientY - 220 - padding;
+      }
+      tt.style.left = Math.max(10, x) + 'px';
+      tt.style.top = Math.max(10, y) + 'px';
+    }
+
+    function hideAchTooltip() {
+      clearTimeout(tooltipTimeout);
+      currentHoverAch = null;
+      const tt = document.getElementById('achTooltip');
+      if (tt) tt.classList.remove('visible');
+    }
+
+    function openAchievementModal(achName) {
+      hideAchTooltip();
+      const meta = getMeta(achName);
+      const playerItem = currentData.find(d => d.name.toLowerCase().trim() === achName.toLowerCase().trim());
+      const counter = playerItem ? playerItem.counter : 0;
+      const date = playerItem ? (playerItem.date || '—') : '—';
+      const rarity = (playerItem && playerItem.rarity) || meta.rarity || 'Normal';
+
+      const icon = meta.categoryIcon || '🎯';
+      const iconEl = document.getElementById('modalIcon');
+      if (iconEl) iconEl.textContent = icon;
+      
+      const titleEl = document.getElementById('modalTitle');
+      const subTitleEl = document.getElementById('modalSubTitle');
+      if (currentLang === 'en') {
+        if (titleEl) titleEl.textContent = achName;
+        if (subTitleEl) subTitleEl.textContent = meta.ptName ? `PT: ${meta.ptName}` : '';
+      } else {
+        if (titleEl) titleEl.textContent = meta.ptName || achName;
+        if (subTitleEl) subTitleEl.textContent = `Original (EN): ${achName}`;
+      }
+
+      const rarityEl = document.getElementById('modalRarityTag');
+      if (rarityEl) {
+        rarityEl.textContent = rarity;
+        rarityEl.className = 'badge-tag ' + (rarity === 'Gold' ? 'tag-gold' : rarity === 'Diamond' ? 'tag-diamond' : rarity === 'Silver' ? 'tag-silver' : 'tag-normal');
+      }
+
+      const counterEl = document.getElementById('modalCounter');
+      if (counterEl) counterEl.textContent = counter + '×';
+
+      const catEl = document.getElementById('modalCategory');
+      if (catEl) catEl.textContent = `${icon} ${meta.categoryLabel || 'Geral'}`;
+
+      const dateEl = document.getElementById('modalDate');
+      if (dateEl) dateEl.textContent = date;
+
+      const desc = (playerItem && playerItem.description) || meta.description || meta.meaning || '';
+      const quoteEl = document.getElementById('modalQuote');
+      if (quoteEl) quoteEl.textContent = desc ? `"${desc}"` : '';
+
+      const meaningEl = document.getElementById('modalMeaning');
+      if (meaningEl) meaningEl.textContent = meta.meaning || meta.description || (currentLang === 'en' ? 'Recognized accomplishment in Wurm Online.' : 'Feito registrado no Wurm Online.');
+
+      const howToEl = document.getElementById('modalHowTo');
+      if (howToEl) howToEl.textContent = meta.unlock || meta.howTo || (currentLang === 'en' ? 'Perform corresponding in-game actions.' : 'Realizar as ações correspondentes no jogo.');
+
+      const triviaCont = document.getElementById('modalTriviaContainer');
+      const triviaEl = document.getElementById('modalTrivia');
+      if (meta.trivia && meta.trivia.trim()) {
+        if (triviaCont) triviaCont.style.display = 'block';
+        if (triviaEl) triviaEl.textContent = meta.trivia;
+      } else {
+        if (triviaCont) triviaCont.style.display = 'none';
+      }
+
+      const backdrop = document.getElementById('achModalBackdrop');
+      if (backdrop) backdrop.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeAchievementModal(e) {
+      if (e && e.target !== document.getElementById('achModalBackdrop') && !e.target.classList.contains('ach-modal-close-btn') && !e.target.closest('.ach-modal-close-btn')) {
+        return;
+      }
+      const backdrop = document.getElementById('achModalBackdrop');
+      if (backdrop) backdrop.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeAchievementModal();
+        hideAchTooltip();
+      }
+    });
 
     // ─── COMPUTE STATS & SCORE ───────────────────────────────
     function computePlayerStats(p) {
@@ -2193,7 +2939,7 @@
           const isMain = nick.toLowerCase() === myMain.toLowerCase();
           return `<div class="my-char-item ${isMain ? 'active' : ''}" onclick="selectMyChar('${nick}')">
             <span>${isMain ? '⭐ ' : '⚔️ '}<strong>${nick}</strong></span>
-            <span style="font-size:0.7rem; color:var(--wurm-muted);">${isMain ? 'Principal' : 'Alt'}</span>
+            <span style="font-size:0.7rem; color:var(--wurm-muted);">${isMain ? (currentLang === 'en' ? 'Main' : 'Principal') : 'Alt'}</span>
           </div>`;
         }).join('');
       }
@@ -2286,7 +3032,7 @@
           if (inspectBanner) inspectBanner.style.display = 'none';
           if (backRankBtn) backRankBtn.style.display = 'inline-flex';
           const heroSub = document.getElementById('playerHeroSub');
-          if (heroSub) heroSub.innerHTML = '⭐ Seu perfil principal sincronizado com o jogo';
+          if (heroSub) heroSub.innerHTML = t('hero_profile_sub');
         } else {
           if (btnMyProfile) btnMyProfile.classList.remove('active');
           if (btnInspect) {
@@ -2300,7 +3046,7 @@
           }
           if (backRankBtn) backRankBtn.style.display = 'none';
           const heroSub = document.getElementById('playerHeroSub');
-          if (heroSub) heroSub.innerHTML = `Perfil comunitário de <strong>${selectedPlayerName}</strong>`;
+          if (heroSub) heroSub.innerHTML = `${t('hero_inspect_sub')} <strong>${selectedPlayerName}</strong>`;
         }
 
         const heroName = document.getElementById('playerHeroName');
@@ -2326,7 +3072,7 @@
       if (!tbody) return;
 
       if (!guildPlayers || guildPlayers.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:36px; color:var(--wurm-muted);">Nenhum jogador registrado ainda. Seja o primeiro conectando seu jogo abaixo!</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:36px; color:var(--wurm-muted);">${currentLang === 'en' ? 'No players registered yet. Be the first by connecting your game below!' : 'Nenhum jogador registrado ainda. Seja o primeiro conectando seu jogo abaixo!'}</td></tr>`;
         return;
       }
 
@@ -2345,7 +3091,7 @@
       });
 
       if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:36px; color:var(--wurm-muted);">Nenhum jogador encontrado com o nick "${rankingSearchQuery}".</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:36px; color:var(--wurm-muted);">${currentLang === 'en' ? `No players found with nick "${rankingSearchQuery}".` : `Nenhum jogador encontrado com o nick "${rankingSearchQuery}".`}</td></tr>`;
         return;
       }
 
@@ -2358,16 +3104,16 @@
         const progressPct = Math.min(100, Math.round((p.total_count / 200) * 100));
 
         const isYou = p.player_name.toLowerCase() === myMain.toLowerCase();
-        const youBadge = isYou ? '<span class="badge-you">Você</span>' : '';
-        const roleLabel = isYou ? 'Seu Personagem' : 'Membro da Comunidade';
+        const youBadge = isYou ? `<span class="badge-you">${t('you_badge')}</span>` : '';
+        const roleLabel = isYou ? t('your_character') : t('community_member');
 
-        let timeStr = 'Recente';
+        let timeStr = currentLang === 'en' ? 'Recent' : 'Recente';
         if (p.updated_at) {
           const d = new Date(p.updated_at);
-          timeStr = d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) + ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+          timeStr = d.toLocaleDateString(currentLang === 'en' ? 'en-US' : 'pt-BR', { day: '2-digit', month: '2-digit' }) + ' ' + d.toLocaleTimeString(currentLang === 'en' ? 'en-US' : 'pt-BR', { hour: '2-digit', minute: '2-digit' });
         }
 
-        const topText = p.top_achievement ? `${p.top_achievement} (${Number(p.max_counter).toLocaleString('pt-BR')}×)` : '—';
+        const topText = p.top_achievement ? `${p.top_achievement} (${Number(p.max_counter).toLocaleString(currentLang === 'en' ? 'en-US' : 'pt-BR')}×)` : '—';
 
         return `<tr>
           <td class="rank-num-cell ${rankClass}">${rankMedal}</td>
@@ -2381,7 +3127,7 @@
             </div>
           </td>
           <td>
-            <span class="score-badge">${Number(p.score).toLocaleString('pt-BR')} pts</span>
+            <span class="score-badge">${Number(p.score).toLocaleString(currentLang === 'en' ? 'en-US' : 'pt-BR')} pts</span>
           </td>
           <td>
             <div style="font-family:var(--font-mono); font-weight:700; color:#fff; margin-bottom:4px;">${p.total_count} / 200</div>
@@ -2401,7 +3147,7 @@
           </td>
           <td style="text-align:center;">
             <button class="btn-view-profile" onclick="switchMainView('player', '${p.player_name}')">
-              ${isYou ? 'Ver Meu Perfil ➔' : 'Inspecionar ➔'}
+              ${isYou ? t('view_profile_btn') : t('inspect_btn')}
             </button>
           </td>
         </tr>`;
@@ -2642,13 +3388,16 @@
         const meta = getMeta(item.name);
         const rankClass = idx === 0 ? 'rank-1' : idx === 1 ? 'rank-2' : idx === 2 ? 'rank-3' : '';
         const icon = meta.categoryIcon || '🏆';
-        return `<div class="podium-card ${rankClass}">
+        const escaped = escapeJs(item.name);
+        const primaryTitle = currentLang === 'en' ? item.name : (meta.ptName || item.name);
+        const secondaryTitle = currentLang === 'en' ? (meta.ptName ? `PT: ${meta.ptName}` : '') : `Original: ${item.name}`;
+        return `<div class="podium-card ${rankClass}" onclick="openAchievementModal('${escaped}')" style="cursor:pointer;" title="${t('tt_hint')}">
           <div class="podium-rank">#${idx+1}</div>
           <div class="podium-data">
-            <h4>${icon} ${item.name}</h4>
-            <p>${meta.ptName || 'Conquista'}</p>
+            <h4>${icon} ${primaryTitle}</h4>
+            <p>${secondaryTitle}</p>
           </div>
-          <div class="podium-count">${item.counter}<span>vezes</span></div>
+          <div class="podium-count">${item.counter}<span>${currentLang === 'en' ? 'times' : 'vezes'}</span></div>
         </div>`;
       }).join('');
     }
@@ -2697,21 +3446,25 @@
         const meta = getMeta(item.name);
         const isGold = item.rarity === 'Gold' || meta.rarity === 'Gold';
         const icon = meta.categoryIcon || '🎯';
-        return `<div class="ach-card ${isGold?'gold-tier':''}">
+        const escaped = escapeJs(item.name);
+        const primaryTitle = currentLang === 'en' ? item.name : (meta.ptName || item.name);
+        const secondaryTitle = currentLang === 'en' ? (meta.ptName ? `PT: ${meta.ptName}` : '') : `Original: ${item.name}`;
+
+        return `<div class="ach-card ${isGold?'gold-tier':''}" onclick="openAchievementModal('${escaped}')" style="cursor:pointer;" title="${t('tt_hint')}">
           <div class="ach-top">
             <div class="ach-title-area">
-              <h3>${icon} ${item.name}</h3>
-              <div class="ach-pt-name">${meta.ptName || item.name}</div>
+              <h3>${icon} ${primaryTitle}</h3>
+              <div class="ach-pt-name">${secondaryTitle}</div>
             </div>
             <div class="ach-counter-badge">
               <div class="num">${item.counter}</div>
-              <div class="lbl">Vezes</div>
+              <div class="lbl">${t('modal_times')}</div>
             </div>
           </div>
           <div class="ach-desc-box">"${item.description || meta.meaning || ''}"</div>
           <div class="ach-details">
-            <div class="detail-item"><span class="detail-label">Significado:</span><span class="detail-val">${meta.meaning || 'Ação produtiva ou façanha reconhecida.'}</span></div>
-            <div class="detail-item"><span class="detail-label">Como obter:</span><span class="detail-val">${meta.unlock || 'Realizar a ação no jogo.'}</span></div>
+            <div class="detail-item"><span class="detail-label">${t('modal_meaning')}:</span><span class="detail-val">${meta.meaning || 'Ação produtiva ou façanha reconhecida.'}</span></div>
+            <div class="detail-item"><span class="detail-label">${t('modal_how_to')}:</span><span class="detail-val">${meta.unlock || 'Realizar a ação no jogo.'}</span></div>
             ${meta.trivia ? `<div class="trivia-box">💡 <strong>Referência:</strong> ${meta.trivia}</div>` : ''}
           </div>
           <div class="ach-footer">
@@ -2726,12 +3479,16 @@
         const meta = getMeta(item.name);
         const isGold = item.rarity === 'Gold' || meta.rarity === 'Gold';
         const icon = meta.categoryIcon || '🎯';
-        return `<div class="compact-row ${isGold?'gold-row':''}">
+        const escaped = escapeJs(item.name);
+        const primaryTitle = currentLang === 'en' ? item.name : (meta.ptName || item.name);
+        const secondaryTitle = currentLang === 'en' ? (meta.ptName || item.name) : item.name;
+
+        return `<div class="compact-row ${isGold?'gold-row':''}" onclick="openAchievementModal('${escaped}')" onmouseenter="showAchTooltip(event, '${escaped}')" onmousemove="updateAchTooltipPos(event)" onmouseleave="hideAchTooltip()" style="cursor:pointer;" title="${t('tt_hint')}">
           <span class="compact-rank">#${idx+1}</span>
           <span class="compact-icon">${icon}</span>
           <div class="compact-names">
-            <div class="compact-en">${item.name}</div>
-            <div class="compact-pt">${meta.ptName || item.name}</div>
+            <div class="compact-en">${primaryTitle}</div>
+            <div class="compact-pt">${secondaryTitle}</div>
           </div>
           <span class="compact-counter">${item.counter}×</span>
           <span class="compact-date">${item.date || '—'}</span>
@@ -2743,7 +3500,8 @@
       tableBody.innerHTML = items.map((item, idx) => {
         const meta = getMeta(item.name);
         const isGold = item.rarity === 'Gold' || meta.rarity === 'Gold';
-        return `<tr>
+        const escaped = escapeJs(item.name);
+        return `<tr onclick="openAchievementModal('${escaped}')" onmouseenter="showAchTooltip(event, '${escaped}')" onmousemove="updateAchTooltipPos(event)" onmouseleave="hideAchTooltip()" title="${t('tt_hint')}">
           <td style="font-family:var(--font-mono);font-weight:700;">#${idx+1}</td>
           <td><strong style="color:#fff;">${item.name}</strong></td>
           <td style="color:var(--wurm-accent);font-weight:500;">${meta.ptName || item.name}</td>
@@ -2807,13 +3565,16 @@
       let html = '';
 
       if (locked.length > 0 && filterMode !== 'unlocked') {
-        html += `<div class="section-divider"><h4>🔒 Metas Para Conquistar (${locked.length})</h4></div>`;
+        html += `<div class="section-divider"><h4>${t('journal_sec_locked')} (${locked.length})</h4></div>`;
         html += locked.map(wa => {
           const rarityTag = wa.rarity === 'Gold' ? 'tag-gold' : wa.rarity === 'Diamond' ? 'tag-diamond' : wa.rarity === 'Iron' ? 'tag-iron' : 'tag-silver';
-          return `<div class="journal-row locked">
+          const escaped = escapeJs(wa.name);
+          const primaryTitle = currentLang === 'en' ? wa.name : (wa.ptName || wa.name);
+          const secondaryTitle = currentLang === 'en' ? (wa.ptName ? `· ${wa.ptName}` : '') : (wa.name !== wa.ptName ? `(${wa.name})` : '');
+          return `<div class="journal-row locked" onclick="openAchievementModal('${escaped}')" onmouseenter="showAchTooltip(event, '${escaped}')" onmousemove="updateAchTooltipPos(event)" onmouseleave="hideAchTooltip()" title="${t('tt_hint')}">
             <span class="journal-status">🔒</span>
             <div class="journal-name">
-              <div class="j-en">${wa.categoryIcon||'🎯'} ${wa.name} ${wa.ptName ? `<span style="color:var(--wurm-accent);font-weight:600;font-size:0.85em;">· ${wa.ptName}</span>` : ''}</div>
+              <div class="j-en">${wa.categoryIcon||'🎯'} ${primaryTitle} <span style="color:var(--wurm-accent);font-weight:600;font-size:0.85em;">${secondaryTitle}</span></div>
               <div class="j-desc">${wa.description || wa.meaning || ''}</div>
             </div>
             <div class="journal-how">${wa.howTo || '—'}</div>
@@ -2823,14 +3584,17 @@
       }
 
       if (unlocked.length > 0 && filterMode !== 'locked') {
-        html += `<div class="section-divider"><h4>✅ Já Desbloqueadas (${unlocked.length})</h4></div>`;
+        html += `<div class="section-divider"><h4>${t('journal_sec_unlocked')} (${unlocked.length})</h4></div>`;
         html += unlocked.map(wa => {
           const pd = wa.playerData;
           const rarityTag = wa.rarity === 'Gold' ? 'tag-gold' : wa.rarity === 'Diamond' ? 'tag-diamond' : wa.rarity === 'Iron' ? 'tag-iron' : 'tag-silver';
-          return `<div class="journal-row unlocked">
+          const escaped = escapeJs(wa.name);
+          const primaryTitle = currentLang === 'en' ? wa.name : (wa.ptName || wa.name);
+          const secondaryTitle = currentLang === 'en' ? (wa.ptName ? `· ${wa.ptName}` : '') : (wa.name !== wa.ptName ? `(${wa.name})` : '');
+          return `<div class="journal-row unlocked" onclick="openAchievementModal('${escaped}')" onmouseenter="showAchTooltip(event, '${escaped}')" onmousemove="updateAchTooltipPos(event)" onmouseleave="hideAchTooltip()" title="${t('tt_hint')}">
             <span class="journal-status">✅</span>
             <div class="journal-name">
-              <div class="j-en">${wa.categoryIcon||'🎯'} ${wa.name} ${wa.ptName ? `<span style="color:var(--wurm-accent);font-weight:600;font-size:0.85em;">· ${wa.ptName}</span>` : ''}</div>
+              <div class="j-en">${wa.categoryIcon||'🎯'} ${primaryTitle} <span style="color:var(--wurm-accent);font-weight:600;font-size:0.85em;">${secondaryTitle}</span></div>
               <div class="j-desc">${wa.description || wa.meaning || ''}</div>
             </div>
             <div class="journal-how">${wa.howTo || '—'}</div>
@@ -2951,6 +3715,7 @@
     });
 
     // ─── INITIAL LOAD + LIVE REFRESH ──────────────────────────
+    applyLanguage();
     updateMyCharUI();
     fetchGuildPlayers();
     if (currentMainView === 'player' && selectedPlayerName) {
