@@ -1206,11 +1206,12 @@
       <a href="https://ko-fi.com/aguildanode" target="_blank" rel="noopener noreferrer" class="kofi-btn">
         ☕ <span>Support Us</span>
       </a>
-      <div class="player-sync-tag" style="padding: 2px 8px; gap: 6px;">
+      <div class="player-sync-tag" style="padding: 3px 10px; gap: 8px;">
         <span class="sync-dot"></span>
         <select id="guildPlayerSelector" style="background: transparent; border: none; color: #fff; font-family: var(--font-mono); font-size: 0.78rem; font-weight: 700; cursor: pointer; padding: 2px 4px; outline: none;">
           <option value="jotasiete" selected>jotasiete (Guilda)</option>
         </select>
+        <span id="syncStatus" style="color: var(--wurm-accent); font-size: 0.72rem; font-family: var(--font-mono); border-left: 1px solid var(--wurm-border); padding-left: 8px;">Nuvem</span>
       </div>
     </div>
   </header>
@@ -1257,12 +1258,18 @@
       </div>
       <div class="hero-stats-inline">
         <div class="hero-stat-badge">
-          <div class="num" id="statTotalHero">32</div>
+          <div class="num" id="statTotalHero">194</div>
           <div class="label">Desbloqueadas</div>
         </div>
         <div class="hero-stat-badge">
-          <div class="num" id="statTopHero">275</div>
+          <div class="num" id="statTopHero">1.2M</div>
           <div class="label">Maior Recorde</div>
+        </div>
+        <div class="hero-stat-badge" style="cursor: pointer; min-width: 150px;" onclick="loadAchievements()" title="Clique para sincronizar da Nuvem agora">
+          <div class="num" id="statSyncTime" style="font-size: 0.92rem; color: var(--wurm-accent); display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <span class="sync-dot"></span> <span id="syncStatusText">Ao Vivo</span> <span style="font-size:0.8rem">🔄</span>
+          </div>
+          <div class="label">Última Sincronização</div>
         </div>
       </div>
     </div>
@@ -1639,7 +1646,17 @@
       }
     }
 
+    function setSyncStatus(badgeText, timeStr) {
+      const el = document.getElementById('syncStatus');
+      if (el) el.textContent = badgeText;
+      const textEl = document.getElementById('syncStatusText');
+      if (textEl && timeStr) textEl.textContent = timeStr;
+    }
+
     async function loadAchievements() {
+      const syncBtn = document.getElementById('syncStatusText');
+      if (syncBtn) syncBtn.textContent = 'Carregando...';
+
       // 1. Buscar prioritariamente da Nuvem Supabase (dados mais recentes de qualquer membro)
       try {
         const res = await fetch(`${SUPABASE_URL}/rest/v1/player_achievements?player_name=eq.${encodeURIComponent(selectedPlayerName)}&select=*`, {
@@ -1649,8 +1666,12 @@
           const rows = await res.json();
           if (rows && rows.length > 0 && rows[0].achievements && rows[0].achievements.length > 0) {
             currentData = rows[0].achievements;
-            const updated = rows[0].updated_at ? new Date(rows[0].updated_at).toLocaleString('pt-BR') : '';
-            document.getElementById('syncStatus').textContent = 'Nuvem A Guilda (Supabase) • ' + (updated || 'Ao Vivo');
+            let timeStr = 'Ao Vivo';
+            if (rows[0].updated_at) {
+              const d = new Date(rows[0].updated_at);
+              timeStr = d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) + ' (' + d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) + ')';
+            }
+            setSyncStatus('Nuvem (Supabase)', timeStr);
             enrichAndRender();
             return;
           }
@@ -1666,7 +1687,7 @@
           const json = await res.json();
           if (json.achievements && json.achievements.length > 0) {
             currentData = json.achievements;
-            if (json.last_updated) document.getElementById('syncStatus').textContent = 'Sincronizado Local: ' + json.last_updated;
+            setSyncStatus('Local', json.last_updated ? json.last_updated.substring(11, 16) : 'Recente');
             enrichAndRender();
             return;
           }
@@ -1674,6 +1695,7 @@
       } catch { /* continuar para fallbackData */ }
 
       // 3. Fallback seguro estatico
+      setSyncStatus('Offline', 'Padrão');
       currentData = fallbackData;
       enrichAndRender();
     }
