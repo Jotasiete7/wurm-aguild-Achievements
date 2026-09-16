@@ -29,11 +29,143 @@ public class AchievementHook {
         }
     }
 
+    public static class EntryComparator implements Comparator<Entry> {
+        @Override
+        public int compare(Entry a, Entry b) {
+            return Integer.compare(b.counter, a.counter);
+        }
+    }
+
+    public static class SaveRunner implements Runnable {
+        @Override
+        public void run() {
+            try {
+                saveAll();
+            } catch (Throwable t) {
+                log("Error in scheduled saveAll: " + t.getMessage());
+            }
+        }
+    }
+
+    public static class LogFilter implements FilenameFilter {
+        @Override
+        public boolean accept(File dir, String name) {
+            return name.startsWith("console.") && name.endsWith(".log") && !name.contains("apenasrecrutoum");
+        }
+    }
+
+    public static class FileModifiedComparator implements Comparator<File> {
+        @Override
+        public int compare(File f1, File f2) {
+            return Long.compare(f2.lastModified(), f1.lastModified());
+        }
+    }
+
+    public static class PlayerFilter implements FileFilter {
+        @Override
+        public boolean accept(File f) {
+            return f.isDirectory() && !f.getName().equalsIgnoreCase("configs");
+        }
+    }
+
+    public static class SupabaseSender implements Runnable {
+        private final String player;
+        private final String arrayJson;
+        private final int total;
+        private final int goldCount;
+        private final int diamondCount;
+        private final int score;
+        private final String topName;
+        private final int maxCounter;
+        private final String claimToken;
+
+        public SupabaseSender(String player, String arrayJson, int total, int goldCount, int diamondCount, int score, String topName, int maxCounter, String claimToken) {
+            this.player = player;
+            this.arrayJson = arrayJson;
+            this.total = total;
+            this.goldCount = goldCount;
+            this.diamondCount = diamondCount;
+            this.score = score;
+            this.topName = topName;
+            this.maxCounter = maxCounter;
+            this.claimToken = claimToken;
+        }
+
+        @Override
+        public void run() {
+            try {
+                log("Sending " + total + " achievements for player '" + player + "' (Score: " + score + ", Golds: " + goldCount + ") to Supabase Cloud...");
+
+                SimpleDateFormat iso = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+                iso.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+                StringBuilder body = new StringBuilder();
+                body.append("[{\n");
+                body.append("  \"player_name\": \"").append(escapeJson(player)).append("\",\n");
+                if (claimToken != null && !claimToken.isEmpty()) {
+                    body.append("  \"claim_token\": \"").append(escapeJson(claimToken)).append("\",\n");
+                }
+                body.append("  \"achievements\": ").append(arrayJson).append(",\n");
+                body.append("  \"total_count\": ").append(total).append(",\n");
+                body.append("  \"gold_count\": ").append(goldCount).append(",\n");
+                body.append("  \"score\": ").append(score).append(",\n");
+                body.append("  \"max_counter\": ").append(maxCounter).append(",\n");
+                body.append("  \"top_achievement\": \"").append(escapeJson(topName)).append("\",\n");
+                body.append("  \"updated_at\": \"").append(iso.format(new Date())).append("\"\n");
+                body.append("}]");
+
+                int code = postJson(SUPABASE_URL, body.toString());
+                if (code == 400 && (claimToken != null || score > 0)) {
+                    // Fallback retrocompativel caso a coluna nao exista ainda
+                    StringBuilder legacyBody = new StringBuilder();
+                    legacyBody.append("[{\n");
+                    legacyBody.append("  \"player_name\": \"").append(escapeJson(player)).append("\",\n");
+                    legacyBody.append("  \"achievements\": ").append(arrayJson).append(",\n");
+                    legacyBody.append("  \"total_count\": ").append(total).append(",\n");
+                    legacyBody.append("  \"gold_count\": ").append(goldCount).append(",\n");
+                    legacyBody.append("  \"max_counter\": ").append(maxCounter).append(",\n");
+                    legacyBody.append("  \"top_achievement\": \"").append(escapeJson(topName)).append("\",\n");
+                    legacyBody.append("  \"updated_at\": \"").append(iso.format(new Date())).append("\"\n");
+                    legacyBody.append("}]");
+                    code = postJson(SUPABASE_URL, legacyBody.toString());
+                }
+
+                if (code >= 200 && code < 300) {
+                    log("Supabase auto-sync SUCCESS: HTTP " + code + " (Achievements published to Cloud Ranking!)");
+                } else {
+                    log("Supabase auto-sync returned HTTP status: " + code);
+                }
+            } catch (Throwable t) {
+                log("Supabase auto-sync error: " + t.getMessage());
+            }
+        }
+    }
+
     private static final Map<String, Entry> achievements = new ConcurrentHashMap<>();
     private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private static ScheduledFuture<?> saveTask = null;
     private static String cachedPlayerName = null;
     private static String cachedClaimToken = null;
+
+    public static synchronized void log(String msg) {
+        System.out.println("[WurmTracker] " + msg);
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String line = "[" + sdf.format(new Date()) + "] " + msg + "\r\n";
+            appendFile(new File("gamedata/wurm_tracker.log"), line);
+            appendFile(new File("wurm_tracker.log"), line);
+        } catch (Throwable ignored) {}
+    }
+
+    private static void appendFile(File f, String text) {
+        try {
+            if (f.getParentFile() != null) f.getParentFile().mkdirs();
+            try (FileOutputStream fos = new FileOutputStream(f, true);
+                 OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8)) {
+                osw.write(text);
+            }
+        } catch (Throwable ignored) {}
+    }
 
     public static void record(String name, String description, byte rarity, long timestamp, int counter) {
         if (name == null || name.isEmpty()) return;
@@ -66,12 +198,7 @@ public class AchievementHook {
         if (saveTask != null && !saveTask.isDone()) {
             saveTask.cancel(false);
         }
-        saveTask = scheduler.schedule(new Runnable() {
-            @Override
-            public void run() {
-                saveAll();
-            }
-        }, 1, TimeUnit.SECONDS);
+        saveTask = scheduler.schedule(new SaveRunner(), 1, TimeUnit.SECONDS);
     }
 
     public static String detectPlayerName() {
@@ -90,7 +217,7 @@ public class AchievementHook {
                             String nick = line.substring("player_name=".length()).trim();
                             if (!nick.isEmpty()) {
                                 cachedPlayerName = nick;
-                                System.out.println("[WurmTracker] Player name loaded from config: " + nick);
+                                log("Player name loaded from config: " + nick);
                                 return nick;
                             }
                         }
@@ -106,43 +233,25 @@ public class AchievementHook {
                 gamedata = new File(System.getProperty("user.dir"), "gamedata");
             }
             if (gamedata.exists() && gamedata.isDirectory()) {
-                File[] consoleLogs = gamedata.listFiles(new FilenameFilter() {
-                    @Override
-                    public boolean accept(File dir, String name) {
-                        return name.startsWith("console.") && name.endsWith(".log") && !name.contains("apenasrecrutoum");
-                    }
-                });
+                File[] consoleLogs = gamedata.listFiles(new LogFilter());
                 if (consoleLogs != null && consoleLogs.length > 0) {
-                    Arrays.sort(consoleLogs, new Comparator<File>() {
-                        @Override
-                        public int compare(File f1, File f2) {
-                            return Long.compare(f2.lastModified(), f1.lastModified());
-                        }
-                    });
+                    Arrays.sort(consoleLogs, new FileModifiedComparator());
                     String fname = consoleLogs[0].getName();
                     String nick = fname.substring("console.".length(), fname.length() - ".log".length());
                     if (!nick.isEmpty()) {
                         cachedPlayerName = nick;
+                        log("Player name detected from console log: " + nick);
                         return nick;
                     }
                 }
 
                 File playersDir = new File(gamedata, "players");
                 if (playersDir.exists() && playersDir.isDirectory()) {
-                    File[] pDirs = playersDir.listFiles(new FileFilter() {
-                        @Override
-                        public boolean accept(File f) {
-                            return f.isDirectory() && !f.getName().equalsIgnoreCase("configs");
-                        }
-                    });
+                    File[] pDirs = playersDir.listFiles(new PlayerFilter());
                     if (pDirs != null && pDirs.length > 0) {
-                        Arrays.sort(pDirs, new Comparator<File>() {
-                            @Override
-                            public int compare(File f1, File f2) {
-                                return Long.compare(f2.lastModified(), f1.lastModified());
-                            }
-                        });
+                        Arrays.sort(pDirs, new FileModifiedComparator());
                         cachedPlayerName = pDirs[0].getName();
+                        log("Player name detected from players folder: " + cachedPlayerName);
                         return cachedPlayerName;
                     }
                 }
@@ -198,124 +307,77 @@ public class AchievementHook {
     }
 
     public static synchronized void saveAll() {
-        String player = detectPlayerName();
-        System.out.println("[WurmTracker] Saving " + achievements.size() + " achievements for player: " + player);
+        try {
+            String player = detectPlayerName();
+            log("Saving " + achievements.size() + " achievements for player: " + player);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        sdf.setTimeZone(TimeZone.getDefault());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            sdf.setTimeZone(TimeZone.getDefault());
 
-        StringBuilder sb = new StringBuilder();
-        sb.append("{\n");
-        sb.append("  \"player\": \"").append(escapeJson(player)).append("\",\n");
-        sb.append("  \"last_updated\": \"").append(sdf.format(new Date())).append("\",\n");
-        sb.append("  \"total\": ").append(achievements.size()).append(",\n");
-        sb.append("  \"achievements\": [\n");
+            StringBuilder sb = new StringBuilder();
+            sb.append("{\n");
+            sb.append("  \"player\": \"").append(escapeJson(player)).append("\",\n");
+            sb.append("  \"last_updated\": \"").append(sdf.format(new Date())).append("\",\n");
+            sb.append("  \"total\": ").append(achievements.size()).append(",\n");
+            sb.append("  \"achievements\": [\n");
 
-        List<Entry> list = new ArrayList<>(achievements.values());
-        Collections.sort(list, new Comparator<Entry>() {
-            @Override
-            public int compare(Entry a, Entry b) {
-                return Integer.compare(b.counter, a.counter);
+            List<Entry> list = new ArrayList<>(achievements.values());
+            Collections.sort(list, new EntryComparator());
+
+            int goldCount = 0;
+            int diamondCount = 0;
+            int totalScore = 0;
+
+            for (int i = 0; i < list.size(); i++) {
+                Entry e = list.get(i);
+                String rName = getRarityName(e.rarity);
+                if ("Gold".equals(rName)) goldCount++;
+                if ("Diamond".equals(rName)) diamondCount++;
+                totalScore += getRarityPoints(e.rarity);
+
+                sb.append("    {\n");
+                sb.append("      \"name\": \"").append(escapeJson(e.name)).append("\",\n");
+                sb.append("      \"description\": \"").append(escapeJson(e.description)).append("\",\n");
+                sb.append("      \"rarity_id\": ").append(e.rarity).append(",\n");
+                sb.append("      \"rarity\": \"").append(rName).append("\",\n");
+                sb.append("      \"counter\": ").append(e.counter).append(",\n");
+                sb.append("      \"timestamp\": ").append(e.timestamp).append(",\n");
+                sb.append("      \"date\": \"").append(e.timestamp > 0 ? sdf.format(new Date(e.timestamp)) : "").append("\"\n");
+                sb.append("    }").append(i < list.size() - 1 ? ",\n" : "\n");
             }
-        });
+            sb.append("  ]\n");
+            String arrayJson = sb.toString().substring(sb.indexOf("[\n"));
+            sb.append("}\n");
 
-        int goldCount = 0;
-        int diamondCount = 0;
-        int totalScore = 0;
+            String json = sb.toString();
 
-        for (int i = 0; i < list.size(); i++) {
-            Entry e = list.get(i);
-            String rName = getRarityName(e.rarity);
-            if ("Gold".equals(rName)) goldCount++;
-            if ("Diamond".equals(rName)) diamondCount++;
-            totalScore += getRarityPoints(e.rarity);
+            File destPlayer = new File("gamedata/players/" + player + "/achievements_" + player + ".json");
+            writeFile(destPlayer, json);
 
-            sb.append("    {\n");
-            sb.append("      \"name\": \"").append(escapeJson(e.name)).append("\",\n");
-            sb.append("      \"description\": \"").append(escapeJson(e.description)).append("\",\n");
-            sb.append("      \"rarity_id\": ").append(e.rarity).append(",\n");
-            sb.append("      \"rarity\": \"").append(rName).append("\",\n");
-            sb.append("      \"counter\": ").append(e.counter).append(",\n");
-            sb.append("      \"timestamp\": ").append(e.timestamp).append(",\n");
-            sb.append("      \"date\": \"").append(e.timestamp > 0 ? sdf.format(new Date(e.timestamp)) : "").append("\"\n");
-            sb.append("    }").append(i < list.size() - 1 ? ",\n" : "\n");
+            File destLatest = new File("achievements_latest.json");
+            writeFile(destLatest, json);
+
+            File destGamedataLatest = new File("gamedata/achievements_latest.json");
+            writeFile(destGamedataLatest, json);
+
+            log("Achievements saved locally (" + list.size() + " entries, score: " + totalScore + "). Triggering Supabase Cloud sync...");
+
+            final int totalCount = list.size();
+            final int finalGoldCount = goldCount;
+            final int finalDiamondCount = diamondCount;
+            final int finalScore = totalScore;
+            final String topName = list.isEmpty() ? "" : list.get(0).name;
+            final int maxCounter = list.isEmpty() ? 0 : list.get(0).counter;
+            final String claimToken = detectClaimToken();
+
+            Thread t = new Thread(new SupabaseSender(player, arrayJson, totalCount, finalGoldCount, finalDiamondCount, finalScore, topName, maxCounter, claimToken));
+            t.setDaemon(true);
+            t.start();
+        } catch (Throwable t) {
+            StringWriter sw = new StringWriter();
+            t.printStackTrace(new PrintWriter(sw));
+            log("FATAL ERROR in saveAll: " + sw.toString());
         }
-        sb.append("  ]\n");
-        String arrayJson = sb.toString().substring(sb.indexOf("[\n"));
-        sb.append("}\n");
-
-        String json = sb.toString();
-
-        File destPlayer = new File("gamedata/players/" + player + "/achievements_" + player + ".json");
-        writeFile(destPlayer, json);
-
-        File destLatest = new File("achievements_latest.json");
-        writeFile(destLatest, json);
-
-        File destAbsolute = new File("D:\\SteamLibrary\\steamapps\\common\\Wurm Online\\gamedata\\players\\" + player + "\\achievements_" + player + ".json");
-        if (!destAbsolute.equals(destPlayer.getAbsoluteFile())) {
-            writeFile(destAbsolute, json);
-        }
-
-        System.out.println("[WurmTracker] Achievements saved locally. Triggering Supabase cloud sync (Score: " + totalScore + ")...");
-
-        final int totalCount = list.size();
-        final int finalGoldCount = goldCount;
-        final int finalDiamondCount = diamondCount;
-        final int finalScore = totalScore;
-        final String topName = list.isEmpty() ? "" : list.get(0).name;
-        final int maxCounter = list.isEmpty() ? 0 : list.get(0).counter;
-
-        sendToSupabase(player, arrayJson, totalCount, finalGoldCount, finalDiamondCount, finalScore, topName, maxCounter);
-    }
-
-    private static void sendToSupabase(final String player, final String arrayJson, final int total, final int goldCount, final int diamondCount, final int score, final String topName, final int maxCounter) {
-        final String claimToken = detectClaimToken();
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    SimpleDateFormat iso = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-                    iso.setTimeZone(TimeZone.getTimeZone("UTC"));
-
-                    StringBuilder body = new StringBuilder();
-                    body.append("[{\n");
-                    body.append("  \"player_name\": \"").append(escapeJson(player)).append("\",\n");
-                    if (claimToken != null && !claimToken.isEmpty()) {
-                        body.append("  \"claim_token\": \"").append(escapeJson(claimToken)).append("\",\n");
-                    }
-                    body.append("  \"achievements\": ").append(arrayJson).append(",\n");
-                    body.append("  \"total_count\": ").append(total).append(",\n");
-                    body.append("  \"gold_count\": ").append(goldCount).append(",\n");
-                    body.append("  \"score\": ").append(score).append(",\n");
-                    body.append("  \"max_counter\": ").append(maxCounter).append(",\n");
-                    body.append("  \"top_achievement\": \"").append(escapeJson(topName)).append("\",\n");
-                    body.append("  \"updated_at\": \"").append(iso.format(new Date())).append("\"\n");
-                    body.append("}]");
-
-                    int code = postJson(SUPABASE_URL, body.toString());
-                    if (code == 400 && (claimToken != null || score > 0)) {
-                        // Fallback de retrocompatibilidade caso as novas colunas ainda nao existam no banco
-                        StringBuilder legacyBody = new StringBuilder();
-                        legacyBody.append("[{\n");
-                        legacyBody.append("  \"player_name\": \"").append(escapeJson(player)).append("\",\n");
-                        legacyBody.append("  \"achievements\": ").append(arrayJson).append(",\n");
-                        legacyBody.append("  \"total_count\": ").append(total).append(",\n");
-                        legacyBody.append("  \"gold_count\": ").append(goldCount).append(",\n");
-                        legacyBody.append("  \"max_counter\": ").append(maxCounter).append(",\n");
-                        legacyBody.append("  \"top_achievement\": \"").append(escapeJson(topName)).append("\",\n");
-                        legacyBody.append("  \"updated_at\": \"").append(iso.format(new Date())).append("\"\n");
-                        legacyBody.append("}]");
-                        code = postJson(SUPABASE_URL, legacyBody.toString());
-                    }
-                    System.out.println("[WurmTracker] Supabase auto-sync response: " + code);
-                } catch (Throwable t) {
-                    System.err.println("[WurmTracker] Supabase auto-sync error: " + t.getMessage());
-                }
-            }
-        });
-        t.setDaemon(true);
-        t.start();
     }
 
     private static int postJson(String urlStr, String jsonBody) throws IOException {
@@ -327,8 +389,8 @@ public class AchievementHook {
         conn.setRequestProperty("Content-Type", "application/json");
         conn.setRequestProperty("Prefer", "resolution=merge-duplicates");
         conn.setDoOutput(true);
-        conn.setConnectTimeout(8000);
-        conn.setReadTimeout(8000);
+        conn.setConnectTimeout(10000);
+        conn.setReadTimeout(10000);
 
         byte[] bytes = jsonBody.getBytes(StandardCharsets.UTF_8);
         try (OutputStream os = conn.getOutputStream()) {
@@ -337,7 +399,6 @@ public class AchievementHook {
         return conn.getResponseCode();
     }
 
-
     private static void writeFile(File f, String content) {
         try {
             if (f.getParentFile() != null) f.getParentFile().mkdirs();
@@ -345,7 +406,7 @@ public class AchievementHook {
                 w.write(content);
             }
         } catch (Throwable t) {
-            System.err.println("[WurmTracker] Failed to write to " + f + ": " + t.getMessage());
+            log("Failed to write to " + f + ": " + t.getMessage());
         }
     }
 

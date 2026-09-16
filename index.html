@@ -1805,7 +1805,7 @@
         🏆 Ranking Geral
       </button>
       <button class="view-switch-btn" id="btnNavMyProfile" onclick="goToMyProfile()">
-        <span data-i18n="nav_my_profile">👤 Meu Perfil</span> (<strong id="navMyProfileNick">jotasiete</strong>)
+        <span data-i18n="nav_my_profile">👤 Meu Perfil</span> <span id="navMyProfileNickWrapper" style="display:none;">(<strong id="navMyProfileNick"></strong>)</span>
       </button>
       <button class="view-switch-btn" id="btnNavInspect" style="display:none;" onclick="switchMainView('player', selectedPlayerName)">
         <span data-i18n="nav_inspect">👁️ Inspecionando</span>: <strong id="navInspectNick">—</strong>
@@ -1823,14 +1823,16 @@
       <div class="my-chars-wrapper">
         <button class="my-chars-btn" id="btnMyCharsDropdown" onclick="toggleMyCharsMenu(event)" title="Gerenciar meus personagens neste computador">
           <span class="sync-dot"></span>
-          <span>Char: <strong id="headerMyCharDisplay" style="color:var(--wurm-accent);">jotasiete</strong></span>
+          <span>Char: <strong id="headerMyCharDisplay" style="color:var(--wurm-muted);">Conectar</strong></span>
           <span style="font-size:0.65rem; opacity:0.7;">▼</span>
         </button>
         <div class="my-chars-menu" id="myCharsMenu">
           <div class="my-chars-header" data-i18n="my_chars_title">Meus Personagens</div>
           <div id="myCharsListContainer"></div>
+          <button class="my-chars-action-btn" onclick="promptSetMyMainChar()">🔗 Vincular Meu Char</button>
           <button class="my-chars-action-btn" onclick="promptAddMyChar()" data-i18n="add_alt_btn">+ Cadastrar Outro Char Meu (Alt)</button>
           <button class="my-chars-action-btn" style="border-top:1px solid var(--wurm-border); color:var(--wurm-muted);" onclick="promptChangeMainChar()" data-i18n="change_main_btn">✏️ Alterar Char Principal</button>
+          <button class="my-chars-action-btn" style="border-top:1px solid var(--wurm-border); color:#f87171;" onclick="unlinkMyChar()">✕ Desvincular deste Navegador</button>
         </div>
       </div>
 
@@ -2094,12 +2096,15 @@
             </div>
           </div>
         </div>
-        <div style="display:flex; align-items:center; gap:10px;">
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
           <button class="back-to-rank-btn" style="margin-bottom:0;" onclick="switchMainView('ranking')">
             ← Voltar ao Ranking
           </button>
-          <button class="back-to-rank-btn" style="margin-bottom:0; background:var(--wurm-accent-bg); color:var(--wurm-accent); border-color:rgba(212,180,131,0.4);" onclick="goToMyProfile()">
-            👤 Ver Meu Perfil (<span class="my-main-nick-inline">jotasiete</span>)
+          <button class="back-to-rank-btn" id="btnClaimThisProfile" style="display:none; margin-bottom:0; background:rgba(126,231,135,0.15); color:#7ee787; border-color:rgba(126,231,135,0.4);" onclick="claimCurrentProfile()">
+            ⭐ Este é meu personagem! Vincular
+          </button>
+          <button class="back-to-rank-btn" id="btnInspectGoMyProfile" style="display:none; margin-bottom:0; background:var(--wurm-accent-bg); color:var(--wurm-accent); border-color:rgba(212,180,131,0.4);" onclick="goToMyProfile()">
+            👤 Ver Meu Perfil (<span class="my-main-nick-inline"></span>)
           </button>
         </div>
       </div>
@@ -2468,9 +2473,22 @@
     let rankingSearchQuery = "";
     let selectedPlayerName = null;
 
-    // Verificar parâmetros da URL (?player= ou ?p=)
+    // Verificar parâmetros da URL (?player=, ?p=, ?mychar=, ?claim=)
     const _urlParams = new URLSearchParams(window.location.search);
-    const _paramPlayer = _urlParams.get('player') || _urlParams.get('p');
+    const _paramMyChar = _urlParams.get('mychar') || _urlParams.get('claim');
+    if (_paramMyChar && _paramMyChar.trim()) {
+      const cleanNick = _paramMyChar.trim();
+      localStorage.setItem('wurm_my_main_char', cleanNick);
+      try {
+        let list = JSON.parse(localStorage.getItem('wurm_my_alt_chars') || '[]');
+        if (!list.map(x => x.toLowerCase()).includes(cleanNick.toLowerCase())) {
+          list.push(cleanNick);
+          localStorage.setItem('wurm_my_alt_chars', JSON.stringify(list));
+        }
+      } catch(e) {}
+    }
+
+    const _paramPlayer = _urlParams.get('player') || _urlParams.get('p') || _paramMyChar;
     if (_paramPlayer && _paramPlayer.trim()) {
       selectedPlayerName = _paramPlayer.trim();
       currentMainView = "player";
@@ -2883,8 +2901,7 @@
     function getMyMainChar() {
       let main = localStorage.getItem(STORAGE_KEY_MAIN_CHAR);
       if (!main || !main.trim()) {
-        main = 'jotasiete';
-        localStorage.setItem(STORAGE_KEY_MAIN_CHAR, main);
+        return null;
       }
       return main.trim();
     }
@@ -2895,9 +2912,7 @@
         if (Array.isArray(list) && list.length > 0) return list;
       } catch(e) {}
       const main = getMyMainChar();
-      const defaultList = [main];
-      localStorage.setItem(STORAGE_KEY_MY_CHARS, JSON.stringify(defaultList));
-      return defaultList;
+      return main ? [main] : [];
     }
 
     function setMyMainChar(nick) {
@@ -2926,22 +2941,44 @@
     function updateMyCharUI() {
       const myMain = getMyMainChar();
       const navMy = document.getElementById('navMyProfileNick');
-      if (navMy) navMy.textContent = myMain;
+      const navMyWrapper = document.getElementById('navMyProfileNickWrapper');
       const headerMy = document.getElementById('headerMyCharDisplay');
-      if (headerMy) headerMy.textContent = myMain;
       const inlines = document.querySelectorAll('.my-main-nick-inline');
-      inlines.forEach(el => el.textContent = myMain);
+
+      if (myMain) {
+        if (navMy) navMy.textContent = myMain;
+        if (navMyWrapper) navMyWrapper.style.display = 'inline';
+        if (headerMy) {
+          headerMy.textContent = myMain;
+          headerMy.style.color = 'var(--wurm-accent)';
+        }
+        inlines.forEach(el => el.textContent = myMain);
+      } else {
+        if (navMy) navMy.textContent = '';
+        if (navMyWrapper) navMyWrapper.style.display = 'none';
+        if (headerMy) {
+          headerMy.textContent = currentLang === 'en' ? 'Connect' : 'Conectar';
+          headerMy.style.color = 'var(--wurm-muted)';
+        }
+        inlines.forEach(el => el.textContent = currentLang === 'en' ? 'None' : 'Não vinculado');
+      }
 
       const container = document.getElementById('myCharsListContainer');
       if (container) {
         const list = getMyCharsList();
-        container.innerHTML = list.map(nick => {
-          const isMain = nick.toLowerCase() === myMain.toLowerCase();
-          return `<div class="my-char-item ${isMain ? 'active' : ''}" onclick="selectMyChar('${nick}')">
-            <span>${isMain ? '⭐ ' : '⚔️ '}<strong>${nick}</strong></span>
-            <span style="font-size:0.7rem; color:var(--wurm-muted);">${isMain ? (currentLang === 'en' ? 'Main' : 'Principal') : 'Alt'}</span>
+        if (list.length === 0) {
+          container.innerHTML = `<div style="padding:12px 14px; font-size:0.75rem; color:var(--wurm-muted); text-align:center; line-height:1.4;">
+            ${currentLang === 'en' ? 'No character linked on this browser.' : 'Nenhum personagem vinculado neste navegador.'}
           </div>`;
-        }).join('');
+        } else {
+          container.innerHTML = list.map(nick => {
+            const isMain = myMain && (nick.toLowerCase() === myMain.toLowerCase());
+            return `<div class="my-char-item ${isMain ? 'active' : ''}" onclick="selectMyChar('${nick}')">
+              <span>${isMain ? '⭐ ' : '⚔️ '}<strong>${nick}</strong></span>
+              <span style="font-size:0.7rem; color:var(--wurm-muted);">${isMain ? (currentLang === 'en' ? 'Main' : 'Principal') : 'Alt'}</span>
+            </div>`;
+          }).join('');
+        }
       }
     }
 
@@ -2971,11 +3008,27 @@
 
     function goToMyProfile() {
       const myMain = getMyMainChar();
+      if (!myMain) {
+        promptSetMyMainChar();
+        return;
+      }
       switchMainView('player', myMain);
     }
 
+    function promptSetMyMainChar() {
+      const msg = currentLang === 'en'
+        ? 'Enter your exact character name in Wurm Online to link to this browser:'
+        : 'Digite o nome exato do seu personagem no Wurm Online para vincular a este navegador:';
+      const nick = prompt(msg);
+      if (nick && nick.trim()) {
+        setMyMainChar(nick.trim());
+        toggleMyCharsMenu(null, false);
+        switchMainView('player', nick.trim());
+      }
+    }
+
     function promptAddMyChar() {
-      const nick = prompt("Digite o nome de outro personagem seu (Alt) no Wurm Online:");
+      const nick = prompt(currentLang === 'en' ? "Enter the name of another character of yours (Alt):" : "Digite o nome de outro personagem seu (Alt) no Wurm Online:");
       if (nick && nick.trim()) {
         addMyAltChar(nick.trim());
         selectMyChar(nick.trim());
@@ -2983,14 +3036,33 @@
     }
 
     function promptChangeMainChar() {
-      const current = getMyMainChar();
-      const nick = prompt("Qual é o seu personagem principal no Wurm Online?", current);
+      const current = getMyMainChar() || '';
+      const nick = prompt(currentLang === 'en' ? "What is your main character name in Wurm Online?" : "Qual é o seu personagem principal no Wurm Online?", current);
       if (nick && nick.trim()) {
         setMyMainChar(nick.trim());
         if (currentMainView === 'player' && selectedPlayerName && selectedPlayerName.toLowerCase() === current.toLowerCase()) {
           switchMainView('player', nick.trim());
         }
       }
+    }
+
+    function unlinkMyChar() {
+      const msg = currentLang === 'en'
+        ? 'Unlink your character from this browser?'
+        : 'Deseja desvincular seu personagem deste navegador?';
+      if (confirm(msg)) {
+        localStorage.removeItem(STORAGE_KEY_MAIN_CHAR);
+        localStorage.removeItem(STORAGE_KEY_MY_CHARS);
+        toggleMyCharsMenu(null, false);
+        updateMyCharUI();
+        switchMainView('ranking');
+      }
+    }
+
+    function claimCurrentProfile() {
+      if (!selectedPlayerName) return;
+      setMyMainChar(selectedPlayerName);
+      switchMainView('player', selectedPlayerName);
     }
 
     // ─── VIEW SWITCHER ────────────────────────────────────────
@@ -3019,12 +3091,18 @@
         window.history.replaceState({}, '', window.location.pathname);
         renderCommunityRanking();
       } else {
-        if (!selectedPlayerName) selectedPlayerName = myMain;
-        const isMyChar = selectedPlayerName.toLowerCase() === myMain.toLowerCase();
+        if (!selectedPlayerName) {
+          if (myMain) selectedPlayerName = myMain;
+          else { switchMainView('ranking'); return; }
+        }
+        const isMyChar = myMain && (selectedPlayerName.toLowerCase() === myMain.toLowerCase());
 
         if (rankSec) rankSec.style.display = 'none';
         if (playSec) playSec.style.display = 'block';
         if (btnRank) btnRank.classList.remove('active');
+
+        const btnClaimProfile = document.getElementById('btnClaimThisProfile');
+        const btnInspectGoProfile = document.getElementById('btnInspectGoMyProfile');
 
         if (isMyChar) {
           if (btnMyProfile) btnMyProfile.classList.add('active');
@@ -3033,6 +3111,8 @@
           if (backRankBtn) backRankBtn.style.display = 'inline-flex';
           const heroSub = document.getElementById('playerHeroSub');
           if (heroSub) heroSub.innerHTML = t('hero_profile_sub');
+          if (btnClaimProfile) btnClaimProfile.style.display = 'none';
+          if (btnInspectGoProfile) btnInspectGoProfile.style.display = 'none';
         } else {
           if (btnMyProfile) btnMyProfile.classList.remove('active');
           if (btnInspect) {
@@ -3047,6 +3127,14 @@
           if (backRankBtn) backRankBtn.style.display = 'none';
           const heroSub = document.getElementById('playerHeroSub');
           if (heroSub) heroSub.innerHTML = `${t('hero_inspect_sub')} <strong>${selectedPlayerName}</strong>`;
+
+          if (!myMain) {
+            if (btnClaimProfile) btnClaimProfile.style.display = 'inline-flex';
+            if (btnInspectGoProfile) btnInspectGoProfile.style.display = 'none';
+          } else {
+            if (btnClaimProfile) btnClaimProfile.style.display = 'none';
+            if (btnInspectGoProfile) btnInspectGoProfile.style.display = 'inline-flex';
+          }
         }
 
         const heroName = document.getElementById('playerHeroName');
@@ -3103,7 +3191,7 @@
         const initial = p.player_name ? p.player_name.charAt(0).toUpperCase() : '?';
         const progressPct = Math.min(100, Math.round((p.total_count / 200) * 100));
 
-        const isYou = p.player_name.toLowerCase() === myMain.toLowerCase();
+        const isYou = myMain && (p.player_name.toLowerCase() === myMain.toLowerCase());
         const youBadge = isYou ? `<span class="badge-you">${t('you_badge')}</span>` : '';
         const roleLabel = isYou ? t('your_character') : t('community_member');
 

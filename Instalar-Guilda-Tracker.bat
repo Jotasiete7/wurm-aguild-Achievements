@@ -143,17 +143,17 @@ if not exist "%JAVA_EXE%" set "JAVA_EXE=java"
 "%JAVA_EXE%" -cp "%~dp0wurm_tracker_patch.jar" wurm.tracker.ClientPatcher "%WURM_DIR%"
 if errorlevel 1 (
     echo.
-    echo [AVISO] Houve um problema ao aplicar o patch direto no client_live.jar.
-    echo Ativando modo de compatibilidade...
+    echo [AVISO] Houve um problema ao aplicar o patch no client_live.jar.
+    echo Copiando biblioteca de suporte...
     copy /Y "%~dp0wurm_achievements.jar" "%WURM_DIR%\wurm_achievements.jar" >nul
 ) else (
-    echo [OK] client_live.jar atualizado com sucesso!
+    echo [OK] client_live.jar atualizado com sucesso com o leitor da Guilda!
 )
 
-:: 7. Registrar no Supabase via PowerShell com token de seguranca
+:: 7. Registrar no Supabase via PowerShell sem sobrescrever conquistas existentes
 echo.
-echo Registrando seu personagem no Ranking da Guilda...
-powershell -NoProfile -ExecutionPolicy Bypass -Command "$name = '%PLAYER_NAME%'; $token = '%CLAIM_TOKEN%'; $url = 'https://gzhvqprdrtudyokhgxlj.supabase.co/rest/v1/player_achievements'; $key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd6aHZxcHJkcnR1ZHlva2hneGxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc3NTQ2MTUsImV4cCI6MjA4MzMzMDYxNX0.aSJIhfViQsb0dBjb5bOup49GCrQBt93uSkZySZAXcNo'; $h = @{ 'apikey' = $key; 'Authorization' = 'Bearer ' + $key; 'Content-Type' = 'application/json'; 'Prefer' = 'resolution=merge-duplicates' }; $bodyWithToken = @(@{ player_name = $name; claim_token = $token; total_count = 0; gold_count = 0; max_counter = 0; top_achievement = ''; achievements = @(); updated_at = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ') }) | ConvertTo-Json; $bodyLegacy = @(@{ player_name = $name; total_count = 0; gold_count = 0; max_counter = 0; top_achievement = ''; achievements = @(); updated_at = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ') }) | ConvertTo-Json; try { try { Invoke-RestMethod -Uri $url -Method Post -Headers $h -Body $bodyWithToken -TimeoutSec 5 | Out-Null; } catch { Invoke-RestMethod -Uri $url -Method Post -Headers $h -Body $bodyLegacy -TimeoutSec 5 | Out-Null; } Write-Host '[OK] Personagem registrado com sucesso no ranking da guilda!' -ForegroundColor Green } catch { Write-Host '[!] Conexao com a nuvem sera confirmada ao abrir o jogo.' -ForegroundColor Yellow }"
+echo Sincronizando registro no Ranking da Guilda...
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$name = '%PLAYER_NAME%'; $token = '%CLAIM_TOKEN%'; $url = 'https://gzhvqprdrtudyokhgxlj.supabase.co/rest/v1/player_achievements'; $key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd6aHZxcHJkcnR1ZHlva2hneGxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc3NTQ2MTUsImV4cCI6MjA4MzMzMDYxNX0.aSJIhfViQsb0dBjb5bOup49GCrQBt93uSkZySZAXcNo'; $h = @{ 'apikey' = $key; 'Authorization' = 'Bearer ' + $key; 'Content-Type' = 'application/json'; 'Prefer' = 'resolution=merge-duplicates' }; try { $existing = Invoke-RestMethod -Uri ($url + '?player_name=eq.' + [uri]::EscapeDataString($name)) -Headers $h; if (!$existing -or $existing.Count -eq 0) { $body = @(@{ player_name = $name; claim_token = $token; total_count = 0; gold_count = 0; score = 0; max_counter = 0; top_achievement = ''; achievements = @(); updated_at = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ') }) | ConvertTo-Json; Invoke-RestMethod -Uri $url -Method Post -Headers $h -Body $body -TimeoutSec 5 | Out-Null; Write-Host '[OK] Personagem registrado pela primeira vez no ranking da guilda!' -ForegroundColor Green } else { Write-Host '[OK] Personagem ja existente no ranking. Conquistas preservadas!' -ForegroundColor Green } } catch { Write-Host '[!] Conexao com a nuvem sera confirmada ao abrir o jogo.' -ForegroundColor Yellow }"
 
 :: Limpar atalhos antigos caso existam
 if exist "%USERPROFILE%\Desktop\Wurm Online (Guilda Tracker).lnk" (
@@ -165,12 +165,12 @@ echo ================================================================
 echo               INSTALACAO CONCLUIDA COM SUCESSO!
 echo ================================================================
 echo.
-echo [1] O personagem [%PLAYER_NAME%] esta configurado e pronto!
+echo [1] O personagem [%PLAYER_NAME%] esta pronto e ativo!
 echo [2] Abra o Wurm Online NORMALMENTE (pela Steam ou como de costume).
 echo [3] Dentro do jogo, abra a janela de Conquistas (tecla P ou menu).
-echo     Todas as suas conquistas serao sincronizadas com o site!
+echo     Suas conquistas serao lidas e enviadas para o ranking!
 echo.
-echo Ranking Global: https://wurm-aguild-achievements.pages.dev
+echo Abrindo o site com seu personagem conectado...
+start "" "https://wurm-aguild-achievements.pages.dev/?mychar=%PLAYER_NAME%"
 echo.
 pause
-

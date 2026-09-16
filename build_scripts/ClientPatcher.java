@@ -13,14 +13,26 @@ public class ClientPatcher {
         try {
             File wurmDir = (args.length > 0) ? new File(args[0]) : new File(".");
             File clientJar = new File(wurmDir, "client_live.jar");
-            File backupJar = new File(wurmDir, "client_live.jar.original");
+            File backupJar = new File(wurmDir, "client_live_backup.jar");
+            File oldBackupJar = new File(wurmDir, "client_live.jar.original");
+
+            // Garantir que temos um backup com extensao .jar para o Javassist reconhecer
             if (!backupJar.exists()) {
-                Files.copy(clientJar.toPath(), backupJar.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                System.out.println("Backup created: " + backupJar);
+                if (oldBackupJar.exists()) {
+                    Files.copy(oldBackupJar.toPath(), backupJar.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    System.out.println("Migrated backup to: " + backupJar);
+                } else if (clientJar.exists()) {
+                    Files.copy(clientJar.toPath(), backupJar.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    System.out.println("Backup created: " + backupJar);
+                } else {
+                    System.err.println("client_live.jar not found in: " + wurmDir.getAbsolutePath());
+                    System.exit(1);
+                }
             }
 
             ClassPool cp = new ClassPool();
             cp.appendSystemPath();
+            // O caminho DEVE terminar com .jar para o Javassist tratar como JAR e nao como diretorio
             cp.appendClassPath(backupJar.getAbsolutePath());
 
             CtClass cc = cp.get("com.wurmonline.client.renderer.gui.i4ndLy7Opx");
@@ -51,20 +63,52 @@ public class ClientPatcher {
             Map<String, byte[]> newEntries = new HashMap<>();
             newEntries.put("com/wurmonline/client/renderer/gui/i4ndLy7Opx.class", patchedClass);
 
+            // 1. Inspecionar dinamicamente o JAR que esta executando o ClientPatcher
+            try {
+                java.security.CodeSource cs = ClientPatcher.class.getProtectionDomain().getCodeSource();
+                if (cs != null && cs.getLocation() != null) {
+                    File selfJar = new File(cs.getLocation().toURI());
+                    if (selfJar.isFile() && selfJar.getName().endsWith(".jar")) {
+                        try (ZipFile selfZip = new ZipFile(selfJar)) {
+                            Enumeration<? extends ZipEntry> se = selfZip.entries();
+                            while (se.hasMoreElements()) {
+                                ZipEntry entry = se.nextElement();
+                                String name = entry.getName();
+                                if (name.startsWith("wurm/tracker/") && name.endsWith(".class") && !name.contains("ClientPatcher")) {
+                                    try (InputStream is = selfZip.getInputStream(entry)) {
+                                        byte[] bytes = is.readAllBytes();
+                                        newEntries.put(name, bytes);
+                                        System.out.println("Discovered tracker class: " + name + " (" + bytes.length + " bytes)");
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch (Throwable t) {
+                System.err.println("Dynamic self-discovery note: " + t.getMessage());
+            }
+
+            // 2. Lista exaustiva de seguranca caso nao esteja rodando de um JAR direto
             String[] trackerClasses = {
                 "wurm/tracker/AchievementHook.class",
                 "wurm/tracker/AchievementHook$Entry.class",
-                "wurm/tracker/AchievementHook$1.class",
-                "wurm/tracker/AchievementHook$2.class",
-                "wurm/tracker/AchievementHook$3.class",
-                "wurm/tracker/AchievementHook$4.class",
-                "wurm/tracker/AchievementHook$5.class"
+                "wurm/tracker/AchievementHook$EntryComparator.class",
+                "wurm/tracker/AchievementHook$SaveRunner.class",
+                "wurm/tracker/AchievementHook$LogFilter.class",
+                "wurm/tracker/AchievementHook$FileModifiedComparator.class",
+                "wurm/tracker/AchievementHook$PlayerFilter.class",
+                "wurm/tracker/AchievementHook$SupabaseSender.class"
             };
 
             for (String tc : trackerClasses) {
-                try (InputStream is = ClientPatcher.class.getResourceAsStream("/" + tc)) {
-                    if (is != null) {
-                        newEntries.put(tc, is.readAllBytes());
+                if (!newEntries.containsKey(tc)) {
+                    try (InputStream is = ClientPatcher.class.getResourceAsStream("/" + tc)) {
+                        if (is != null) {
+                            byte[] bytes = is.readAllBytes();
+                            newEntries.put(tc, bytes);
+                            System.out.println("Loaded fallback resource: " + tc + " (" + bytes.length + " bytes)");
+                        }
                     }
                 }
             }
@@ -103,7 +147,7 @@ public class ClientPatcher {
             }
 
             Files.move(tempJar.toPath(), clientJar.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            System.out.println("client_live.jar successfully patched!");
+            System.out.println("client_live.jar successfully patched! (" + newEntries.size() + " classes injected)");
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(1);
