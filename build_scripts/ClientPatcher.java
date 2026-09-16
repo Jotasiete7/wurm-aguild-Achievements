@@ -146,7 +146,29 @@ public class ClientPatcher {
                 }
             }
 
-            Files.move(tempJar.toPath(), clientJar.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            boolean moved = false;
+            Exception lastEx = null;
+            for (int i = 0; i < 5; i++) {
+                try {
+                    Files.move(tempJar.toPath(), clientJar.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    moved = true;
+                    break;
+                } catch (Exception ex) {
+                    lastEx = ex;
+                    try { Thread.sleep(600); } catch (InterruptedException ignored) {}
+                }
+            }
+
+            if (!moved) {
+                System.err.println("=======================================================================");
+                System.err.println("[ERRO CRITICO] O arquivo client_live.jar esta BLOQUEADO pelo Windows!");
+                System.err.println("O Wurm Online ou WurmLauncher64.exe estao rodando no seu computador.");
+                System.err.println("Feche o jogo completamente antes de instalar para que o arquivo possa ser atualizado!");
+                System.err.println("=======================================================================");
+                if (lastEx != null) lastEx.printStackTrace();
+                System.exit(1);
+            }
+
             System.out.println("client_live.jar successfully patched! (" + newEntries.size() + " classes injected)");
         } catch (Exception e) {
             e.printStackTrace();

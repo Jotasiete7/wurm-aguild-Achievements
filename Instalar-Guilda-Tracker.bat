@@ -9,14 +9,29 @@ echo          (Feito pela Guilda para toda a comunidade)
 echo ================================================================
 echo.
 
-:: 1. Verificar se o Wurm Online esta aberto
-tasklist /FI "IMAGENAME eq javaw.exe" 2>nul | find /I "javaw.exe" >nul
-if not errorlevel 1 (
-    echo [AVISO IMPORTANTE] O Wurm Online parece estar aberto agora!
-    echo Por favor, FECHE O JOGO antes de continuar para que a atualizacao seja aplicada.
+:: 1. Verificar se o Wurm Online ou seu Inicializador estao abertos
+:check_wurm_open
+set "WURM_RUNNING=0"
+tasklist /FI "IMAGENAME eq WurmLauncher64.exe" 2>nul | find /I "WurmLauncher64.exe" >nul && set "WURM_RUNNING=1"
+tasklist /FI "IMAGENAME eq WurmLauncher.exe" 2>nul | find /I "WurmLauncher.exe" >nul && set "WURM_RUNNING=1"
+tasklist /FI "IMAGENAME eq javaw.exe" 2>nul | find /I "javaw.exe" >nul && set "WURM_RUNNING=1"
+
+if "%WURM_RUNNING%"=="1" (
     echo.
-    echo Pressione qualquer tecla apos fechar o jogo...
+    echo =======================================================================
+    echo          [ATENCAO OBRIGATORIA] O WURM ONLINE ESTA ABERTO!
+    echo =======================================================================
+    echo.
+    echo O Wurm Online ou a janela de inicializacao da Steam estao rodando.
+    echo O Windows NAO PERMITE atualizar o client_live.jar enquanto o jogo estiver aberto!
+    echo.
+    echo >>> FECHE O JOGO COMPLETAMENTE ANTES DE CONTINUAR. <<<
+    echo.
+    echo Quando tiver fechado o jogo (ou finalizado pelo Gerenciador de Tarefas),
+    echo pressione qualquer tecla aqui para verificar novamente...
+    echo =======================================================================
     pause >nul
+    goto check_wurm_open
 )
 
 echo Procurando onde seu Wurm Online esta instalado...
@@ -143,9 +158,18 @@ if not exist "%JAVA_EXE%" set "JAVA_EXE=java"
 "%JAVA_EXE%" -cp "%~dp0wurm_tracker_patch.jar" wurm.tracker.ClientPatcher "%WURM_DIR%"
 if errorlevel 1 (
     echo.
-    echo [AVISO] Houve um problema ao aplicar o patch no client_live.jar.
-    echo Copiando biblioteca de suporte...
-    copy /Y "%~dp0wurm_achievements.jar" "%WURM_DIR%\wurm_achievements.jar" >nul
+    echo =======================================================================
+    echo [ERRO CRITICO] Falha ao aplicar a integracao no client_live.jar!
+    echo =======================================================================
+    echo Nao foi possivel atualizar o client_live.jar do jogo.
+    echo O arquivo pode estar bloqueado por um processo em segundo plano ou permissao.
+    echo.
+    echo 1. Certifique-se de que o Wurm Online / Steam estejam TOTALMENTE fechados.
+    echo 2. Se o problema persistir, clique com o botao direito neste instalador
+    echo    e escolha "Executar como Administrador".
+    echo =======================================================================
+    pause
+    exit /b 1
 ) else (
     echo [OK] client_live.jar atualizado com sucesso com o leitor da Guilda!
 )
