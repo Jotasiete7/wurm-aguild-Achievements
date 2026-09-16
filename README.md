@@ -10,7 +10,7 @@ Sistema oficial de rastreamento, categorização, Journal de metas e rankings de
 2. **Execute o instalador:** Extraia os arquivos e dê dois cliques em `Instalar-Guilda-Tracker.bat`.
    - O instalador detecta a pasta do seu Wurm na Steam automaticamente (em qualquer disco).
    - Ele cria um atalho seguro na sua Área de Trabalho: `Wurm Online (Guilda Tracker)`.
-3. **Jogue normalmente:** Abra o jogo pelo atalho. Ao abrir a janela de Conquistas (*Hud settings -> Achievement Window*), seus dados são registrados e sincronizados.
+3. **Jogue normalmente:** Abra o jogo pela Steam. Ao abrir a janela de Conquistas (*Tools -> Achievements*), seus dados são registrados e sincronizados na hora.
 
 ---
 

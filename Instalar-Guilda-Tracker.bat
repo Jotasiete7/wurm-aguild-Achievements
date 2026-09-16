@@ -167,7 +167,7 @@ echo ================================================================
 echo.
 echo [1] O personagem [%PLAYER_NAME%] esta pronto e ativo!
 echo [2] Abra o Wurm Online NORMALMENTE (pela Steam ou como de costume).
-echo [3] Dentro do jogo, abra a janela de Conquistas (tecla P ou menu).
+echo [3] Dentro do jogo, abra a janela de Conquistas (menu Tools > Achievements).
 echo     Suas conquistas serao lidas e enviadas para o ranking!
 echo.
 echo Abrindo o site com seu personagem conectado...
