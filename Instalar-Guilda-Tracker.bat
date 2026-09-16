@@ -11,24 +11,19 @@ echo.
 
 :: 1. Verificar se o Wurm Online ou seu Inicializador estao abertos
 :check_wurm_open
-set "WURM_RUNNING=0"
-tasklist /FI "IMAGENAME eq WurmLauncher64.exe" 2>nul | find /I "WurmLauncher64.exe" >nul && set "WURM_RUNNING=1"
-tasklist /FI "IMAGENAME eq WurmLauncher.exe" 2>nul | find /I "WurmLauncher.exe" >nul && set "WURM_RUNNING=1"
-tasklist /FI "IMAGENAME eq javaw.exe" 2>nul | find /I "javaw.exe" >nul && set "WURM_RUNNING=1"
-
-if "%WURM_RUNNING%"=="1" (
+powershell -NoProfile -Command "if (Get-Process -Name 'WurmLauncher64', 'WurmLauncher' -ErrorAction SilentlyContinue) { exit 1 } else { exit 0 }"
+if errorlevel 1 (
     echo.
     echo =======================================================================
     echo          [ATENCAO OBRIGATORIA] O WURM ONLINE ESTA ABERTO!
     echo =======================================================================
     echo.
-    echo O Wurm Online ou a janela de inicializacao da Steam estao rodando.
-    echo O Windows NAO PERMITE atualizar o client_live.jar enquanto o jogo estiver aberto!
+    echo Detectamos que o Wurm Online ainda esta aberto no seu computador.
+    echo O Windows nao permite atualizar o client_live.jar com o jogo aberto!
     echo.
     echo *** FECHE O JOGO COMPLETAMENTE ANTES DE CONTINUAR. ***
     echo.
-    echo Quando tiver fechado o jogo (ou finalizado pelo Gerenciador de Tarefas),
-    echo pressione qualquer tecla aqui para verificar novamente...
+    echo Pressione qualquer tecla apos fechar o jogo para verificar novamente...
     echo =======================================================================
     pause >nul
     goto check_wurm_open
