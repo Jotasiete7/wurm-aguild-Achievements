@@ -1640,32 +1640,17 @@
     }
 
     async function loadAchievements() {
-      // 1. Se estiver visualizando o próprio player local, tentar arquivo local recente
-      if (selectedPlayerName === "jotasiete" || !selectedPlayerName) {
-        try {
-          const res = await fetch('achievements_latest.json?t=' + Date.now());
-          if (res.ok) {
-            const json = await res.json();
-            if (json.achievements && json.achievements.length > 0) {
-              currentData = json.achievements;
-              if (json.last_updated) document.getElementById('syncStatus').textContent = 'Sincronizado: ' + json.last_updated;
-              enrichAndRender();
-              return;
-            }
-          }
-        } catch { /* continuar para o Supabase */ }
-      }
-
-      // 2. Buscar do Supabase (para qualquer jogador da guilda)
+      // 1. Buscar prioritariamente da Nuvem Supabase (dados mais recentes de qualquer membro)
       try {
         const res = await fetch(`${SUPABASE_URL}/rest/v1/player_achievements?player_name=eq.${encodeURIComponent(selectedPlayerName)}&select=*`, {
           headers: { "apikey": SUPABASE_KEY, "Authorization": "Bearer " + SUPABASE_KEY }
         });
         if (res.ok) {
           const rows = await res.json();
-          if (rows && rows.length > 0) {
-            currentData = rows[0].achievements || [];
-            document.getElementById('syncStatus').textContent = 'Nuvem A Guilda (Supabase)';
+          if (rows && rows.length > 0 && rows[0].achievements && rows[0].achievements.length > 0) {
+            currentData = rows[0].achievements;
+            const updated = rows[0].updated_at ? new Date(rows[0].updated_at).toLocaleString('pt-BR') : '';
+            document.getElementById('syncStatus').textContent = 'Nuvem A Guilda (Supabase) • ' + (updated || 'Ao Vivo');
             enrichAndRender();
             return;
           }
@@ -1674,7 +1659,21 @@
         console.warn("[Supabase] Falha ao carregar jogador:", e);
       }
 
-      // 3. Fallback seguro
+      // 2. Fallback para arquivo local se Supabase estiver offline
+      try {
+        const res = await fetch('achievements_latest.json?t=' + Date.now());
+        if (res.ok) {
+          const json = await res.json();
+          if (json.achievements && json.achievements.length > 0) {
+            currentData = json.achievements;
+            if (json.last_updated) document.getElementById('syncStatus').textContent = 'Sincronizado Local: ' + json.last_updated;
+            enrichAndRender();
+            return;
+          }
+        }
+      } catch { /* continuar para fallbackData */ }
+
+      // 3. Fallback seguro estatico
       currentData = fallbackData;
       enrichAndRender();
     }
