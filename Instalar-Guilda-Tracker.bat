@@ -25,7 +25,7 @@ if "%WURM_RUNNING%"=="1" (
     echo O Wurm Online ou a janela de inicializacao da Steam estao rodando.
     echo O Windows NAO PERMITE atualizar o client_live.jar enquanto o jogo estiver aberto!
     echo.
-    echo >>> FECHE O JOGO COMPLETAMENTE ANTES DE CONTINUAR. <<<
+    echo *** FECHE O JOGO COMPLETAMENTE ANTES DE CONTINUAR. ***
     echo.
     echo Quando tiver fechado o jogo (ou finalizado pelo Gerenciador de Tarefas),
     echo pressione qualquer tecla aqui para verificar novamente...
@@ -191,7 +191,7 @@ echo ================================================================
 echo.
 echo [1] O personagem [%PLAYER_NAME%] esta pronto e ativo!
 echo [2] Abra o Wurm Online NORMALMENTE (pela Steam ou como de costume).
-echo [3] Dentro do jogo, abra a janela de Conquistas (menu Tools > Achievements).
+echo [3] Dentro do jogo, abra a janela de Conquistas (menu Tools -^> Achievements).
 echo     Suas conquistas serao lidas e enviadas para o ranking!
 echo.
 echo Abrindo o site com seu personagem conectado...
