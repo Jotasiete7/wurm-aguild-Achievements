@@ -1613,12 +1613,25 @@
     const SUPABASE_URL = "https://gzhvqprdrtudyokhgxlj.supabase.co";
     const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd6aHZxcHJkcnR1ZHlva2hneGxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc3NTQ2MTUsImV4cCI6MjA4MzMzMDYxNX0.aSJIhfViQsb0dBjb5bOup49GCrQBt93uSkZySZAXcNo";
     let guildPlayers = [];
+    
+    // Ler do parâmetro ?player= ou do localStorage (padrão: jotasiete)
+    const _urlParams = new URLSearchParams(window.location.search);
+    const _paramPlayer = _urlParams.get('player') || _urlParams.get('p');
     let selectedPlayerName = "jotasiete";
+    if (_paramPlayer && _paramPlayer.trim()) {
+      selectedPlayerName = _paramPlayer.trim();
+      try { localStorage.setItem('wurm_selected_player', selectedPlayerName); } catch {}
+    } else {
+      try {
+        const saved = localStorage.getItem('wurm_selected_player');
+        if (saved && saved.trim()) selectedPlayerName = saved.trim();
+      } catch {}
+    }
 
     // ─── LOAD DATA (Supabase Cloud + Local Live Polling) ──────
     async function fetchGuildPlayers() {
       try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/player_achievements?select=player_name,total_count,gold_count,updated_at`, {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/player_achievements?select=player_name,total_count,gold_count,updated_at&order=total_count.desc`, {
           headers: { "apikey": SUPABASE_KEY, "Authorization": "Bearer " + SUPABASE_KEY }
         });
         if (res.ok) {
@@ -1636,14 +1649,18 @@
     function updatePlayerSelector() {
       const select = document.getElementById('guildPlayerSelector');
       if (!select) return;
-      const current = select.value || selectedPlayerName;
-      select.innerHTML = guildPlayers.map(p => {
-        const isSel = p.player_name === current ? 'selected' : '';
-        return `<option value="${p.player_name}" ${isSel}>${p.player_name} (${p.total_count}🏅)</option>`;
+      const current = selectedPlayerName;
+      let html = guildPlayers.map((p, idx) => {
+        const medal = idx === 0 ? '🥇 ' : idx === 1 ? '🥈 ' : idx === 2 ? '🥉 ' : '🏅 ';
+        const isSel = p.player_name.toLowerCase() === current.toLowerCase() ? 'selected' : '';
+        return `<option value="${p.player_name}" ${isSel}>${medal}${p.player_name} (${p.total_count}🏆)</option>`;
       }).join('');
-      if (!guildPlayers.some(p => p.player_name === current)) {
-        select.innerHTML += `<option value="${current}" selected>${current} (Local)</option>`;
+
+      if (!guildPlayers.some(p => p.player_name.toLowerCase() === current.toLowerCase())) {
+        html = `<option value="${current}" selected>👤 ${current}</option>` + html;
       }
+      html += `<option value="__custom__">➕ Trocar / Digitar Nick...</option>`;
+      select.innerHTML = html;
     }
 
     function setSyncStatus(badgeText, timeStr) {
@@ -1657,9 +1674,9 @@
       const syncBtn = document.getElementById('syncStatusText');
       if (syncBtn) syncBtn.textContent = 'Carregando...';
 
-      // 1. Buscar prioritariamente da Nuvem Supabase (dados mais recentes de qualquer membro)
+      // 1. Buscar prioritariamente da Nuvem Supabase usando ilike (case-insensitive)
       try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/player_achievements?player_name=eq.${encodeURIComponent(selectedPlayerName)}&select=*`, {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/player_achievements?player_name=ilike.${encodeURIComponent(selectedPlayerName)}&select=*`, {
           headers: { "apikey": SUPABASE_KEY, "Authorization": "Bearer " + SUPABASE_KEY }
         });
         if (res.ok) {
@@ -1674,13 +1691,20 @@
             setSyncStatus('Nuvem (Supabase)', timeStr);
             enrichAndRender();
             return;
+          } else if (selectedPlayerName.toLowerCase() !== 'jotasiete') {
+            // Jogador pesquisado ainda não enviou dados para a nuvem
+            currentData = [];
+            setSyncStatus('Aguardando Conexão', 'Sem dados');
+            enrichAndRender();
+            renderNotSyncedState(selectedPlayerName);
+            return;
           }
         }
       } catch (e) {
         console.warn("[Supabase] Falha ao carregar jogador:", e);
       }
 
-      // 2. Fallback para arquivo local se Supabase estiver offline
+      // 2. Fallback para arquivo local se Supabase estiver offline (ou se for jotasiete)
       try {
         const res = await fetch('achievements_latest.json?t=' + Date.now());
         if (res.ok) {
@@ -1698,6 +1722,40 @@
       setSyncStatus('Offline', 'Padrão');
       currentData = fallbackData;
       enrichAndRender();
+    }
+
+    function renderNotSyncedState(playerName) {
+      const grid = document.getElementById('achievementsGrid');
+      const compact = document.getElementById('compactList');
+      const tableBody = document.getElementById('tableBody');
+      const podium = document.getElementById('podiumGrid');
+
+      if (podium) {
+        podium.innerHTML = `
+          <div style="grid-column: 1 / -1; padding: 18px; text-align: center; color: var(--wurm-muted); font-size: 0.88rem; background: var(--wurm-panel); border: 1px solid var(--wurm-border); border-radius: 6px;">
+            Aguardando primeiras conquistas de <strong style="color:#fff;">${playerName}</strong> para montar o pódio.
+          </div>
+        `;
+      }
+
+      const msg = `
+        <div style="grid-column: 1 / -1; padding: 48px 24px; background: var(--wurm-panel); border: 1px dashed rgba(212,180,131,0.4); border-radius: 8px; text-align: center;">
+          <div style="font-size: 3rem; margin-bottom: 14px;">🛡️</div>
+          <h3 style="font-family: var(--font-serif); font-size: 1.5rem; color: #fff; margin-bottom: 10px;">
+            Nenhum dado encontrado para <span style="color: var(--wurm-accent); font-family: var(--font-mono);">${playerName}</span>
+          </h3>
+          <p style="color: var(--wurm-muted); font-size: 0.94rem; max-width: 540px; margin: 0 auto 24px; line-height: 1.6;">
+            Se este é você, suas conquistas ainda não foram sincronizadas com a Nuvem da Guilda.<br>
+            Basta baixar o <strong>Extrator da Guilda</strong> no botão abaixo, dar 2 cliques no instalador e abrir o jogo normalmente pela Steam!
+          </p>
+          <a href="#installCard" class="pill-btn active" style="padding: 11px 26px; font-weight: 700; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 8px;">
+            📥 Baixar Extrator & Ver Passo a Passo
+          </a>
+        </div>
+      `;
+      if (grid) grid.innerHTML = msg;
+      if (compact) compact.innerHTML = msg;
+      if (tableBody) tableBody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:32px;">Aguardando sincronização de ${playerName}</td></tr>`;
     }
 
     function enrichAndRender() {
@@ -1986,7 +2044,20 @@
     const playerSelector = document.getElementById('guildPlayerSelector');
     if (playerSelector) {
       playerSelector.addEventListener('change', (e) => {
+        if (e.target.value === '__custom__') {
+          const nick = prompt("Digite o nome exato do seu personagem no Wurm Online:");
+          if (nick && nick.trim()) {
+            selectedPlayerName = nick.trim();
+            try { localStorage.setItem('wurm_selected_player', selectedPlayerName); } catch {}
+            updatePlayerSelector();
+            loadAchievements();
+          } else {
+            updatePlayerSelector();
+          }
+          return;
+        }
         selectedPlayerName = e.target.value;
+        try { localStorage.setItem('wurm_selected_player', selectedPlayerName); } catch {}
         loadAchievements();
       });
     }

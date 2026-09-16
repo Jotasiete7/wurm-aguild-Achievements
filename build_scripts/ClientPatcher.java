@@ -21,7 +21,7 @@ public class ClientPatcher {
 
             ClassPool cp = new ClassPool();
             cp.appendSystemPath();
-            cp.appendClassPath(clientJar.getAbsolutePath());
+            cp.appendClassPath(backupJar.getAbsolutePath());
 
             CtClass cc = cp.get("com.wurmonline.client.renderer.gui.i4ndLy7Opx");
             CtMethod[] methods = cc.getDeclaredMethods("BCRMM7EbTa");
