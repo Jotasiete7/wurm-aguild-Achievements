@@ -2297,12 +2297,31 @@
       document.getElementById('tableContainer').style.display = mode === 'table' ? 'block' : 'none';
     }
 
+    // ─── HELPER METADATA LOOKUP ───────────────────────────────
+    function getMeta(name) {
+      if (typeof getAchievementMeta === 'function') {
+        return getAchievementMeta(name);
+      }
+      if (typeof WURM_ACHIEVEMENTS_DB !== 'undefined' && WURM_ACHIEVEMENTS_DB[name]) {
+        return WURM_ACHIEVEMENTS_DB[name];
+      }
+      return {
+        ptName: name,
+        category: 'exploration',
+        categoryLabel: 'Exploração & Mundo',
+        categoryIcon: '🧭',
+        meaning: 'Conquista reconhecida pelo mundo de Wurm Online.',
+        unlock: 'Realizar a ação requerida no jogo.',
+        rarity: 'Silver'
+      };
+    }
+
     // ─── STATS ────────────────────────────────────────────────
     function updateStats() {
       const counts = { all: currentData.length, sailing: 0, combat: 0, exploration: 0, mounts: 0, epic: 0, work: 0, survival: 0 };
       let navalTrips = 0, goldCount = 0, maxCount = 0;
       currentData.forEach(item => {
-        const meta = (typeof WURM_ACHIEVEMENTS_DB !== 'undefined' && WURM_ACHIEVEMENTS_DB[item.name]) || {};
+        const meta = getMeta(item.name);
         const cat = meta.category || 'exploration';
         if (counts[cat] !== undefined) counts[cat]++;
         if (item.rarity === 'Gold' || meta.rarity === 'Gold') goldCount++;
@@ -2330,7 +2349,7 @@
     function renderPodium() {
       const sorted = [...currentData].sort((a,b) => b.counter - a.counter).slice(0, 5);
       document.getElementById('podiumGrid').innerHTML = sorted.map((item, idx) => {
-        const meta = (typeof WURM_ACHIEVEMENTS_DB !== 'undefined' && WURM_ACHIEVEMENTS_DB[item.name]) || {};
+        const meta = getMeta(item.name);
         const rankClass = idx === 0 ? 'rank-1' : idx === 1 ? 'rank-2' : idx === 2 ? 'rank-3' : '';
         const icon = meta.categoryIcon || '🏆';
         return `<div class="podium-card ${rankClass}">
@@ -2348,7 +2367,7 @@
     function filterAndSortData() {
       const query = document.getElementById('searchInput').value.toLowerCase().trim();
       let filtered = currentData.filter(item => {
-        const meta = (typeof WURM_ACHIEVEMENTS_DB !== 'undefined' && WURM_ACHIEVEMENTS_DB[item.name]) || {};
+        const meta = getMeta(item.name);
         const cat = meta.category || 'exploration';
         if (currentCategory !== 'all' && cat !== currentCategory) return false;
         if (query) {
@@ -2385,14 +2404,14 @@
 
       // CARDS
       grid.innerHTML = items.map((item, idx) => {
-        const meta = (typeof WURM_ACHIEVEMENTS_DB !== 'undefined' && WURM_ACHIEVEMENTS_DB[item.name]) || {};
+        const meta = getMeta(item.name);
         const isGold = item.rarity === 'Gold' || meta.rarity === 'Gold';
         const icon = meta.categoryIcon || '🎯';
         return `<div class="ach-card ${isGold?'gold-tier':''}">
           <div class="ach-top">
             <div class="ach-title-area">
               <h3>${icon} ${item.name}</h3>
-              <div class="ach-pt-name">${meta.ptName || 'Conquista'}</div>
+              <div class="ach-pt-name">${meta.ptName || item.name}</div>
             </div>
             <div class="ach-counter-badge">
               <div class="num">${item.counter}</div>
@@ -2401,7 +2420,7 @@
           </div>
           <div class="ach-desc-box">"${item.description || meta.meaning || ''}"</div>
           <div class="ach-details">
-            <div class="detail-item"><span class="detail-label">Significado:</span><span class="detail-val">${meta.meaning || 'Ação registrada pelo servidor.'}</span></div>
+            <div class="detail-item"><span class="detail-label">Significado:</span><span class="detail-val">${meta.meaning || 'Ação produtiva ou façanha reconhecida.'}</span></div>
             <div class="detail-item"><span class="detail-label">Como obter:</span><span class="detail-val">${meta.unlock || 'Realizar a ação no jogo.'}</span></div>
             ${meta.trivia ? `<div class="trivia-box">💡 <strong>Referência:</strong> ${meta.trivia}</div>` : ''}
           </div>
@@ -2414,7 +2433,7 @@
 
       // COMPACT
       compact.innerHTML = items.map((item, idx) => {
-        const meta = (typeof WURM_ACHIEVEMENTS_DB !== 'undefined' && WURM_ACHIEVEMENTS_DB[item.name]) || {};
+        const meta = getMeta(item.name);
         const isGold = item.rarity === 'Gold' || meta.rarity === 'Gold';
         const icon = meta.categoryIcon || '🎯';
         return `<div class="compact-row ${isGold?'gold-row':''}">
@@ -2422,7 +2441,7 @@
           <span class="compact-icon">${icon}</span>
           <div class="compact-names">
             <div class="compact-en">${item.name}</div>
-            <div class="compact-pt">${meta.ptName || ''}</div>
+            <div class="compact-pt">${meta.ptName || item.name}</div>
           </div>
           <span class="compact-counter">${item.counter}×</span>
           <span class="compact-date">${item.date || '—'}</span>
@@ -2432,13 +2451,13 @@
 
       // TABLE
       tableBody.innerHTML = items.map((item, idx) => {
-        const meta = (typeof WURM_ACHIEVEMENTS_DB !== 'undefined' && WURM_ACHIEVEMENTS_DB[item.name]) || {};
+        const meta = getMeta(item.name);
         const isGold = item.rarity === 'Gold' || meta.rarity === 'Gold';
         return `<tr>
           <td style="font-family:var(--font-mono);font-weight:700;">#${idx+1}</td>
           <td><strong style="color:#fff;">${item.name}</strong></td>
-          <td style="color:var(--wurm-accent);">${meta.ptName || '—'}</td>
-          <td>${meta.categoryIcon||''} ${meta.categoryLabel||'Geral'}</td>
+          <td style="color:var(--wurm-accent);font-weight:500;">${meta.ptName || item.name}</td>
+          <td>${meta.categoryIcon||'🎯'} ${meta.categoryLabel||'Geral'}</td>
           <td><strong style="color:${isGold?'var(--wurm-accent)':'#fff'};font-family:var(--font-mono);">${item.counter}</strong></td>
           <td style="font-family:var(--font-mono);font-size:0.75rem;color:var(--wurm-muted);">${item.date || '—'}</td>
           <td><span class="badge-tag ${isGold?'tag-gold':'tag-normal'}">${isGold?'Ouro':'Normal'}</span></td>
@@ -2476,7 +2495,7 @@
         if (filterMode === 'unlocked' && !wa.unlocked) return false;
         if (rarityFilter !== 'all' && wa.rarity !== rarityFilter) return false;
         if (query) {
-          const s = [wa.name, wa.description||'', wa.howTo||''].join(' ').toLowerCase();
+          const s = [wa.name, wa.ptName||'', wa.description||'', wa.howTo||'', wa.meaning||''].join(' ').toLowerCase();
           if (!s.includes(query)) return false;
         }
         return true;
@@ -2504,8 +2523,8 @@
           return `<div class="journal-row locked">
             <span class="journal-status">🔒</span>
             <div class="journal-name">
-              <div class="j-en">${wa.name}</div>
-              <div class="j-desc">${wa.description || ''}</div>
+              <div class="j-en">${wa.categoryIcon||'🎯'} ${wa.name} ${wa.ptName ? `<span style="color:var(--wurm-accent);font-weight:600;font-size:0.85em;">· ${wa.ptName}</span>` : ''}</div>
+              <div class="j-desc">${wa.description || wa.meaning || ''}</div>
             </div>
             <div class="journal-how">${wa.howTo || '—'}</div>
             <div class="journal-rarity"><span class="badge-tag ${rarityTag}">${wa.rarity}</span></div>
@@ -2521,8 +2540,8 @@
           return `<div class="journal-row unlocked">
             <span class="journal-status">✅</span>
             <div class="journal-name">
-              <div class="j-en">${wa.name}</div>
-              <div class="j-desc">${wa.description || ''}</div>
+              <div class="j-en">${wa.categoryIcon||'🎯'} ${wa.name} ${wa.ptName ? `<span style="color:var(--wurm-accent);font-weight:600;font-size:0.85em;">· ${wa.ptName}</span>` : ''}</div>
+              <div class="j-desc">${wa.description || wa.meaning || ''}</div>
             </div>
             <div class="journal-how">${wa.howTo || '—'}</div>
             ${pd ? `<span class="journal-counter-badge">${pd.counter}×</span>` : ''}
