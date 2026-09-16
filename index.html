@@ -1170,6 +1170,201 @@
       color: var(--wurm-accent);
     }
 
+    /* ═══════════════════════════════════════════════════════════════
+       COMMUNITY LEADERBOARD & RANKING VIEW
+       ═══════════════════════════════════════════════════════════════ */
+    .view-switcher-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 22px;
+      padding: 6px 10px;
+      background: var(--wurm-panel);
+      border: 1px solid var(--wurm-border);
+      border-radius: 6px;
+    }
+    .view-switch-btn {
+      padding: 8px 16px;
+      border: none;
+      background: transparent;
+      color: var(--wurm-muted);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 700;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .view-switch-btn:hover {
+      background: rgba(255, 255, 255, 0.04);
+      color: #fff;
+    }
+    .view-switch-btn.active {
+      background: var(--wurm-accent-bg);
+      color: var(--wurm-accent);
+      border: 1px solid rgba(212, 180, 131, 0.4);
+    }
+    .score-legend-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 18px;
+      background: #080808;
+      border: 1px solid var(--wurm-border);
+      border-radius: 6px;
+      margin-bottom: 20px;
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      color: var(--wurm-muted);
+    }
+    .score-legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .score-legend-item strong {
+      color: #fff;
+    }
+    .ranking-table-container {
+      background: var(--wurm-panel);
+      border: 1px solid var(--wurm-border);
+      border-radius: 6px;
+      overflow-x: auto;
+      margin-bottom: 24px;
+    }
+    .ranking-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    .ranking-table th {
+      padding: 13px 16px;
+      background: #050505;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--wurm-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-bottom: 1px solid var(--wurm-border);
+    }
+    .ranking-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--wurm-border);
+      font-size: 0.88rem;
+      vertical-align: middle;
+    }
+    .ranking-table tr:hover td {
+      background: rgba(255, 255, 255, 0.03);
+    }
+    .rank-num-cell {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      font-weight: 700;
+      width: 48px;
+      text-align: center;
+    }
+    .rank-first { color: #f59e0b; }
+    .rank-second { color: #94a3b8; }
+    .rank-third { color: #d97706; }
+    .player-name-cell {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .player-avatar-circle {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #151515;
+      border: 1px solid var(--wurm-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--wurm-accent);
+      font-size: 0.9rem;
+    }
+    .player-nick-text {
+      font-family: var(--font-serif);
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #fff;
+    }
+    .score-badge {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--wurm-accent);
+      background: var(--wurm-accent-bg);
+      border: 1px solid rgba(212, 180, 131, 0.3);
+      padding: 4px 10px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+    .btn-view-profile {
+      background: transparent;
+      border: 1px solid var(--wurm-border);
+      color: var(--wurm-accent);
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-view-profile:hover {
+      background: var(--wurm-accent-bg);
+      border-color: var(--wurm-accent);
+      color: #fff;
+    }
+    .back-to-rank-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
+      padding: 8px 16px;
+      background: var(--wurm-panel);
+      border: 1px solid var(--wurm-border);
+      border-radius: 4px;
+      color: var(--wurm-accent);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .back-to-rank-btn:hover {
+      background: var(--wurm-panel-hover);
+      border-color: var(--wurm-accent);
+    }
+    .dropzone-box {
+      border: 2px dashed rgba(212, 180, 131, 0.3);
+      background: #080808;
+      border-radius: 6px;
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 14px;
+    }
+    .dropzone-box:hover {
+      border-color: var(--wurm-accent);
+      background: rgba(212, 180, 131, 0.04);
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       .guild-header { padding: 0 1rem; }
@@ -1201,6 +1396,16 @@
       </a>
     </div>
 
+    <!-- Navigation View Switcher -->
+    <div style="display:flex; align-items:center; gap:8px; margin-left:auto; margin-right:12px;">
+      <button class="view-switch-btn active" id="btnNavRanking" onclick="switchMainView('ranking')">
+        🏆 Ranking Comunitário
+      </button>
+      <button class="view-switch-btn" id="btnNavPlayer" onclick="switchMainView('player')">
+        👤 <span id="navPlayerName">Ver Jogador</span>
+      </button>
+    </div>
+
     <!-- Right Area: Support + Player Live Tag -->
     <div class="guild-header-right">
       <a href="https://ko-fi.com/aguildanode" target="_blank" rel="noopener noreferrer" class="kofi-btn">
@@ -1209,7 +1414,7 @@
       <div class="player-sync-tag" style="padding: 3px 10px; gap: 8px;">
         <span class="sync-dot"></span>
         <select id="guildPlayerSelector" style="background: transparent; border: none; color: #fff; font-family: var(--font-mono); font-size: 0.78rem; font-weight: 700; cursor: pointer; padding: 2px 4px; outline: none;">
-          <option value="jotasiete" selected>jotasiete (Guilda)</option>
+          <option value="" disabled selected>Selecionar Jogador...</option>
         </select>
         <span id="syncStatus" style="color: var(--wurm-accent); font-size: 0.72rem; font-family: var(--font-mono); border-left: 1px solid var(--wurm-border); padding-left: 8px;">Nuvem</span>
       </div>
@@ -1250,134 +1455,236 @@
        ═══════════════════════════════════════════════════════════════ -->
   <div class="container">
 
-    <!-- HERO BANNER -->
-    <div class="hero-banner">
-      <div class="hero-title">
-        <h1>Wurm Online <span>Achievements Codex</span></h1>
-        <p>Extrator em Tempo Real · Significados Ocultos · Journal 2.0 de Metas · Rankings</p>
-      </div>
-      <div class="hero-stats-inline">
-        <div class="hero-stat-badge">
-          <div class="num" id="statTotalHero">194</div>
-          <div class="label">Desbloqueadas</div>
+    <!-- ═══════════════════════════════════════════════════════════════
+         VIEW 1: RANKING GLOBAL DA COMUNIDADE (PÁGINA INICIAL PADRÃO)
+         ═══════════════════════════════════════════════════════════════ -->
+    <div id="rankingViewSection">
+      
+      <!-- HERO BANNER DA COMUNIDADE -->
+      <div class="hero-banner">
+        <div class="hero-title">
+          <h1>Wurm Online <span>Leaderboard Comunitário</span></h1>
+          <p>Ranking Geral de Conquistas & Metas · Desenvolvido por A Guilda para toda a comunidade</p>
         </div>
-        <div class="hero-stat-badge">
-          <div class="num" id="statTopHero">1.2M</div>
-          <div class="label">Maior Recorde</div>
-        </div>
-        <div class="hero-stat-badge" style="cursor: pointer; min-width: 150px;" onclick="loadAchievements()" title="Clique para sincronizar da Nuvem agora">
-          <div class="num" id="statSyncTime" style="font-size: 0.92rem; color: var(--wurm-accent); display: flex; align-items: center; justify-content: center; gap: 6px;">
-            <span class="sync-dot"></span> <span id="syncStatusText">Ao Vivo</span> <span style="font-size:0.8rem">🔄</span>
+        <div class="hero-stats-inline">
+          <div class="hero-stat-badge">
+            <div class="num" id="statCommunityPlayers">0</div>
+            <div class="label">Jogadores no Ranking</div>
           </div>
-          <div class="label">Última Sincronização</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ====== CARD FIXO: COMO CONECTAR & TRANSPARÊNCIA (GUILDA TRACKER) ====== -->
-    <div id="installCard" style="margin-bottom: 28px;">
-
-      <!-- Top Action Download Banner -->
-      <div style="background: var(--wurm-panel); border: 1px solid rgba(212,180,131,0.4); border-radius: 6px; padding: 24px 28px; margin-bottom: 20px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px; background: linear-gradient(180deg, rgba(212,180,131,0.06) 0%, var(--wurm-panel) 100%);">
-        <div>
-          <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: #fff; margin-bottom: 4px;">
-            Pacote Oficial: <span>Wurm Online Guild Tracker</span>
-          </h2>
-          <p style="color: var(--wurm-muted); font-size: 0.88rem;">
-            Extrator leve, 100% seguro, sem necessidade de instalar o Java ou procurar pastas manualmente.
-          </p>
-        </div>
-        <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
-          <a href="Wurm-Guilda-Tracker.zip" download class="pill-btn active" style="padding: 10px 22px; font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; gap: 8px;">
-            📥 Baixar Extrator da Guilda (ZIP · ~750 KB)
-          </a>
+          <div class="hero-stat-badge">
+            <div class="num" id="statCommunityAchievements">0</div>
+            <div class="label">Conquistas Coletivas</div>
+          </div>
+          <div class="hero-stat-badge">
+            <div class="num" id="statCommunityLeader" style="color:var(--wurm-accent); font-size:1.05rem;">—</div>
+            <div class="label">Líder Geral 🥇</div>
+          </div>
+          <div class="hero-stat-badge" style="cursor: pointer; min-width: 140px;" onclick="fetchGuildPlayers()" title="Clique para atualizar o ranking agora">
+            <div class="num" style="font-size: 0.9rem; color: #7ee787; display: flex; align-items: center; justify-content: center; gap: 6px;">
+              <span class="sync-dot"></span> <span>Ao Vivo</span> <span style="font-size:0.8rem">🔄</span>
+            </div>
+            <div class="label">Nuvem da Guilda</div>
+          </div>
         </div>
       </div>
 
-      <!-- 3-Step Setup Cards Grid -->
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-bottom: 20px;">
-        
-        <div style="background: var(--wurm-panel); border: 1px solid var(--wurm-border); border-radius: 6px; padding: 20px; position: relative;">
-          <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--wurm-accent); font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em;">
-            Passo 01
-          </div>
-          <h3 style="font-family: var(--font-serif); font-size: 1.2rem; color: #fff; margin-bottom: 8px;">
-            Baixar & Extrair
-          </h3>
-          <p style="color: var(--wurm-muted); font-size: 0.84rem; line-height: 1.5;">
-            Clique no botão acima para baixar o <code style="color:var(--wurm-accent); font-family:var(--font-mono);">Wurm-Guilda-Tracker.zip</code> e extraia os dois arquivos em qualquer pasta do seu computador (como Downloads ou Área de Trabalho).
-          </p>
-        </div>
-
-        <div style="background: var(--wurm-panel); border: 1px solid var(--wurm-border); border-radius: 6px; padding: 20px; position: relative;">
-          <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--wurm-accent); font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em;">
-            Passo 02 · Automático
-          </div>
-          <h3 style="font-family: var(--font-serif); font-size: 1.2rem; color: #fff; margin-bottom: 8px;">
-            Executar o Instalador
-          </h3>
-          <p style="color: var(--wurm-muted); font-size: 0.84rem; line-height: 1.5;">
-            Dê dois cliques em <strong style="color:#fff;">Instalar-Guilda-Tracker.bat</strong>. Ele detecta sozinho sua pasta do Wurm na Steam e integra o leitor de forma silenciosa e limpa. <strong style="color:var(--wurm-accent);">Nenhum atalho novo é criado</strong> para manter sua Área de Trabalho sempre limpa.
-          </p>
-        </div>
-
-        <div style="background: var(--wurm-panel); border: 1px solid var(--wurm-border); border-radius: 6px; padding: 20px; position: relative;">
-          <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--wurm-accent); font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em;">
-            Passo 03
-          </div>
-          <h3 style="font-family: var(--font-serif); font-size: 1.2rem; color: #fff; margin-bottom: 8px;">
-            Jogar Normal pela Steam
-          </h3>
-          <p style="color: var(--wurm-muted); font-size: 0.84rem; line-height: 1.5;">
-            Abra seu jogo <strong style="color:#fff;">normalmente pela Steam</strong> (ou pelo ícone oficial de sempre). Suas conquistas são sincronizadas com a Nuvem da Guilda automaticamente enquanto você joga, e ao abrir ou recarregar o site, seus números aparecem atualizados!
-          </p>
-        </div>
-
+      <!-- REGRAS DE PONTUAÇÃO (GUILD SCORE SYSTEM) -->
+      <div class="score-legend-bar">
+        <span style="color:#fff; font-weight:700;">⚖️ Pontuação Ponderada:</span>
+        <span class="score-legend-item">💎 Diamante: <strong>50 pts</strong></span>
+        <span class="score-legend-item">🥇 Ouro: <strong>25 pts</strong></span>
+        <span class="score-legend-item">🥈 Prata: <strong>10 pts</strong></span>
+        <span class="score-legend-item">🥉 Bronze: <strong>5 pts</strong></span>
+        <span class="score-legend-item">⚪ Normal: <strong>1 pt</strong></span>
       </div>
 
-      <!-- Transparency & Security Section -->
-      <div style="background: var(--wurm-panel); border: 1px solid var(--wurm-border); border-radius: 6px; padding: 24px;">
-        <div class="section-header" style="margin-bottom: 18px;">
-          <h2>🛡️ Transparência & Segurança: <span>O que cada arquivo faz?</span></h2>
-          <span class="subtext">Código 100% auditável e seguro</span>
+      <!-- CONTROLES DO RANKING (BUSCA + FILTROS DE ORDENAÇÃO) -->
+      <div class="controls-bar" style="margin-bottom: 16px;">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="rankingSearchInput" placeholder="Buscar jogador no ranking por nick...">
+        </div>
+        <div class="filter-actions">
+          <div class="view-mode-group">
+            <button class="view-mode-btn active" id="rankFilterScore" onclick="setRankingSort('score')">🏆 Pontuação</button>
+            <button class="view-mode-btn" id="rankFilterTotal" onclick="setRankingSort('total')">🏅 Total Conquistas</button>
+            <button class="view-mode-btn" id="rankFilterGold" onclick="setRankingSort('gold')">✨ Ouro/Diamante</button>
+            <button class="view-mode-btn" id="rankFilterRecord" onclick="setRankingSort('record')">⚡ Maior Recorde</button>
+            <button class="view-mode-btn" id="rankFilterRecent" onclick="setRankingSort('recent')">⏱️ Recentes</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TABELA DE RANKING COMUNITÁRIO -->
+      <div class="ranking-table-container">
+        <table class="ranking-table">
+          <thead>
+            <tr>
+              <th style="width:60px; text-align:center;">#</th>
+              <th>Jogador</th>
+              <th style="width:130px;">Pontuação</th>
+              <th style="width:150px;">Conquistas</th>
+              <th style="width:150px;">Raridades</th>
+              <th>Maior Recorde Individual</th>
+              <th style="width:150px;">Última Atividade</th>
+              <th style="width:130px; text-align:center;">Ação</th>
+            </tr>
+          </thead>
+          <tbody id="communityRankingBody">
+            <tr><td colspan="8" style="text-align:center; padding:32px; color:var(--wurm-muted);">Carregando Ranking da Comunidade...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ====== CARD: COMO CONECTAR & DOWNLOAD DO EXTRATOR ====== -->
+      <div id="installCard" style="margin-bottom: 28px;">
+
+        <!-- Top Action Download Banner -->
+        <div style="background: var(--wurm-panel); border: 1px solid rgba(212,180,131,0.4); border-radius: 6px; padding: 24px 28px; margin-bottom: 20px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px; background: linear-gradient(180deg, rgba(212,180,131,0.06) 0%, var(--wurm-panel) 100%);">
+          <div>
+            <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: #fff; margin-bottom: 4px;">
+              Participe do Ranking: <span>Extrator Oficial da Guilda</span>
+            </h2>
+            <p style="color: var(--wurm-muted); font-size: 0.88rem;">
+              Ferramenta aberta a todos os jogadores de Wurm Online. Leve, segura e sem alterar o jogo.
+            </p>
+          </div>
+          <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+            <a href="Wurm-Guilda-Tracker.zip" download class="pill-btn active" style="padding: 10px 22px; font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; gap: 8px;">
+              📥 Baixar Extrator da Guilda (ZIP · ~750 KB)
+            </a>
+          </div>
         </div>
 
-        <div style="display: flex; flex-direction: column; gap: 14px;">
+        <!-- 3-Step Setup Cards Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-bottom: 20px;">
           
-          <div style="background: #050505; border: 1px solid var(--wurm-border); border-radius: 4px; padding: 14px 18px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-              <strong style="color:var(--wurm-accent); font-family:var(--font-mono); font-size:0.88rem;">📦 wurm_achievements.jar (800 KB)</strong>
-              <span class="badge-tag tag-gold">Agente Premain</span>
+          <div style="background: var(--wurm-panel); border: 1px solid var(--wurm-border); border-radius: 6px; padding: 20px; position: relative;">
+            <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--wurm-accent); font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em;">
+              Passo 01
             </div>
-            <p style="color: var(--wurm-muted); font-size: 0.82rem; line-height: 1.5;">
-              Utiliza a API oficial de instrumentação do próprio Java da Oracle (<code style="font-family:var(--font-mono);">javaagent</code>). Ele atua como um ouvinte passivo: quando os pacotes da lista de conquistas chegam do servidor oficial e são desenhados na janela de interface, ele apenas anota o nome, contador e data em um arquivo de texto local (<code style="font-family:var(--font-mono);">.json</code>). <strong style="color:#fff;">Não altera mecânicas do jogo, não dá vantagens (não é bot nem hack), não toca em senhas nem lê outros arquivos do computador.</strong>
+            <h3 style="font-family: var(--font-serif); font-size: 1.2rem; color: #fff; margin-bottom: 8px;">
+              Baixar & Extrair
+            </h3>
+            <p style="color: var(--wurm-muted); font-size: 0.84rem; line-height: 1.5;">
+              Clique no botão acima para baixar o <code style="color:var(--wurm-accent); font-family:var(--font-mono);">Wurm-Guilda-Tracker.zip</code> e extraia os arquivos em qualquer pasta do seu PC.
             </p>
           </div>
 
-          <div style="background: #050505; border: 1px solid var(--wurm-border); border-radius: 4px; padding: 14px 18px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-              <strong style="color:var(--wurm-accent); font-family:var(--font-mono); font-size:0.88rem;">⚙️ Instalar-Guilda-Tracker.bat & Desinstalar-Restaurar.bat</strong>
-              <span class="badge-tag tag-silver">Scripts Batch</span>
+          <div style="background: var(--wurm-panel); border: 1px solid var(--wurm-border); border-radius: 6px; padding: 20px; position: relative;">
+            <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--wurm-accent); font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em;">
+              Passo 02 · Configurar
             </div>
-            <p style="color: var(--wurm-muted); font-size: 0.82rem; line-height: 1.5;">
-              Scripts 100% transparentes e legíveis no Bloco de Notas. O instalador integra o leitor silencioso sem criar atalhos na sua Área de Trabalho, e o desinstalador restaura o client original da desenvolvedora a qualquer momento com apenas 1 clique.
+            <h3 style="font-family: var(--font-serif); font-size: 1.2rem; color: #fff; margin-bottom: 8px;">
+              Executar o Instalador
+            </h3>
+            <p style="color: var(--wurm-muted); font-size: 0.84rem; line-height: 1.5;">
+              Com o Wurm fechado, dê 2 cliques em <strong style="color:#fff;">Instalar-Guilda-Tracker.bat</strong>. Ele detecta seus personagens, registra seu nick no Supabase e integra o leitor.
             </p>
           </div>
 
-          <div style="background: #050505; border: 1px solid var(--wurm-border); border-radius: 4px; padding: 14px 18px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-              <strong style="color:var(--wurm-accent); font-family:var(--font-mono); font-size:0.88rem;">☕ Preciso instalar o Java no meu PC?</strong>
-              <span class="badge-tag tag-diamond">Já Incluso</span>
+          <div style="background: var(--wurm-panel); border: 1px solid var(--wurm-border); border-radius: 6px; padding: 20px; position: relative;">
+            <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--wurm-accent); font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em;">
+              Passo 03
             </div>
-            <p style="color: var(--wurm-muted); font-size: 0.82rem; line-height: 1.5;">
-              <strong style="color:#fff;">Não!</strong> O próprio Wurm Online (tanto na Steam quanto no cliente oficial) já vem com o Java 21 oficial da desenvolvedora embutido na pasta do jogo (<code style="font-family:var(--font-mono);">21-win64\runtime\bin</code>). O processo utiliza o Java que o próprio jogo já possui.
+            <h3 style="font-family: var(--font-serif); font-size: 1.2rem; color: #fff; margin-bottom: 8px;">
+              Abrir o Wurm e Jogar
+            </h3>
+            <p style="color: var(--wurm-muted); font-size: 0.84rem; line-height: 1.5;">
+              Abra seu jogo normalmente pela Steam. Ao abrir a janela de Conquistas (tecla P), suas conquistas sobem instantaneamente para a Nuvem e seu nome aparece no ranking!
             </p>
           </div>
 
         </div>
+
+        <!-- Dropzone de Sincronização Manual -->
+        <div style="background: var(--wurm-panel); border: 1px solid var(--wurm-border); border-radius: 6px; padding: 20px; margin-bottom: 20px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:8px;">
+            <h3 style="font-family: var(--font-serif); font-size: 1.15rem; color: #fff; margin:0;">
+              📂 Sincronização Manual por Arquivo (Backup ou Linux/Mac)
+            </h3>
+            <span class="badge-tag tag-gold">Alternativa sem instalador</span>
+          </div>
+          <p style="color: var(--wurm-muted); font-size: 0.84rem; line-height: 1.5; margin:0 0 12px;">
+            Se você já possui o arquivo <code style="color:var(--wurm-accent); font-family:var(--font-mono);">achievements_&lt;nick&gt;.json</code> gerado pelo jogo, arraste-o abaixo para sincronizar na hora:
+          </p>
+          <div class="dropzone-box" onclick="document.getElementById('manualFileInput').click()">
+            <div style="font-size: 1.8rem; margin-bottom: 6px;">📥</div>
+            <div style="font-family: var(--font-mono); font-size: 0.85rem; color: #fff; font-weight:700;">
+              Arraste seu achievements_*.json aqui ou clique para procurar
+            </div>
+            <div style="font-size: 0.76rem; color: var(--wurm-muted); margin-top: 4px;">
+              Geralmente localizado em: gamedata/players/&lt;SeuNick&gt;/
+            </div>
+            <input type="file" id="manualFileInput" accept=".json" style="display:none;" onchange="handleManualJsonUpload(this.files[0])">
+          </div>
+        </div>
+
+        <!-- Transparency & Security Section -->
+        <div style="background: var(--wurm-panel); border: 1px solid var(--wurm-border); border-radius: 6px; padding: 24px;">
+          <div class="section-header" style="margin-bottom: 18px;">
+            <h2>🛡️ Transparência & Segurança: <span>O que o tracker faz?</span></h2>
+            <span class="subtext">Código 100% auditável e seguro</span>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div style="background: #050505; border: 1px solid var(--wurm-border); border-radius: 4px; padding: 14px 18px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <strong style="color:var(--wurm-accent); font-family:var(--font-mono); font-size:0.88rem;">📦 Leitor Passivo de Conquistas</strong>
+                <span class="badge-tag tag-gold">100% Seguro</span>
+              </div>
+              <p style="color: var(--wurm-muted); font-size: 0.82rem; line-height: 1.5;">
+                O tracker apenas escuta os pacotes oficiais de conquistas que o próprio servidor do Wurm envia para a sua tela. Ele não modifica dados no servidor, não interfere na jogabilidade (não é bot nem hack), não mexe em senhas e não lê outros arquivos do seu computador.
+              </p>
+            </div>
+            <div style="background: #050505; border: 1px solid var(--wurm-border); border-radius: 4px; padding: 14px 18px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <strong style="color:var(--wurm-accent); font-family:var(--font-mono); font-size:0.88rem;">⚙️ Desinstalação com 1 Clique</strong>
+                <span class="badge-tag tag-silver">Desinstalar-Restaurar.bat</span>
+              </div>
+              <p style="color: var(--wurm-muted); font-size: 0.82rem; line-height: 1.5;">
+                O ZIP inclui o arquivo <strong style="color:#fff;">Desinstalar-Restaurar.bat</strong>, que restaura imediatamente o client original do Wurm exatamente como estava antes.
+              </p>
+            </div>
+          </div>
+        </div>
+
       </div>
 
     </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         VIEW 2: PERFIL INDIVIDUAL DO JOGADOR
+         ═══════════════════════════════════════════════════════════════ -->
+    <div id="playerViewSection" style="display:none;">
+
+      <button class="back-to-rank-btn" onclick="switchMainView('ranking')">
+        ← Voltar ao Ranking Geral da Comunidade
+      </button>
+
+      <!-- HERO BANNER DO JOGADOR -->
+      <div class="hero-banner">
+        <div class="hero-title">
+          <h1>Conquistas de <span id="playerHeroName" style="color:var(--wurm-accent);">Jogador</span></h1>
+          <p id="playerHeroSub">Perfil individual sincronizado com a Nuvem da Guilda</p>
+        </div>
+        <div class="hero-stats-inline">
+          <div class="hero-stat-badge">
+            <div class="num" id="statTotalHero">0</div>
+            <div class="label">Desbloqueadas</div>
+          </div>
+          <div class="hero-stat-badge">
+            <div class="num" id="statTopHero">0</div>
+            <div class="label">Maior Recorde</div>
+          </div>
+          <div class="hero-stat-badge" style="cursor: pointer; min-width: 150px;" onclick="loadAchievements()" title="Clique para sincronizar agora">
+            <div class="num" id="statSyncTime" style="font-size: 0.92rem; color: var(--wurm-accent); display: flex; align-items: center; justify-content: center; gap: 6px;">
+              <span class="sync-dot"></span> <span id="syncStatusText">Ao Vivo</span> <span style="font-size:0.8rem">🔄</span>
+            </div>
+            <div class="label">Última Sincronização</div>
+          </div>
+        </div>
+      </div>
 
     <!-- STATS CARDS -->
     <div class="stats-grid">
@@ -1539,7 +1846,9 @@
 
     </div>
 
-  </div>
+    </div> <!-- END playerViewSection -->
+
+  </div> <!-- END container -->
 
   <!-- GUILD FOOTER -->
   <footer>
@@ -1613,32 +1922,227 @@
     const SUPABASE_URL = "https://gzhvqprdrtudyokhgxlj.supabase.co";
     const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd6aHZxcHJkcnR1ZHlva2hneGxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc3NTQ2MTUsImV4cCI6MjA4MzMzMDYxNX0.aSJIhfViQsb0dBjb5bOup49GCrQBt93uSkZySZAXcNo";
     let guildPlayers = [];
-    
-    // Ler do parâmetro ?player= ou do localStorage (padrão: jotasiete)
+    let currentMainView = "ranking"; // 'ranking' | 'player'
+    let currentRankingSort = "score"; // 'score' | 'total' | 'gold' | 'record' | 'recent'
+    let rankingSearchQuery = "";
+    let selectedPlayerName = null;
+
+    // Verificar parâmetros da URL (?player= ou ?p=)
     const _urlParams = new URLSearchParams(window.location.search);
     const _paramPlayer = _urlParams.get('player') || _urlParams.get('p');
-    let selectedPlayerName = "jotasiete";
     if (_paramPlayer && _paramPlayer.trim()) {
       selectedPlayerName = _paramPlayer.trim();
-      try { localStorage.setItem('wurm_selected_player', selectedPlayerName); } catch {}
+      currentMainView = "player";
     } else {
-      try {
-        const saved = localStorage.getItem('wurm_selected_player');
-        if (saved && saved.trim()) selectedPlayerName = saved.trim();
-      } catch {}
+      currentMainView = "ranking";
+      selectedPlayerName = null;
+    }
+
+    // ─── COMPUTE STATS & SCORE ───────────────────────────────
+    function computePlayerStats(p) {
+      const achs = p.achievements || [];
+      let score = 0;
+      let diamonds = 0;
+      let golds = 0;
+      let silvers = 0;
+      let bronzes = 0;
+      let maxCount = p.max_counter || 0;
+      let topAch = p.top_achievement || '';
+
+      achs.forEach(a => {
+        const r = (a.rarity || '').toLowerCase();
+        if (r === 'diamond') { score += 50; diamonds++; }
+        else if (r === 'gold') { score += 25; golds++; }
+        else if (r === 'silver') { score += 10; silvers++; }
+        else if (r === 'bronze') { score += 5; bronzes++; }
+        else { score += 1; }
+
+        if (a.counter > maxCount) {
+          maxCount = a.counter;
+          topAch = a.name;
+        }
+      });
+
+      return {
+        ...p,
+        score: score,
+        diamond_count: diamonds,
+        gold_count: golds,
+        silver_count: silvers,
+        bronze_count: bronzes,
+        max_counter: maxCount,
+        top_achievement: topAch
+      };
+    }
+
+    // ─── VIEW SWITCHER ────────────────────────────────────────
+    function switchMainView(view, playerName) {
+      currentMainView = view;
+      if (playerName) selectedPlayerName = playerName;
+
+      const rankSec = document.getElementById('rankingViewSection');
+      const playSec = document.getElementById('playerViewSection');
+      const btnRank = document.getElementById('btnNavRanking');
+      const btnPlay = document.getElementById('btnNavPlayer');
+      const playLabel = document.getElementById('navPlayerName');
+
+      if (view === 'ranking') {
+        if (rankSec) rankSec.style.display = 'block';
+        if (playSec) playSec.style.display = 'none';
+        if (btnRank) btnRank.classList.add('active');
+        if (btnPlay) btnPlay.classList.remove('active');
+        window.history.replaceState({}, '', window.location.pathname);
+        renderCommunityRanking();
+      } else {
+        if (!selectedPlayerName) {
+          const nick = prompt("Digite o nome exato do jogador no Wurm Online:");
+          if (nick && nick.trim()) {
+            selectedPlayerName = nick.trim();
+          } else if (guildPlayers.length > 0) {
+            selectedPlayerName = guildPlayers[0].player_name;
+          } else {
+            selectedPlayerName = "jotasiete";
+          }
+        }
+        if (rankSec) rankSec.style.display = 'none';
+        if (playSec) playSec.style.display = 'block';
+        if (btnRank) btnRank.classList.remove('active');
+        if (btnPlay) btnPlay.classList.add('active');
+        if (playLabel) playLabel.textContent = selectedPlayerName;
+
+        const heroName = document.getElementById('playerHeroName');
+        if (heroName) heroName.textContent = selectedPlayerName;
+
+        window.history.replaceState({}, '', '?player=' + encodeURIComponent(selectedPlayerName));
+        loadAchievements();
+      }
+    }
+
+    // ─── SORT & RENDER COMMUNITY RANKING ─────────────────────
+    function setRankingSort(sort) {
+      currentRankingSort = sort;
+      ['Score', 'Total', 'Gold', 'Record', 'Recent'].forEach(s => {
+        const btn = document.getElementById('rankFilter' + s);
+        if (btn) btn.classList.toggle('active', s.toLowerCase() === sort);
+      });
+      renderCommunityRanking();
+    }
+
+    function renderCommunityRanking() {
+      const tbody = document.getElementById('communityRankingBody');
+      if (!tbody) return;
+
+      if (!guildPlayers || guildPlayers.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:36px; color:var(--wurm-muted);">Nenhum jogador registrado ainda. Seja o primeiro conectando seu jogo abaixo!</td></tr>`;
+        return;
+      }
+
+      let filtered = guildPlayers.filter(p => {
+        if (!rankingSearchQuery) return true;
+        return p.player_name.toLowerCase().includes(rankingSearchQuery.toLowerCase());
+      });
+
+      filtered.sort((a, b) => {
+        if (currentRankingSort === 'score') return b.score - a.score;
+        if (currentRankingSort === 'total') return b.total_count - a.total_count;
+        if (currentRankingSort === 'gold') return (b.gold_count + b.diamond_count) - (a.gold_count + a.diamond_count);
+        if (currentRankingSort === 'record') return b.max_counter - a.max_counter;
+        if (currentRankingSort === 'recent') return new Date(b.updated_at || 0) - new Date(a.updated_at || 0);
+        return b.score - a.score;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:36px; color:var(--wurm-muted);">Nenhum jogador encontrado com o nick "${rankingSearchQuery}".</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map((p, idx) => {
+        const rankMedal = idx === 0 ? '🥇 1º' : idx === 1 ? '🥈 2º' : idx === 2 ? '🥉 3º' : `${idx + 1}º`;
+        const rankClass = idx === 0 ? 'rank-first' : idx === 1 ? 'rank-second' : idx === 2 ? 'rank-third' : '';
+        const initial = p.player_name ? p.player_name.charAt(0).toUpperCase() : '?';
+        const progressPct = Math.min(100, Math.round((p.total_count / 200) * 100));
+
+        let timeStr = 'Recente';
+        if (p.updated_at) {
+          const d = new Date(p.updated_at);
+          timeStr = d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) + ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        const topText = p.top_achievement ? `${p.top_achievement} (${Number(p.max_counter).toLocaleString('pt-BR')}×)` : '—';
+
+        return `<tr>
+          <td class="rank-num-cell ${rankClass}">${rankMedal}</td>
+          <td>
+            <div class="player-name-cell">
+              <div class="player-avatar-circle">${initial}</div>
+              <div>
+                <div class="player-nick-text">${p.player_name}</div>
+                <div style="font-size:0.72rem; color:var(--wurm-muted); font-family:var(--font-mono);">Wurm Community</div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <span class="score-badge">${Number(p.score).toLocaleString('pt-BR')} pts</span>
+          </td>
+          <td>
+            <div style="font-family:var(--font-mono); font-weight:700; color:#fff; margin-bottom:4px;">${p.total_count} / 200</div>
+            <div style="width:100px; height:4px; background:#111; border-radius:2px; overflow:hidden;">
+              <div style="width:${progressPct}%; height:100%; background:var(--wurm-accent);"></div>
+            </div>
+          </td>
+          <td>
+            <span class="badge-tag tag-diamond">💎 ${p.diamond_count || 0}</span>
+            <span class="badge-tag tag-gold" style="margin-left:4px;">🥇 ${p.gold_count || 0}</span>
+          </td>
+          <td style="font-family:var(--font-mono); font-size:0.8rem; color:var(--wurm-silver);">
+            ${topText}
+          </td>
+          <td style="font-family:var(--font-mono); font-size:0.76rem; color:var(--wurm-muted);">
+            ${timeStr}
+          </td>
+          <td style="text-align:center;">
+            <button class="btn-view-profile" onclick="switchMainView('player', '${p.player_name}')">
+              Ver Conquistas ➔
+            </button>
+          </td>
+        </tr>`;
+      }).join('');
+    }
+
+    function updateGlobalMetrics() {
+      const pCount = document.getElementById('statCommunityPlayers');
+      if (pCount) pCount.textContent = guildPlayers.length;
+
+      const aCount = document.getElementById('statCommunityAchievements');
+      if (aCount) {
+        const totalAchs = guildPlayers.reduce((acc, p) => acc + (p.total_count || 0), 0);
+        aCount.textContent = totalAchs.toLocaleString('pt-BR');
+      }
+
+      const lSpan = document.getElementById('statCommunityLeader');
+      if (lSpan) {
+        if (guildPlayers.length > 0) {
+          const sorted = [...guildPlayers].sort((a, b) => b.score - a.score);
+          lSpan.textContent = sorted[0].player_name + ' (' + sorted[0].score + ' pts)';
+        } else {
+          lSpan.textContent = '—';
+        }
+      }
     }
 
     // ─── LOAD DATA (Supabase Cloud + Local Live Polling) ──────
     async function fetchGuildPlayers() {
       try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/player_achievements?select=player_name,total_count,gold_count,updated_at&order=total_count.desc`, {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/player_achievements?select=*`, {
           headers: { "apikey": SUPABASE_KEY, "Authorization": "Bearer " + SUPABASE_KEY }
         });
         if (res.ok) {
           const players = await res.json();
           if (players && players.length > 0) {
-            guildPlayers = players;
+            guildPlayers = players.map(computePlayerStats);
+            updateGlobalMetrics();
             updatePlayerSelector();
+            renderCommunityRanking();
           }
         }
       } catch (e) {
@@ -1649,15 +2153,16 @@
     function updatePlayerSelector() {
       const select = document.getElementById('guildPlayerSelector');
       if (!select) return;
-      const current = selectedPlayerName;
-      let html = guildPlayers.map((p, idx) => {
+      const current = selectedPlayerName || '';
+      let html = `<option value="" disabled ${!current ? 'selected' : ''}>Selecionar Jogador...</option>`;
+      html += guildPlayers.map((p, idx) => {
         const medal = idx === 0 ? '🥇 ' : idx === 1 ? '🥈 ' : idx === 2 ? '🥉 ' : '🏅 ';
         const isSel = p.player_name.toLowerCase() === current.toLowerCase() ? 'selected' : '';
-        return `<option value="${p.player_name}" ${isSel}>${medal}${p.player_name} (${p.total_count}🏆)</option>`;
+        return `<option value="${p.player_name}" ${isSel}>${medal}${p.player_name} (${p.score} pts · ${p.total_count}🏆)</option>`;
       }).join('');
 
-      if (!guildPlayers.some(p => p.player_name.toLowerCase() === current.toLowerCase())) {
-        html = `<option value="${current}" selected>👤 ${current}</option>` + html;
+      if (current && !guildPlayers.some(p => p.player_name.toLowerCase() === current.toLowerCase())) {
+        html += `<option value="${current}" selected>👤 ${current}</option>`;
       }
       html += `<option value="__custom__">➕ Trocar / Digitar Nick...</option>`;
       select.innerHTML = html;
@@ -1671,6 +2176,8 @@
     }
 
     async function loadAchievements() {
+      if (!selectedPlayerName) return;
+
       const syncBtn = document.getElementById('syncStatusText');
       if (syncBtn) syncBtn.textContent = 'Carregando...';
 
@@ -1691,7 +2198,7 @@
             setSyncStatus('Nuvem (Supabase)', timeStr);
             enrichAndRender();
             return;
-          } else if (selectedPlayerName.toLowerCase() !== 'jotasiete') {
+          } else {
             // Jogador pesquisado ainda não enviou dados para a nuvem
             currentData = [];
             setSyncStatus('Aguardando Conexão', 'Sem dados');
@@ -1704,24 +2211,27 @@
         console.warn("[Supabase] Falha ao carregar jogador:", e);
       }
 
-      // 2. Fallback para arquivo local se Supabase estiver offline (ou se for jotasiete)
-      try {
-        const res = await fetch('achievements_latest.json?t=' + Date.now());
-        if (res.ok) {
-          const json = await res.json();
-          if (json.achievements && json.achievements.length > 0) {
-            currentData = json.achievements;
-            setSyncStatus('Local', json.last_updated ? json.last_updated.substring(11, 16) : 'Recente');
-            enrichAndRender();
-            return;
+      // 2. Fallback para arquivo local apenas se for jotasiete
+      if (selectedPlayerName.toLowerCase() === 'jotasiete') {
+        try {
+          const res = await fetch('achievements_latest.json?t=' + Date.now());
+          if (res.ok) {
+            const json = await res.json();
+            if (json.achievements && json.achievements.length > 0) {
+              currentData = json.achievements;
+              setSyncStatus('Local', json.last_updated ? json.last_updated.substring(11, 16) : 'Recente');
+              enrichAndRender();
+              return;
+            }
           }
-        }
-      } catch { /* continuar para fallbackData */ }
+        } catch {}
+      }
 
-      // 3. Fallback seguro estatico
-      setSyncStatus('Offline', 'Padrão');
-      currentData = fallbackData;
+      // 3. Fallback neutro
+      setSyncStatus('Aguardando Conexão', 'Sem dados');
+      currentData = [];
       enrichAndRender();
+      renderNotSyncedState(selectedPlayerName);
     }
 
     function renderNotSyncedState(playerName) {
@@ -2041,32 +2551,99 @@
       });
     });
 
+    const rSearch = document.getElementById('rankingSearchInput');
+    if (rSearch) {
+      rSearch.addEventListener('input', e => {
+        rankingSearchQuery = e.target.value.trim();
+        renderCommunityRanking();
+      });
+    }
+
     const playerSelector = document.getElementById('guildPlayerSelector');
     if (playerSelector) {
       playerSelector.addEventListener('change', (e) => {
         if (e.target.value === '__custom__') {
-          const nick = prompt("Digite o nome exato do seu personagem no Wurm Online:");
+          const nick = prompt("Digite o nome exato do jogador no Wurm Online:");
           if (nick && nick.trim()) {
-            selectedPlayerName = nick.trim();
-            try { localStorage.setItem('wurm_selected_player', selectedPlayerName); } catch {}
-            updatePlayerSelector();
-            loadAchievements();
+            switchMainView('player', nick.trim());
           } else {
             updatePlayerSelector();
           }
           return;
         }
-        selectedPlayerName = e.target.value;
-        try { localStorage.setItem('wurm_selected_player', selectedPlayerName); } catch {}
-        loadAchievements();
+        switchMainView('player', e.target.value);
       });
+    }
+
+    // ─── MANUAL JSON UPLOAD ──────────────────────────────────
+    async function handleManualJsonUpload(file) {
+      if (!file) return;
+      try {
+        const text = await file.text();
+        const json = JSON.parse(text);
+        const playerName = json.player || (file.name.replace('achievements_', '').replace('.json', ''));
+        if (!playerName || !json.achievements || !Array.isArray(json.achievements)) {
+          alert("Arquivo JSON inválido. O arquivo deve ser um achievements_<player>.json gerado pelo extrator.");
+          return;
+        }
+        const total = json.achievements.length;
+        let goldCount = 0;
+        let maxCounter = 0;
+        let topName = "";
+        json.achievements.forEach(a => {
+          if (a.rarity === 'Gold') goldCount++;
+          if (a.counter > maxCounter) { maxCounter = a.counter; topName = a.name; }
+        });
+
+        const payload = [{
+          player_name: playerName,
+          achievements: json.achievements,
+          total_count: total,
+          gold_count: goldCount,
+          max_counter: maxCounter,
+          top_achievement: topName,
+          updated_at: new Date().toISOString()
+        }];
+
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/player_achievements`, {
+          method: 'POST',
+          headers: {
+            "apikey": SUPABASE_KEY,
+            "Authorization": "Bearer " + SUPABASE_KEY,
+            "Content-Type": "application/json",
+            "Prefer": "resolution=merge-duplicates"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+          alert(`Sucesso! Conquistas de ${playerName} enviadas para o ranking comunitário!`);
+          await fetchGuildPlayers();
+          switchMainView('player', playerName);
+        } else {
+          const err = await res.text();
+          alert("Erro ao enviar: " + err);
+        }
+      } catch (e) {
+        alert("Erro ao ler arquivo: " + e.message);
+      }
     }
 
     // ─── INITIAL LOAD + LIVE REFRESH ──────────────────────────
     fetchGuildPlayers();
-    loadAchievements();
-    setInterval(loadAchievements, 5000);
-    setInterval(fetchGuildPlayers, 30000); // atualiza lista de membros a cada 30s
+    if (currentMainView === 'player' && selectedPlayerName) {
+      switchMainView('player', selectedPlayerName);
+    } else {
+      switchMainView('ranking');
+    }
+
+    setInterval(() => {
+      if (currentMainView === 'player' && selectedPlayerName) {
+        loadAchievements();
+      } else {
+        fetchGuildPlayers();
+      }
+    }, 10000);
   </script>
 </body>
 </html>

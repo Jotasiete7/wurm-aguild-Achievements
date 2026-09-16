@@ -74,12 +74,35 @@ public class AchievementHook {
     }
 
     public static String detectPlayerName() {
-        if (cachedPlayerName != null) return cachedPlayerName;
+        if (cachedPlayerName != null && !cachedPlayerName.isEmpty()) return cachedPlayerName;
 
+        // 1. Ler explicitamente de wurm_tracker.cfg se existir
+        String[] configPaths = {"wurm_tracker.cfg", "gamedata/wurm_tracker.cfg", "../wurm_tracker.cfg"};
+        for (String cp : configPaths) {
+            File cfg = new File(cp);
+            if (cfg.exists()) {
+                try (BufferedReader br = new BufferedReader(new FileReader(cfg, StandardCharsets.UTF_8))) {
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        line = line.trim();
+                        if (line.startsWith("player_name=")) {
+                            String nick = line.substring("player_name=".length()).trim();
+                            if (!nick.isEmpty()) {
+                                cachedPlayerName = nick;
+                                System.out.println("[WurmTracker] Player name loaded from config: " + nick);
+                                return nick;
+                            }
+                        }
+                    }
+                } catch (Throwable ignored) {}
+            }
+        }
+
+        // 2. Procurar na pasta gamedata
         try {
             File gamedata = new File("gamedata");
             if (!gamedata.exists()) {
-                gamedata = new File("D:\\SteamLibrary\\steamapps\\common\\Wurm Online\\gamedata");
+                gamedata = new File(System.getProperty("user.dir"), "gamedata");
             }
             if (gamedata.exists() && gamedata.isDirectory()) {
                 File[] consoleLogs = gamedata.listFiles(new FilenameFilter() {
@@ -102,11 +125,30 @@ public class AchievementHook {
                         return nick;
                     }
                 }
+
+                File playersDir = new File(gamedata, "players");
+                if (playersDir.exists() && playersDir.isDirectory()) {
+                    File[] pDirs = playersDir.listFiles(new FileFilter() {
+                        @Override
+                        public boolean accept(File f) {
+                            return f.isDirectory() && !f.getName().equalsIgnoreCase("configs");
+                        }
+                    });
+                    if (pDirs != null && pDirs.length > 0) {
+                        Arrays.sort(pDirs, new Comparator<File>() {
+                            @Override
+                            public int compare(File f1, File f2) {
+                                return Long.compare(f2.lastModified(), f1.lastModified());
+                            }
+                        });
+                        cachedPlayerName = pDirs[0].getName();
+                        return cachedPlayerName;
+                    }
+                }
             }
         } catch (Throwable ignored) {}
 
-        cachedPlayerName = "jotasiete";
-        return cachedPlayerName;
+        return "Desconhecido";
     }
 
     private static String getRarityName(byte r) {
@@ -116,6 +158,16 @@ public class AchievementHook {
             case 4: return "Gold";
             case 5: return "Diamond";
             default: return "Normal";
+        }
+    }
+
+    private static int getRarityPoints(byte r) {
+        switch (r) {
+            case 5: return 50; // Diamond
+            case 4: return 25; // Gold
+            case 3: return 10; // Silver
+            case 2: return 5;  // Bronze
+            default: return 1; // Normal
         }
     }
 
@@ -142,10 +194,16 @@ public class AchievementHook {
         });
 
         int goldCount = 0;
+        int diamondCount = 0;
+        int totalScore = 0;
+
         for (int i = 0; i < list.size(); i++) {
             Entry e = list.get(i);
             String rName = getRarityName(e.rarity);
             if ("Gold".equals(rName)) goldCount++;
+            if ("Diamond".equals(rName)) diamondCount++;
+            totalScore += getRarityPoints(e.rarity);
+
             sb.append("    {\n");
             sb.append("      \"name\": \"").append(escapeJson(e.name)).append("\",\n");
             sb.append("      \"description\": \"").append(escapeJson(e.description)).append("\",\n");
@@ -173,17 +231,19 @@ public class AchievementHook {
             writeFile(destAbsolute, json);
         }
 
-        System.out.println("[WurmTracker] Achievements saved locally. Triggering Supabase cloud sync...");
+        System.out.println("[WurmTracker] Achievements saved locally. Triggering Supabase cloud sync (Score: " + totalScore + ")...");
 
         final int totalCount = list.size();
         final int finalGoldCount = goldCount;
+        final int finalDiamondCount = diamondCount;
+        final int finalScore = totalScore;
         final String topName = list.isEmpty() ? "" : list.get(0).name;
         final int maxCounter = list.isEmpty() ? 0 : list.get(0).counter;
 
-        sendToSupabase(player, arrayJson, totalCount, finalGoldCount, topName, maxCounter);
+        sendToSupabase(player, arrayJson, totalCount, finalGoldCount, finalDiamondCount, finalScore, topName, maxCounter);
     }
 
-    private static void sendToSupabase(final String player, final String arrayJson, final int total, final int goldCount, final String topName, final int maxCounter) {
+    private static void sendToSupabase(final String player, final String arrayJson, final int total, final int goldCount, final int diamondCount, final int score, final String topName, final int maxCounter) {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -227,6 +287,7 @@ public class AchievementHook {
         t.setDaemon(true);
         t.start();
     }
+
 
     private static void writeFile(File f, String content) {
         try {
